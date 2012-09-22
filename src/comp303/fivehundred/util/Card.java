@@ -3,6 +3,7 @@ package comp303.fivehundred.util;
 import java.util.Comparator;
 
 /**
+ * @author Eleyine
  * An immutable description of a playing card.
  */
 public final class Card implements Comparable<Card>
