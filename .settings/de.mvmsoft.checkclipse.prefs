@@ -1,0 +1,4 @@
+eclipse.preferences.version=1
+enabled=true
+file_filter=in\:\\.java$\nin\:\\.properties$\nex\:src/comp303.fivehundred.util/CombinationGenerator.java\nex\:src/comp303.fivehundred.util/test/*\n
+filenames.config=default_checks.xml
