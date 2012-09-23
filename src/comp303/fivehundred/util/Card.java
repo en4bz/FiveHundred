@@ -335,6 +335,9 @@ public final class Card implements Comparable<Card>
 		//@Override
 		/**
 		 * Compare cards according to their suit then rank in a no trump round.
+		 * The highest card is the highest card of suit led; if there is no lead
+		 * suit, then the highest card of the highest ordinal suit as defined in 
+		 * the enum declaration. Jokers are higher than all cards. 
 		 * @param pCard1 the first card to compare
 		 * @param pCard2 the second card to compare
 		 * @return Returns a negative integer, zero, or a positive integer 
