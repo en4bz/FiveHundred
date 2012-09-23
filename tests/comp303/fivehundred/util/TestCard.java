@@ -2,8 +2,9 @@ package comp303.fivehundred.util;
 
 import static comp303.fivehundred.util.AllCards.*;
 import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+
 
 public class TestCard
 {
