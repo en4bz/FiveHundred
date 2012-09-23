@@ -443,7 +443,7 @@ public final class Card implements Comparable<Card>
 							|| (pCard1.getSuit().equals(aLead) && pCard2.getSuit().equals(aLead))) // both lead
 					{
 						// both trump || both lead || both neither trump nor lead
-						lReturn = pCard1.getSuit().compareTo(pCard2.getSuit());
+						lReturn = pCard1.getEffectiveSuit(aTrump).compareTo(pCard2.getEffectiveSuit(aTrump));
 					}
 					else
 					// exactly one card has the leading suit and no card is a trump
@@ -454,7 +454,7 @@ public final class Card implements Comparable<Card>
 				else
 				// exactly one card has the trump suit
 				{
-					lReturn = (pCard1.getSuit().equals(aTrump))? 1 : -1;
+					lReturn = (pCard1.getEffectiveSuit(aTrump).equals(aTrump))? 1 : -1;
 				}
 			}
 			else
