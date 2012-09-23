@@ -265,11 +265,10 @@ public final class Card implements Comparable<Card>
 	{
 		int lReturn;
 		int numRank = Rank.values().length;
+		int numSuit = Suit.values().length;
 		if(this.isJoker()) 
 		{
-			int maxSuit = Suit.values().length - 1;
-			int maxRank = Rank.values().length -1;
-			lReturn = maxSuit * numRank + maxRank + this.getJokerValue().ordinal();
+			lReturn = numSuit * numRank + this.getJokerValue().ordinal();
 		}
 		else
 		{
