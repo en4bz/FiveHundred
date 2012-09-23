@@ -3,7 +3,7 @@ package comp303.fivehundred.util;
 import java.util.Comparator;
 
 /**
- * @author Eleyine
+ * @author Eleyine Zarour
  * An immutable description of a playing card.
  */
 public final class Card implements Comparable<Card>
@@ -191,10 +191,29 @@ public final class Card implements Comparable<Card>
 	 * @param pCard The card to compare to
 	 * @return Returns a negative integer, zero, or a positive integer 
 	 * as this object is less than, equal to, or greater than pCard
+	 * @pre pCard != null
 	 */
 	public int compareTo(Card pCard)
 	{
-		return 0; // TODO
+		assert pCard != null;
+		int lReturn = 0;
+		if (pCard.isJoker() && this.isJoker()) 
+		{
+			lReturn = this.getJokerValue().compareTo(pCard.getJokerValue());
+		} 
+		else if (!pCard.isJoker() && !this.isJoker()) 
+		{
+			lReturn = this.getRank().compareTo(pCard.getRank());
+		} 
+		else if(!pCard.isJoker() && this.isJoker()) 
+		{
+			lReturn = 1;
+		} 
+		else //pCard.isJoker() && !this.isJoker()
+		{
+			lReturn = -1;
+		}
+		return lReturn;
 	}
 
 	/**
@@ -202,23 +221,61 @@ public final class Card implements Comparable<Card>
 	 * are two jokers of the same value.
 	 * @param pCard The card to test.
 	 * @return true if the two cards are equal
+	 * @pre pCard != null
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals( Object pCard ) 
 	{
-		return false; // TODO
+		// TODO: ask if this is okay
+		assert pCard != null;
+		return pCard instanceof Card && this.hashCode() == pCard.hashCode();
+		
+		/*boolean lReturn = false;
+		
+		if ( !(pCard instanceof Card) )
+		{
+			return false;
+		}
+		
+	    //cast to native object is now safe
+		Card lCard = (Card)pCard;
+		
+		if(this.isJoker() && lCard.isJoker() ) 
+		{
+			lReturn = this.getJokerValue().equals(lCard.getJokerValue());
+		}
+		if(!this.isJoker() && !lCard.isJoker()) 
+		{
+			lReturn = this.getRank().equals(lCard.getRank());
+		}
+		return lReturn;
+		*/
 	}
 
 	/** 
-	 * The hashcode for a card is the suit*number of ranks + that of the rank (perfect hash).
+	 * The hashcode for a card is the suit*number of ranks + that of the rank (perfect hash). 
+	 * If the card is a joker, apply the formula with the maximal Suit and Rank ordinal value 
+	 * + the Joker ordinal value.
 	 * @return the hashcode
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() 
 	{
-		return 0; // TODO
+		int lReturn;
+		int numRank = Rank.values().length;
+		if(this.isJoker()) 
+		{
+			int maxSuit = Suit.values().length - 1;
+			int maxRank = Rank.values().length -1;
+			lReturn = maxSuit * numRank + maxRank + this.getJokerValue().ordinal();
+		}
+		else
+		{
+			lReturn = this.getSuit().ordinal() * numRank + this.getRank().ordinal();
+		}
+		return lReturn;
 	}
 	
 	/**
@@ -227,10 +284,28 @@ public final class Card implements Comparable<Card>
 	 */
 	public static class ByRankComparator implements Comparator<Card>
 	{
-		@Override
+		// I don't know what purpose this serves. TODO: Look into this.
+		@Override 		
+		/**
+		 * @pre pCard1 != null
+		 * @pre pCard2 != null
+		 * @return Returns a negative integer, zero, or a positive integer 
+		 * as pCard1 is less than, equal to, or greater than pCard2 by rank
+		 * then by suit. Jacks rank between 10 and queens of their suit.
+		 * */
 		public int compare(Card pCard1, Card pCard2)
 		{
-			return 0; // TODO
+			assert pCard1 != null;
+			assert pCard2 != null;
+			int lReturn = pCard1.compareTo(pCard2);
+			if (lReturn == 0 && !pCard1.equals(pCard2)) 
+			// Note: If at least one of the cards is a joker, the only case where 
+			// lReturn == 0 is when the cards are equal. Hence, in this condition
+			// block all cards are not jokers and getSuit() can be called.
+			{
+				lReturn = pCard1.getSuit().compareTo(pCard2.getSuit());
+			}
+			return lReturn;
 		}
 		
 	}
@@ -241,10 +316,63 @@ public final class Card implements Comparable<Card>
 	 */
 	public static class BySuitNoTrumpComparator implements Comparator<Card>
 	{
+		private Suit aLead;
+		/**
+		 * Create a Comparator object which compares cards according to 
+		 * their suit then rank. Jacks rank between 10 and queens of their suit.
+		 * @param pLead the suit of the leading card in the trick
+		 * @pre pLead != null
+		 */
+		public BySuitNoTrumpComparator(Suit pLead)
+		{
+			assert pLead != null;
+			aLead = pLead;
+		}
+		
 		@Override
+		/**
+		 * Compare cards according to their suit then rank.
+		 * @return Returns a negative integer, zero, or a positive integer 
+		 * as pCard1 is less than, equal to, or greater than pCard2 by rank
+		 * then by suit. Jacks rank between 10 and queens of their suit.
+		 * @pre pCard1 != null
+		 * @pre pCard2 != null
+		 */
 		public int compare(Card pCard1, Card pCard2)
 		{
-			return 0; // TODO
+			assert pCard1 != null;
+			assert pCard2 != null;
+			int lReturn = 0;
+				
+			// First compare by Suit.			
+			if(!pCard1.isJoker() && !pCard2.isJoker())
+			{
+				if( ( !pCard1.getSuit().equals(aLead) && !pCard2.getSuit().equals(aLead))
+					|| (pCard1.getSuit().equals(aLead) && pCard2.getSuit().equals(aLead))) 
+				{
+					lReturn = pCard1.getSuit().compareTo(pCard2.getSuit());
+				}
+				else
+				// exactly one card has a the leading suit
+				{
+					lReturn = (pCard1.getSuit().equals(aLead))? 1 : -1;
+				}
+			}
+			else
+			// if at least one card is a joker, then compareTo returns the correct result
+			{
+				lReturn = pCard1.compareTo(pCard2);
+			}
+			
+			// Then compare by Rank.
+			if (lReturn == 0 && !pCard1.equals(pCard2)) 
+			// Note: If at least one of the cards is a joker, the only case where 
+			// lReturn == 0 is when the cards are equal. Hence, in this condition
+			// block all cards are not jokers and getRank() can be called.
+			{
+				lReturn = pCard1.getRank().compareTo(pCard2.getRank());
+			}
+			return lReturn;
 		}
 	}
 	
@@ -255,10 +383,104 @@ public final class Card implements Comparable<Card>
 	 */
 	public static class BySuitComparator implements Comparator<Card>
 	{
+		private Suit aLead;
+		private Suit aTrump;
+		/**
+		 * Create a Comparator object which compares cards according to 
+		 * their suit then rank. 
+		 * @param pTrump the trump suit of the round 
+		 * @param pLead the suit of the leading card in the trick
+		 * @pre pTrump != null
+		 * @pre pLead != null
+		 */
+		public BySuitComparator(Suit pTrump, Suit pLead)
+		{
+			assert pTrump != null;
+			assert pLead != null;
+			aTrump = pTrump;
+			aLead = pLead;
+		}
+		
 		@Override
+		/**
+		 * Compare cards according to their suit then rank.
+		 * @return Returns a negative integer, zero, or a positive integer 
+		 * as pCard1 is less than, equal to, or greater than pCard2.
+		 * @pre pCard1 != null
+		 * @pre pCard2 != null
+		 */
 		public int compare(Card pCard1, Card pCard2)
 		{
-			return 0; // TODO
+			assert pCard1 != null;
+			assert pCard2 != null;
+			int lReturn = 0;
+			
+			if(pCard1.equals(pCard2))
+			{
+				return 0;
+			}
+			
+			// First compare by Suit.			
+			if(!pCard1.isJoker() && !pCard2.isJoker())
+			{
+				if( ( !pCard1.getEffectiveSuit(aTrump).equals(aTrump) && !pCard2.getEffectiveSuit(aTrump).equals(aTrump)) // both not trump
+					|| (pCard1.getEffectiveSuit(aTrump).equals(aTrump) && pCard2.getEffectiveSuit(aTrump).equals(aTrump))) // both trump
+				{
+					if( ( !pCard1.getEffectiveSuit(aTrump).equals(aLead) && !pCard2.getEffectiveSuit(aTrump).equals(aLead)) // both not lead
+							|| (pCard1.getSuit().equals(aLead) && pCard2.getSuit().equals(aLead))) // both lead
+					{
+						lReturn = pCard1.getSuit().compareTo(pCard2.getSuit());
+					}
+					else
+					// exactly one card has the leading suit and no card is a trump
+					{
+						lReturn = (pCard1.getSuit().equals(aLead))? 1 : -1;
+					}
+				}
+				else
+				// exactly one card has the trump suit
+				{
+					lReturn = (pCard1.getSuit().equals(aTrump))? 1 : -1;
+				}
+			}
+			else
+			// if at least one card is a joker, then compareTo returns the correct result
+			{
+				lReturn = pCard1.compareTo(pCard2);
+			}
+			
+			// Then compare by Rank.
+			if (lReturn == 0) 
+			// Note: If at least one of the cards is a joker, the only case where 
+			// lReturn == 0 is when the cards are equal. Hence, in this condition
+			// block all cards are not jokers and both getRank() and getSuit() can be called.
+			{
+				if(pCard1.getEffectiveSuit(aTrump).equals(aTrump))
+				{	
+					if(!pCard1.getRank().equals(Rank.JACK) && !pCard2.getRank().equals(Rank.JACK) )
+					{
+						lReturn = pCard1.getRank().compareTo(pCard2.getRank());
+					}
+					else
+					// at least one card is a JACK
+					{
+						if(pCard1.getRank().equals(Rank.JACK) && pCard2.getRank().equals(Rank.JACK))
+						// if both cards are JACK and they are not equal, then they must be the right and left bowers
+						{
+							lReturn = pCard1.getSuit().equals(aTrump)? 1 : -1;
+						}
+						else
+						{
+							lReturn = pCard1.getRank().equals(Rank.JACK)? 1 : -1;
+						}
+					}
+				}
+				else
+				{
+					lReturn = pCard1.getRank().compareTo(pCard2.getRank());
+				}
+			}
+			return lReturn;
 		}
 	}
 }
