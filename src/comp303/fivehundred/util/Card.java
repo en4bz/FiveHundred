@@ -285,8 +285,11 @@ public final class Card implements Comparable<Card>
 	public static class ByRankComparator implements Comparator<Card>
 	{
 		// I don't know what purpose this serves. TODO: Look into this.
-		@Override 		
+		//@Override 		
 		/**
+		 * Compares two cards by rank then suit. Suit order corresponds to enum ordinality.
+		 * @param pCard1 the first card to compare
+		 * @param pCard2 the second card to compare
 		 * @pre pCard1 != null
 		 * @pre pCard2 != null
 		 * @return Returns a negative integer, zero, or a positive integer 
@@ -300,8 +303,8 @@ public final class Card implements Comparable<Card>
 			int lReturn = pCard1.compareTo(pCard2);
 			if (lReturn == 0 && !pCard1.equals(pCard2)) 
 			// Note: If at least one of the cards is a joker, the only case where 
-			// lReturn == 0 is when the cards are equal. Hence, in this condition
-			// block all cards are not jokers and getSuit() can be called.
+			// lReturn == 0 is when the cards are equal. Hence in this condition
+			// block, all cards are not jokers and getSuit() can be called.
 			{
 				lReturn = pCard1.getSuit().compareTo(pCard2.getSuit());
 			}
@@ -329,9 +332,11 @@ public final class Card implements Comparable<Card>
 			aLead = pLead;
 		}
 		
-		@Override
+		//@Override
 		/**
-		 * Compare cards according to their suit then rank.
+		 * Compare cards according to their suit then rank in a no trump round.
+		 * @param pCard1 the first card to compare
+		 * @param pCard2 the second card to compare
 		 * @return Returns a negative integer, zero, or a positive integer 
 		 * as pCard1 is less than, equal to, or greater than pCard2 by rank
 		 * then by suit. Jacks rank between 10 and queens of their suit.
@@ -383,11 +388,12 @@ public final class Card implements Comparable<Card>
 	 */
 	public static class BySuitComparator implements Comparator<Card>
 	{
-		private Suit aLead;
 		private Suit aTrump;
+		private Suit aLead;
+
 		/**
 		 * Create a Comparator object which compares cards according to 
-		 * their suit then rank. 
+		 * their suit then rank in a trump round. 
 		 * @param pTrump the trump suit of the round 
 		 * @param pLead the suit of the leading card in the trick
 		 * @pre pTrump != null
@@ -401,9 +407,14 @@ public final class Card implements Comparable<Card>
 			aLead = pLead;
 		}
 		
-		@Override
+		//@Override
 		/**
-		 * Compare cards according to their suit then rank.
+		 * Compare cards according to their suit then rank. The highest card is the highest
+		 * trump; if there is no trump, then the highest card of the suit led; if there is no
+		 * lead suit, then the highest card of the highest ordinal suit as defined in the enum 
+		 * declaration. Jokers are higher than all cards.
+		 * @param pCard1 the first card to compare
+		 * @param pCard2 the second card to compare
 		 * @return Returns a negative integer, zero, or a positive integer 
 		 * as pCard1 is less than, equal to, or greater than pCard2.
 		 * @pre pCard1 != null
@@ -429,6 +440,7 @@ public final class Card implements Comparable<Card>
 					if( ( !pCard1.getEffectiveSuit(aTrump).equals(aLead) && !pCard2.getEffectiveSuit(aTrump).equals(aLead)) // both not lead
 							|| (pCard1.getSuit().equals(aLead) && pCard2.getSuit().equals(aLead))) // both lead
 					{
+						// both trump || both lead || both neither trump nor lead
 						lReturn = pCard1.getSuit().compareTo(pCard2.getSuit());
 					}
 					else
@@ -453,7 +465,7 @@ public final class Card implements Comparable<Card>
 			if (lReturn == 0) 
 			// Note: If at least one of the cards is a joker, the only case where 
 			// lReturn == 0 is when the cards are equal. Hence, in this condition
-			// block all cards are not jokers and both getRank() and getSuit() can be called.
+			// block, all cards are not jokers and both getRank() and getSuit() can be called.
 			{
 				if(pCard1.getEffectiveSuit(aTrump).equals(aTrump))
 				{	
@@ -476,6 +488,7 @@ public final class Card implements Comparable<Card>
 					}
 				}
 				else
+				// the usual ranking is used for non-trump cards
 				{
 					lReturn = pCard1.getRank().compareTo(pCard2.getRank());
 				}
