@@ -1,5 +1,8 @@
 package comp303.fivehundred.model;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import comp303.fivehundred.util.Card.Suit;
 
 /**
@@ -7,6 +10,15 @@ import comp303.fivehundred.util.Card.Suit;
  */
 public class Bid implements Comparable<Bid>
 {
+	
+	private int aTricks;
+	private Suit aSuit;
+	private boolean aPass;
+	private final Suit[] aSUITS = { Suit.SPADES, Suit.CLUBS, Suit.DIAMONDS, Suit.HEARTS, null};
+	private final int aMINTRICKS = 6;
+	private final int aMAXTRICKS = 10;
+	
+	
 	/**
 	 * Constructs a new standard bid (not a pass) in a trump.
 	 * @param pTricks Number of tricks bid. Must be between 6 and 10 inclusive.
@@ -15,6 +27,11 @@ public class Bid implements Comparable<Bid>
 	 */
 	public Bid(int pTricks, Suit pSuit)
 	{
+		assert pTricks >= aMINTRICKS;
+		assert pTricks <= aMAXTRICKS;
+		aTricks = pTricks;
+		aSuit = pSuit;
+		aPass = false;
 	}
 	
 	/**
@@ -22,6 +39,9 @@ public class Bid implements Comparable<Bid>
 	 */
 	public Bid()
 	{
+		aTricks = 0;
+		aSuit = null;
+		aPass = true;
 	}
 	
 	/**
@@ -33,6 +53,11 @@ public class Bid implements Comparable<Bid>
 	 */
 	public Bid(int pIndex)
 	{
+		assert pIndex >= 0;
+		assert pIndex <= ((aMAXTRICKS - aMINTRICKS + 1) * aSUITS.length - 1);
+		aSuit =	aSUITS[pIndex % aSUITS.length];
+		aTricks = pIndex / aSUITS.length + aMINTRICKS;
+		aPass = false;
 	}
 	
 	/**
@@ -41,7 +66,11 @@ public class Bid implements Comparable<Bid>
 	 */
 	public Suit getSuit()
 	{
-		return null;
+		if(aPass)
+		{
+			throw new ModelException("Cannot get the suit of a passing bid.");
+		}
+		return aSuit;
 	}
 	
 	/**
@@ -50,7 +79,11 @@ public class Bid implements Comparable<Bid>
 	 */
 	public int getTricksBid()
 	{
-		return -1;
+		if(aPass)
+		{
+			throw new ModelException("Cannot get the number of tricks of a passing bid.");
+		}
+		return aTricks;
 	}
 	
 	/**
@@ -58,7 +91,7 @@ public class Bid implements Comparable<Bid>
 	 */
 	public boolean isPass()
 	{
-		return false;
+		return aPass;
 	}
 	
 	/**
@@ -66,13 +99,19 @@ public class Bid implements Comparable<Bid>
 	 */
 	public boolean isNoTrump()
 	{
-		return false;
+		boolean lReturn = false;
+		if(!aPass && aSuit == null)
+		{
+			lReturn = true;
+		}
+		return lReturn;
 	}
 
 	@Override
+	// TODO: how does a passing bid compare to a non-passing bid?
 	public int compareTo(Bid pBid)
 	{
-		return 0;
+		return this.toIndex() - pBid.toIndex();
 	}
 	
 	/**
@@ -82,7 +121,14 @@ public class Bid implements Comparable<Bid>
 	@Override
 	public String toString()
 	{
-		return "Deat cats, dead rats";
+		if(aSuit != null)
+		{
+			return "" + aTricks + " of " + aSuit.toString();
+		}
+		else
+		{
+			return "" + aTricks + " of NO TRUMP";
+		}
 	}
 
 	/**
@@ -92,7 +138,7 @@ public class Bid implements Comparable<Bid>
 	@Override
 	public boolean equals(Object pBid)
 	{
-		return false;
+		return pBid instanceof Bid && this.hashCode() == pBid.hashCode();
 	}
 
 	/**
@@ -102,7 +148,14 @@ public class Bid implements Comparable<Bid>
 	@Override
 	public int hashCode()
 	{
-		return 0;
+		if(aPass)
+		{
+			return (aMAXTRICKS - aMINTRICKS + 1) * aSUITS.length;
+		}
+		else
+		{
+			return this.toIndex();
+		}
 	}
 
 	/**
@@ -113,7 +166,11 @@ public class Bid implements Comparable<Bid>
 	 */
 	public int toIndex()
 	{
-		return -1;
+		if(aPass)
+		{
+			throw new ModelException("Cannot get index of a passing bid.");
+		}		
+		return (aTricks - aMINTRICKS) * aSUITS.length + getSuitIndex();
 	}
 	
 	/**
@@ -124,7 +181,25 @@ public class Bid implements Comparable<Bid>
 	 */
 	public static Bid max(Bid[] pBids)
 	{
-		return null;
+		Bid lReturn;
+		boolean lAllPass = true;
+		for(Bid b: pBids)
+		{
+			if(b.isPass())
+			{
+				lAllPass = false;
+				break;
+			}
+		}
+		if(lAllPass)
+		{
+			lReturn = new Bid();
+		}
+		else
+		{
+			lReturn = Collections.max(Arrays.asList(pBids));
+		}
+		return lReturn;
 	}
 	
 	/**
@@ -133,6 +208,27 @@ public class Bid implements Comparable<Bid>
 	 */
 	public int getScore()
 	{
-		return -1;
+		if(aPass)
+		{
+			throw new ModelException("Cannot get score of passing bid.");
+		}
+		return (aTricks - aMINTRICKS) * 100 + getSuitIndex() * 20 + 40;
+	}
+	
+	/**
+	 * Helper function which returns the index of the suit according to the fivehundred rules.
+	 * @return the index of pSuit according to the fivehundred rules.
+	 */
+	private int getSuitIndex()
+	{
+		int lIndex;
+		for(lIndex = 0; lIndex < aSUITS.length; lIndex++)
+		{
+			if(aSUITS[lIndex] == aSuit)
+			{
+				break;
+			}
+		}
+		return lIndex;
 	}
 }
