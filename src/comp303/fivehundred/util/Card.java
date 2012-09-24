@@ -398,8 +398,8 @@ public final class Card implements Comparable<Card>
 		 * their suit then rank in a trump round. 
 		 * @param pTrump the trump suit of the round 
 		 * @param pLead the suit of the leading card in the trick
-		 * @pre pTrump != null
-		 * @pre pLead != null
+		 * @pre pTrump != null;
+		 * @pre pLead != null;
 		 */
 		public BySuitComparator(Suit pTrump, Suit pLead)
 		{
@@ -419,8 +419,8 @@ public final class Card implements Comparable<Card>
 		 * @param pCard2 the second card to compare
 		 * @return Returns a negative integer, zero, or a positive integer 
 		 * as pCard1 is less than, equal to, or greater than pCard2.
-		 * @pre pCard1 != null
-		 * @pre pCard2 != null
+		 * @pre pCard1 != null;
+		 * @pre pCard2 != null;
 		 */
 		public int compare(Card pCard1, Card pCard2)
 		{
