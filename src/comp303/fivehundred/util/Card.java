@@ -354,8 +354,8 @@ public final class Card implements Comparable<Card>
 			// First compare by Suit.			
 			if(!pCard1.isJoker() && !pCard2.isJoker())
 			{
-				if( ( !pCard1.getSuit().equals(aLead) && !pCard2.getSuit().equals(aLead))
-					|| (pCard1.getSuit().equals(aLead) && pCard2.getSuit().equals(aLead))) 
+				if( ( !pCard1.getSuit().equals(aLead) && !pCard2.getSuit().equals(aLead)) ||
+					(pCard1.getSuit().equals(aLead) && pCard2.getSuit().equals(aLead))) 
 				{
 					lReturn = pCard1.getSuit().compareTo(pCard2.getSuit());
 				}
@@ -436,11 +436,11 @@ public final class Card implements Comparable<Card>
 			// First compare by Suit.			
 			if(!pCard1.isJoker() && !pCard2.isJoker())
 			{
-				if( ( !pCard1.getEffectiveSuit(aTrump).equals(aTrump) && !pCard2.getEffectiveSuit(aTrump).equals(aTrump)) // both not trump
-					|| (pCard1.getEffectiveSuit(aTrump).equals(aTrump) && pCard2.getEffectiveSuit(aTrump).equals(aTrump))) // both trump
+				if( ( !pCard1.getEffectiveSuit(aTrump).equals(aTrump) && !pCard2.getEffectiveSuit(aTrump).equals(aTrump)) ||// both not trump
+					(pCard1.getEffectiveSuit(aTrump).equals(aTrump) && pCard2.getEffectiveSuit(aTrump).equals(aTrump))) // both trump
 				{
-					if( ( !pCard1.getEffectiveSuit(aTrump).equals(aLead) && !pCard2.getEffectiveSuit(aTrump).equals(aLead)) // both not lead
-							|| (pCard1.getSuit().equals(aLead) && pCard2.getSuit().equals(aLead))) // both lead
+					if( ( !pCard1.getEffectiveSuit(aTrump).equals(aLead) && !pCard2.getEffectiveSuit(aTrump).equals(aLead)) ||// both not lead
+						(pCard1.getSuit().equals(aLead) && pCard2.getSuit().equals(aLead))) // both lead
 					{
 						// both trump || both lead || both neither trump nor lead
 						lReturn = pCard1.getEffectiveSuit(aTrump).compareTo(pCard2.getEffectiveSuit(aTrump));
