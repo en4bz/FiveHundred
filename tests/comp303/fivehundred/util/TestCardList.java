@@ -20,10 +20,18 @@ public class TestCardList
 		fail("Not yet implemented");
 	}
 
-	@Test //test before?
+	@Test 
 	public void testAdd()
 	{
-		fail("Not yet implemented");
+		CardList lList = new CardList();
+		
+		lList.add(AllCards.aAH);
+		assertEquals(lList.size(), 1);
+		
+		lList.add(AllCards.a7H);
+		lList.add(AllCards.aAD);
+		assertEquals(lList.size(), 3);
+		
 	}
 
 	@Test
