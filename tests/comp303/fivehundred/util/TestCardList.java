@@ -3,7 +3,6 @@ package comp303.fivehundred.util;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.junit.Test;
 
 /**
  * @author Gabrielle Germain
