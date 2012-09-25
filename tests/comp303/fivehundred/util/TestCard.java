@@ -1,11 +1,26 @@
 package comp303.fivehundred.util;
 
-import static comp303.fivehundred.util.AllCards.*;
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static comp303.fivehundred.util.AllCards.a4C;
+import static comp303.fivehundred.util.AllCards.a7D;
+import static comp303.fivehundred.util.AllCards.a8C;
+import static comp303.fivehundred.util.AllCards.a9C;
+import static comp303.fivehundred.util.AllCards.a9D;
+import static comp303.fivehundred.util.AllCards.aAC;
+import static comp303.fivehundred.util.AllCards.aHJo;
+import static comp303.fivehundred.util.AllCards.aJC;
+import static comp303.fivehundred.util.AllCards.aJD;
+import static comp303.fivehundred.util.AllCards.aJS;
+import static comp303.fivehundred.util.AllCards.aKC;
+import static comp303.fivehundred.util.AllCards.aKS;
+import static comp303.fivehundred.util.AllCards.aLJo;
+import static comp303.fivehundred.util.AllCards.aQD;
+import static comp303.fivehundred.util.AllCards.aQH;
+import static comp303.fivehundred.util.AllCards.aTC;
+import static comp303.fivehundred.util.AllCards.aTH;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import comp303.fivehundred.*;
+
 import comp303.fivehundred.util.Card.Joker;
 import comp303.fivehundred.util.Card.Rank;
 import comp303.fivehundred.util.Card.Suit;

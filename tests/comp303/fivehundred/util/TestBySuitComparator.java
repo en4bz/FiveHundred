@@ -1,8 +1,11 @@
 package comp303.fivehundred.util;
 
-import static comp303.fivehundred.util.*;
-import static comp303.fivehundred.util.AllCards.*;
-import static org.junit.Assert.*;
+import static comp303.fivehundred.util.AllCards.a4H;
+import static comp303.fivehundred.util.AllCards.aHJo;
+import static comp303.fivehundred.util.AllCards.aKC;
+import static comp303.fivehundred.util.AllCards.aLJo;
+import static comp303.fivehundred.util.AllCards.aTC;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

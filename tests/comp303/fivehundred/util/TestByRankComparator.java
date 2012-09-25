@@ -1,14 +1,18 @@
 package comp303.fivehundred.util;
 
-import static comp303.fivehundred.util.*;
-import static comp303.fivehundred.util.AllCards.*;
-import static org.junit.Assert.*;
+import static comp303.fivehundred.util.AllCards.a4D;
+import static comp303.fivehundred.util.AllCards.a5C;
+import static comp303.fivehundred.util.AllCards.a6C;
+import static comp303.fivehundred.util.AllCards.a7C;
+import static comp303.fivehundred.util.AllCards.a8C;
+import static comp303.fivehundred.util.AllCards.a8H;
+import static comp303.fivehundred.util.AllCards.aAC;
+import static comp303.fivehundred.util.AllCards.aHJo;
+import static comp303.fivehundred.util.AllCards.aLJo;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-
 import comp303.fivehundred.util.Card.ByRankComparator;
-import comp303.fivehundred.util.Card.BySuitComparator;
-import comp303.fivehundred.util.Card.Suit;
 
 
 /*
