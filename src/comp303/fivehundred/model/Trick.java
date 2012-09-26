@@ -1,8 +1,5 @@
 package comp303.fivehundred.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 
 import comp303.fivehundred.util.Card;
@@ -16,7 +13,7 @@ import comp303.fivehundred.util.CardList;
  */
 public class Trick extends CardList
 {	
-	private Suit aTrump;
+	private final Suit aTrump;
 	
 	/**
 	 * Constructs a new empty trick for the specified contract.
@@ -32,7 +29,7 @@ public class Trick extends CardList
 	}
 	
 	/**
-	 * @return Can be null for no-trump.
+	 * @return The Suit of the trump. Can be null for no-trump.
 	 */
 	public Suit getTrumpSuit()
 	{
@@ -80,19 +77,13 @@ public class Trick extends CardList
 	public Card highest()
 	{
 		Card lReturn;
-		ArrayList<Card> lCardList = new ArrayList<Card>();
-		for(Card c: this)
-		{
-			lCardList.add(c);
-		}
-		// TODO: find a way to make a Collection out of "this".
 		if(aTrump == null)
 		{
-			lReturn = Collections.max(lCardList, new Card.BySuitNoTrumpComparator(getSuitLed()));
+			lReturn = sort( new Card.BySuitNoTrumpComparator(getSuitLed())).getFirst();
 		}
 		else 
 		{
-			lReturn = Collections.max(lCardList, new Card.BySuitComparator(getTrumpSuit(), getSuitLed()));
+			lReturn = sort(new Card.BySuitComparator(getTrumpSuit(), getSuitLed())).getFirst();
 		}
 		return lReturn;
 	}
@@ -100,6 +91,8 @@ public class Trick extends CardList
 	/**
 	 * @return The index of the card that wins the trick.
 	 */
+	// TODO: might want to add a getIndexOf(Card) method to CardList, it could be useful 
+	// if we have more methods like the one below
 	public int winnerIndex()
 	{
 		Card lHighest = highest();
