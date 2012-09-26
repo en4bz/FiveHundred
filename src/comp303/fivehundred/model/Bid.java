@@ -6,23 +6,23 @@ import java.util.Collections;
 import comp303.fivehundred.util.Card.Suit;
 
 /**
+ * @author Eleyine Zarour
  * Represents a bid or a contract for a player. Immutable.
  */
 public class Bid implements Comparable<Bid>
 {
-	
-	private int aTricks;
-	private Suit aSuit;
-	private boolean aPass;
+	private final int aTricks;
+	private final Suit aSuit;
+	private final boolean aPass;
 	private final Suit[] aSUITS = { Suit.SPADES, Suit.CLUBS, Suit.DIAMONDS, Suit.HEARTS, null};
 	private final int aMINTRICKS = 6;
 	private final int aMAXTRICKS = 10;
-	
+	private final int[] aSCORECONST = {100, 20, 40};
 	
 	/**
 	 * Constructs a new standard bid (not a pass) in a trump.
 	 * @param pTricks Number of tricks bid. Must be between 6 and 10 inclusive.
-	 * @param pSuit Suit bid. 
+	 * @param pSuit The suit the bid is in, or null if it is in no-trump.
 	 * @pre pTricks >= 6 && pTricks <= 10
 	 */
 	public Bid(int pTricks, Suit pSuit)
@@ -54,13 +54,14 @@ public class Bid implements Comparable<Bid>
 	public Bid(int pIndex)
 	{
 		assert pIndex >= 0;
-		assert pIndex <= ((aMAXTRICKS - aMINTRICKS + 1) * aSUITS.length - 1);
+		assert pIndex <= ((aMAXTRICKS - aMINTRICKS + 1) * aSUITS.length - 1); // 24
 		aSuit =	aSUITS[pIndex % aSUITS.length];
 		aTricks = pIndex / aSUITS.length + aMINTRICKS;
 		aPass = false;
 	}
 	
 	/**
+	 * Get the suit the bid is in.
 	 * @return The suit the bid is in, or null if it is in no-trump.
 	 * @throws ModelException if the bid is a pass.
 	 */
@@ -74,14 +75,15 @@ public class Bid implements Comparable<Bid>
 	}
 	
 	/**
-	 * @return The number of tricks bid.
+	 * Get the number of tricks in the bid.
+	 * @return The number of tricks in the bid.
 	 * @throws ModelException if the bid is a pass.
 	 */
 	public int getTricksBid()
 	{
 		if(aPass)
 		{
-			throw new ModelException("Cannot get the number of tricks of a passing bid.");
+			throw new ModelException("Cannot get the number of tricks in a passing bid.");
 		}
 		return aTricks;
 	}
@@ -96,22 +98,43 @@ public class Bid implements Comparable<Bid>
 	
 	/**
 	 * @return True if the bid is in no trump.
+	 * @throws ModelException if the bid is a pass.
 	 */
 	public boolean isNoTrump()
 	{
-		boolean lReturn = false;
-		if(!aPass && aSuit == null)
+		if(aPass)
 		{
-			lReturn = true;
+			throw new ModelException("Cannot check if a passing bid is no-trump.");			
 		}
-		return lReturn;
+		if(aSuit == null)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	@Override
-	// TODO: how does a passing bid compare to a non-passing bid?
+	/**
+	 * Compare bids according to the score table (see game rules). A passing bid is lower than all bids 
+	 * (is considered to have an unofficial score of 0).
+	 * @pre pBid != null
+	 * @return Returns a negative integer, zero, or a positive integer 
+	 * if this bid's score is less than, equal to, or greater than pBid's score.
+	 */
 	public int compareTo(Bid pBid)
 	{
-		return this.toIndex() - pBid.toIndex();
+		assert pBid != null;
+		int lBidScore = 0;
+		int lThisScore = 0;
+		if(!aPass) 
+		{
+			lBidScore = pBid.getScore();
+		}
+		if(!this.isPass())
+		{
+			lThisScore = this.getScore();
+		}
+		return lThisScore - lBidScore;
 	}
 	
 	/**
@@ -121,13 +144,20 @@ public class Bid implements Comparable<Bid>
 	@Override
 	public String toString()
 	{
-		if(aSuit != null)
+		if(aPass)
 		{
-			return "" + aTricks + " of " + aSuit.toString();
-		}
-		else
+			return "PASS";
+		} 
+		else 
 		{
-			return "" + aTricks + " of NO TRUMP";
+			if(aSuit != null)
+			{
+				return "" + aTricks + " of " + aSuit.toString();
+			}
+			else
+			{
+				return "" + aTricks + " of NO TRUMP";
+			}
 		}
 	}
 
@@ -150,7 +180,7 @@ public class Bid implements Comparable<Bid>
 	{
 		if(aPass)
 		{
-			return (aMAXTRICKS - aMINTRICKS + 1) * aSUITS.length;
+			return (aMAXTRICKS - aMINTRICKS + 1) * aSUITS.length; // 25
 		}
 		else
 		{
@@ -181,25 +211,7 @@ public class Bid implements Comparable<Bid>
 	 */
 	public static Bid max(Bid[] pBids)
 	{
-		Bid lReturn;
-		boolean lAllPass = true;
-		for(Bid b: pBids)
-		{
-			if(b.isPass())
-			{
-				lAllPass = false;
-				break;
-			}
-		}
-		if(lAllPass)
-		{
-			lReturn = new Bid();
-		}
-		else
-		{
-			lReturn = Collections.max(Arrays.asList(pBids));
-		}
-		return lReturn;
+		return 	Collections.max(Arrays.asList(pBids));
 	}
 	
 	/**
@@ -212,11 +224,12 @@ public class Bid implements Comparable<Bid>
 		{
 			throw new ModelException("Cannot get score of passing bid.");
 		}
-		return (aTricks - aMINTRICKS) * 100 + getSuitIndex() * 20 + 40;
+		return (aTricks - aMINTRICKS) * aSCORECONST[0] + getSuitIndex() * aSCORECONST[1] + aSCORECONST[2];
 	}
 	
 	/**
-	 * Helper function which returns the index of the suit according to the fivehundred rules.
+	 * Helper function which returns the index of the suit according to the fivehundred rules in
+	 * the following order { SPADES, CLUBS, DIAMONDS, HEARTS, NO-TRUMP};
 	 * @return the index of pSuit according to the fivehundred rules.
 	 */
 	private int getSuitIndex()
