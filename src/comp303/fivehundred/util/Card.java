@@ -204,6 +204,8 @@ public final class Card implements Comparable<Card>
 		else if (!pCard.isJoker() && !this.isJoker()) 
 		{
 			lReturn = this.getRank().compareTo(pCard.getRank());
+			System.out.println("Both cards " + this.toString() +" and " + pCard.toString() + " are not jokers!");
+			System.out.println(lReturn);
 		} 
 		else if(!pCard.isJoker() && this.isJoker()) 
 		{
@@ -409,7 +411,7 @@ public final class Card implements Comparable<Card>
 			aLead = pLead;
 		}
 		
-		//@Override
+		@Override
 		/**
 		 * Compare cards according to their suit then rank. The highest card is the highest
 		 * trump; if there is no trump, then the highest card of the suit led; if there is no
