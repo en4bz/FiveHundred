@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 /**
+ * @author Rayyan Khoury
  * A mutable list of cards. Does not support duplicates.
  * The cards are maintained in the order added.
  */
@@ -111,6 +112,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	 */
 	public CardList sort(Comparator<Card> pComparator)
 	{
+		Collections.sort(fCardList);
 		return null;
 	}
 }
