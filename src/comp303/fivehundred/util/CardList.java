@@ -1,7 +1,10 @@
 package comp303.fivehundred.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * @author Rayyan Khoury
@@ -10,11 +13,18 @@ import java.util.Iterator;
  */
 public class CardList implements Iterable<Card>, Cloneable
 {
+
+	// The array list of all cards
+	private ArrayList<Card> aCards;
+	
 	/**
 	 * Creates a new, empty card list.
 	 */
 	public CardList()
 	{
+		
+		aCards = new ArrayList<Card>();
+		
 	}
 	
 	/**
@@ -26,6 +36,10 @@ public class CardList implements Iterable<Card>, Cloneable
 	 */
 	public void add(Card pCard)
 	{
+		
+		assert pCard != null;
+		aCards.add(pCard);
+		
 	}
 	
 	/**
@@ -33,7 +47,9 @@ public class CardList implements Iterable<Card>, Cloneable
 	 */
 	public int size()
 	{
-		return 0;
+		
+		return aCards.size();
+		
 	}
 	
 	/**
@@ -41,9 +57,15 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * order is currently being used. 
 	 * @throws GameUtilException if the list is empty.
 	 */
-	public Card getFirst()
+	public Card getFirst() throws GameUtilException
 	{
-		return null;
+
+		if (aCards.isEmpty()) 
+		{
+			throw new GameUtilException("CARD LIST EMPTY - cannot retrieve first card");
+		}
+		
+		return aCards.get(0);
 	}
 	
 	/**
@@ -51,9 +73,15 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * order is currently being used. 
 	 * @throws GameUtilException If the list is empty.
 	 */
-	public Card getLast()
+	public Card getLast() throws GameUtilException
 	{
-		return null;
+		
+		if (aCards.isEmpty()) 
+		{
+			throw new GameUtilException("CARD LIST EMPTY - cannot retrieve last card");
+		}
+		
+		return aCards.get(aCards.size() - 1);
 	}
 	
 	/**
@@ -64,15 +92,23 @@ public class CardList implements Iterable<Card>, Cloneable
 	 */
 	public void remove(Card pCard)
 	{
+		
+		assert pCard != null;
+		aCards.remove(pCard);
+		
 	}
 	
 	/**
 	 * @see java.lang.Object#clone()
 	 * {@inheritDoc}
 	 */
-	public CardList clone()
+	public CardList clone() throws CloneNotSupportedException
 	{
-		return null;
+		
+		CardList copy = (CardList) super.clone();
+		copy.aCards = new ArrayList<Card>(aCards);
+		return copy;
+		
 	}
 	
 	/**
@@ -82,7 +118,10 @@ public class CardList implements Iterable<Card>, Cloneable
 	@Override
 	public Iterator<Card> iterator()
 	{
-		return null;
+		
+		Iterator<Card> it = aCards.iterator();
+		return it;
+		
 	}
 	
 	/**
@@ -91,7 +130,26 @@ public class CardList implements Iterable<Card>, Cloneable
 	 */
 	public String toString()
 	{
-		return null;
+
+		// Starts building the string
+		StringBuilder sb = new StringBuilder();
+		String NEWLINE = System.getProperty("line.separator");
+		
+		sb.append("The Cards in this List are as follows in order:" + NEWLINE);
+		
+		// Creates the iterator for this object
+		Iterator<Card> it = this.iterator();
+		int cardNumber = 1;
+		
+		// Goes through the card list and prints all the cards to the console
+	    while (it.hasNext())
+	    {
+	    	sb.append(cardNumber+ ": " + it.next().toString() + NEWLINE);
+	    }
+	    
+	    // Returns the full string of cards
+	    return sb.toString();
+		
 	}
 	
 	/**
@@ -100,7 +158,19 @@ public class CardList implements Iterable<Card>, Cloneable
 	 */
 	public Card random()
 	{
-		return null;
+		
+		// Assertions
+		assert aCards != null;
+		assert aCards.size() > 0;
+
+		// Finding a random number between 0 and size
+	    Random num = new Random();
+		int size = aCards.size();
+	    int index = num.nextInt(size);
+	    
+	    // Returns the random card
+		return aCards.get(index);
+		
 	}
 	
 	/**
@@ -108,11 +178,23 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * method has no side effects.
 	 * @param pComparator Defines the sorting order.
 	 * @return the sorted CardList
+	 * @throws CloneNotSupportedException 
 	 * @pre pComparator != null
 	 */
-	public CardList sort(Comparator<Card> pComparator)
+	public CardList sort(Comparator<Card> pComparator) throws CloneNotSupportedException
 	{
-		Collections.sort(fCardList);
-		return null;
+		
+		// Assertions
+		assert pComparator != null;
+		
+		// Clones the current CardList
+		CardList copy = this.clone();
+		
+		// Sorts the clone's cards
+		Collections.sort(copy.aCards,  pComparator);
+		
+		// Returns the copied sorted card list
+		return copy;
+		
 	}
 }
