@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 
 import comp303.fivehundred.model.TestBid;
 import comp303.fivehundred.util.TestCard;
+import comp303.fivehundred.util.TestCardList;
 import comp303.fivehundred.util.TestComparators;
 import comp303.fivehundred.util.TestDeck;
 
@@ -14,6 +15,7 @@ import comp303.fivehundred.util.TestDeck;
 	TestDeck.class,
 	TestComparators.class,
 	TestBid.class,
+	TestCardList.class,
 	})
 public class AllTests
 {

@@ -2,6 +2,11 @@ package comp303.fivehundred.util;
 
 import static org.junit.Assert.*;
 
+//import java.util.ArrayList;
+//import java.util.Collections;
+//import java.util.Comparator;
+import java.util.Iterator;
+
 import org.junit.Test;
 
 /**
@@ -11,12 +16,12 @@ import org.junit.Test;
 
 public class TestCardList
 {
-	private CardList lInitiallyEmpty = new CardList();
+//	private CardList lInitiallyEmpty = new CardList();
 
 	@Test
 	public void testCardList()
 	{
-		fail("Not yet implemented");
+		CardList lInitiallyEmpty = new CardList();
 	}
 
 	@Test 
@@ -29,93 +34,81 @@ public class TestCardList
 		
 		lList.add(AllCards.a7H);
 		lList.add(AllCards.aAD);
+		
 		assertEquals(lList.size(), 3);
+		
+		//Since the card is already in the set, it will not be added to the hand
+		lList.add(AllCards.a7H);
+		assertEquals(lList.size(), 3); // size must remain the same
+		
+		assertEquals(lList.getFirst(), AllCards.aAH);
+		assertEquals(lList.getLast(), AllCards.aAD);
 		
 	}
 
 	@Test
 	public void testSize()
 	{
-		fail("Not yet implemented");
+		CardList lList = new CardList();
+		
+		assertEquals(lList.size(), 0);
+		lList.add(AllCards.aAH);
+		assertEquals(lList.size(), 1);
 	}
 
 	@Test(expected=GameUtilException.class)
 	public void testGetFirst()
 	{
-		//exception expected since the list is empty
-		lInitiallyEmpty.getFirst();
-		
-		//add one card in lList and test if it returns the same card as "first card"
 		CardList lList = new CardList();
+		
+		//exception expected since the list is empty
+		lList.getFirst();
+		
+		//fill lList with cards and test if it returns the first card inserted
 		lList.add(AllCards.a4C);
+		lList.add(AllCards.a5D);
+		lList.add(AllCards.aAS);
 		assertEquals(AllCards.a4C, lList.getFirst());
-		
-		lInitiallyEmpty.add(AllCards.a4C);
-		
-		//Add more than one card in each list and see if it returns the same "first card" from both lists
-		lList.add(AllCards.aAH);
-		lInitiallyEmpty.add(AllCards.aAH);
-		lList.add(AllCards.a5S);
-		lInitiallyEmpty.add(AllCards.a5S);
-		assertEquals(lList.getFirst(), AllCards.a5S);
-		assertEquals(lList.getFirst(), lInitiallyEmpty.getFirst());
-		//both sets of card must return the same "first card" (the last added to the set)
-		
+			
 	}
 
 	@Test(expected=GameUtilException.class)
 	public void testGetLast()
 	{
 		CardList lList = new CardList();
-		lList.getLast();//exception expected since the list is empty
 		
-		//add one card in lList and test if it returns the same card as "last card"
-		lList.add(AllCards.a4C);
-		assertEquals(AllCards.a4C, lList.getLast());
+		//exception expected since the list is empty
+		lList.getLast();
 		
-		//return the first card added to the set
-		lList.add(AllCards.a4D);
-		lList.add(AllCards.a4S);
-		assertEquals(AllCards.a4C, lInitiallyEmpty.getLast());
+		//fill lList with cards and test if it returns the last card inserted
+		lList.add(AllCards.a9C);
+		lList.add(AllCards.aAS);
+		lList.add(AllCards.a5D);
+		assertEquals(AllCards.a5D, lList.getLast());
 		
-		//We need to test lInitialltEmptyList also
 	}
 
-	@Test(expected=GameUtilException.class)
+	@Test
 	public void testRemove()
 	{
 		
 		CardList lList = new CardList();
 		
-		//remove the cards in the same order as they were inserted
 		lList.add(AllCards.a7H);
 		lList.add(AllCards.a8S);
 		lList.add(AllCards.a5H);
 		assertEquals(lList.size(), 3);
-		lList.remove(AllCards.a7H);
 		lList.remove(AllCards.a8S);
 		lList.remove(AllCards.a5H);
-		assertEquals(lList.size(), 0);//lList is supposed to be empty
-		
-		lList.remove(AllCards.a4D); //exception expected since the deck is empty
-		
-		//remove the cards in the inverse order in which they were inserted
-		lList.add(AllCards.a7H);
-		lList.add(AllCards.a8S);
-		lList.add(AllCards.aAS);
-		lList.remove(AllCards.aAS);		
-		assertEquals(lList.size(),2);//lList contains two elements
-		lList.remove(AllCards.a8S);
+		assertEquals(lList.size(), 1);
 		lList.remove(AllCards.a7H);
 		assertEquals(lList.size(), 0);//lList is supposed to be empty
-		
 		
 	}
 
 	@Test
-	public void testClone()
+	public void testClone() throws CloneNotSupportedException
 	{
-		
 		CardList lList = new CardList();
 		
 		//we create a new list and add cards to it
@@ -123,29 +116,39 @@ public class TestCardList
 		lList.add(AllCards.a8S);
 		lList.add(AllCards.aAS);
 		
-		//we create a clone of lList
-		CardList clonedList = lList.clone();
+		CardList copy = lList.clone();
 		
-		assertEquals(lList.size(), clonedList.size());
-		assertEquals(lList.getFirst(), clonedList.getFirst());
-		assertEquals(lList.getLast(), clonedList.getLast());
+		assertEquals(lList.size(), copy.size());
+		assertEquals(lList.getFirst(), copy.getFirst());
+		assertEquals(lList.getLast(), copy.getLast());
 		
-		//We modify the lList. We remove the first card
+		//We modify lList. We remove the first card
 		lList.remove(AllCards.a7H);
-		
-		assertNotSame(lList.getFirst(), clonedList.getFirst());
-		assertNotSame(lList.getLast(), clonedList.getLast());
-		assertNotSame(lList.size(), clonedList.size());
-		
-		
-		
+		assertNotSame(lList.size(), copy.size());
+
 	}
 
 	@Test
 	public void testIterator()
 	{
-		fail("Not yet implemented");
+		CardList lList = new CardList();
+		lList.add(AllCards.a5H);
+		lList.add(AllCards.a4S);
+		lList.add(AllCards.aAS);
+		
+		
+		Iterator<Card> it = lList.iterator();
+		int sizeOfList = 0;
+
+	    while (it.hasNext()){
+	    	
+	    	Card newCard = it.next();
+	    	sizeOfList++;
+	    }
+	    
+	    assertEquals(lList.size(), 3); 
 	}
+	
 
 	@Test
 	public void testToString()
@@ -154,22 +157,31 @@ public class TestCardList
 		CardList lList = new CardList();
 		
 		lList.add(AllCards.aKH);
-		lList.add(AllCards.a8S);
-		lList.add(AllCards.a5H);
-		
-		assertEquals(lList.getFirst().toString(), "five of hearts");
-		
+		assertEquals(lList.getFirst().toString(), "KING of HEARTS");
+		//\n is the "line separator"
 		
 	}
 
 	@Test
 	public void testRandom()
 	{
-		fail("Not yet implemented");
-	}
+		CardList lList = new CardList();
+		
+		lList.add(AllCards.a5C);
+		lList.add(AllCards.a6C);
+		lList.add(AllCards.a7S);
+		
+		Card randomCard = lList.random();
+		
+		//We make sure that the random card chosen is originally in lList
+		if (randomCard != AllCards.a5C && randomCard != AllCards.a6C && randomCard != AllCards.a7S){
+			fail();
+		}
+				
+		}
 
 	@Test
-	public void testSort()
+	public void testSort() throws CloneNotSupportedException
 	{
 		
 		CardList lList = new CardList();
@@ -178,10 +190,10 @@ public class TestCardList
 		lList.add(AllCards.a6C);
 		lList.add(AllCards.a7S);
 		
-		//lList.sort(pComparator); // what is pComparator?
+		lList.sort(null); // what is the pComparator?
 		
-		assertEquals(lList.getFirst(), AllCards.a7S);//assuming that the lowest card is the first card in an ordered set
-		assertEquals(lList.getLast(), AllCards.a6C); //assuming that the highest card is the last card in an ordered set
+		assertEquals(lList.getFirst(), AllCards.a5C);
+		assertEquals(lList.getLast(), AllCards.a7S); 
 		
 	}
 
