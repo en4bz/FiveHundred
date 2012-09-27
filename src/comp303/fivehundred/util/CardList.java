@@ -23,6 +23,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	public CardList()
 	{
 		
+		// Creates a new array list of type card
 		aCards = new ArrayList<Card>();
 		
 	}
@@ -38,6 +39,14 @@ public class CardList implements Iterable<Card>, Cloneable
 	{
 		
 		assert pCard != null;
+		
+		// If the card is already contained, returns without adding card
+		if (aCards.contains(pCard))
+		{
+			return;
+		}
+		
+		// Adds the unique card
 		aCards.add(pCard);
 		
 	}
@@ -60,6 +69,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	public Card getFirst() throws GameUtilException
 	{
 
+		// Throws an exception if the card list is empty
 		if (aCards.isEmpty()) 
 		{
 			throw new GameUtilException("CARD LIST EMPTY - cannot retrieve first card");
@@ -76,11 +86,13 @@ public class CardList implements Iterable<Card>, Cloneable
 	public Card getLast() throws GameUtilException
 	{
 		
+		// Throws an exception if the card list is empty
 		if (aCards.isEmpty()) 
 		{
 			throw new GameUtilException("CARD LIST EMPTY - cannot retrieve last card");
 		}
 		
+		// Returns the last card using (n-1) indexing
 		return aCards.get(aCards.size() - 1);
 	}
 	
@@ -94,6 +106,8 @@ public class CardList implements Iterable<Card>, Cloneable
 	{
 		
 		assert pCard != null;
+		
+		// Remove already takes care of whether the array list contains the card or not
 		aCards.remove(pCard);
 		
 	}
@@ -105,6 +119,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	public CardList clone() throws CloneNotSupportedException
 	{
 		
+		// Creates a clone, and then copies this object's cards to the new cardlist's cards
 		CardList copy = (CardList) super.clone();
 		copy.aCards = new ArrayList<Card>(aCards);
 		return copy;
@@ -119,6 +134,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	public Iterator<Card> iterator()
 	{
 		
+		// Returns an iterator
 		Iterator<Card> it = aCards.iterator();
 		return it;
 		
@@ -141,7 +157,7 @@ public class CardList implements Iterable<Card>, Cloneable
 		Iterator<Card> it = this.iterator();
 		int cardNumber = 1;
 		
-		// Goes through the card list and prints all the cards to the console
+		// Goes through the card list and prints all the cards to the console in order
 	    while (it.hasNext())
 	    {
 	    	sb.append(cardNumber+ ": " + it.next().toString() + NEWLINE);
