@@ -1,5 +1,7 @@
 package comp303.fivehundred.ai;
 
+import java.util.Random;
+
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 
@@ -10,11 +12,38 @@ import comp303.fivehundred.model.Hand;
  */
 public class RandomBiddingStrategy implements IBiddingStrategy
 {
+
+	private static final int MAX_INCLUSIVE = 100;
+	private static final int MIN_PERCENTAGE = 50;
+	private Bid aCurrent;
+	//private Bid lastBid;
+	
+	// Creates a random object
+	private Random aRand = new Random();
+	
 	/**
 	 * Builds a robot that passes 50% of the time and bids randomly otherwise.
 	 */
 	public RandomBiddingStrategy()
-	{}
+	{
+		
+		// Finds a random number between 0 and 100
+	    int prob = aRand.nextInt(MAX_INCLUSIVE + 1);
+		
+	    if (prob < MIN_PERCENTAGE)
+	    {
+	    	
+	    	
+	    	
+	    }
+	    
+	    else
+	    {
+	    	
+	    	
+	    }
+		
+	}
 	
 	/** 
 	 * Builds a robot that passes the specified percentage number of the time.
@@ -24,6 +53,33 @@ public class RandomBiddingStrategy implements IBiddingStrategy
 	 */
 	public RandomBiddingStrategy(int pPassFrequency)
 	{
+
+		// Finds a random number between 0 and 100
+	    int prob = aRand.nextInt(MAX_INCLUSIVE + 1);
+	    
+	    // Robot never passes
+	    if (pPassFrequency == 0) 
+	    {
+	    
+	    	//aCurrent = 
+	    	
+	    }
+	    
+	    else if (pPassFrequency == MAX_INCLUSIVE) 
+	    {
+	    	
+	    	aCurrent = new Bid();
+	    	return;
+	    	
+	    }
+	    
+	    // Passes if random number is greater than 50
+	    else if (prob < pPassFrequency) 
+	    {
+	    	//aCurrent = selectBid(super.pPreviousBids, Hand pHand);
+	    	return;
+	    }
+		
 	}
 	
 	@Override
