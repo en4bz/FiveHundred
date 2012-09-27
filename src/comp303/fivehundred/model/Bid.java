@@ -2,7 +2,6 @@ package comp303.fivehundred.model;
 
 import java.util.Arrays;
 import java.util.Collections;
-
 import comp303.fivehundred.util.Card.Suit;
 
 /**
@@ -168,7 +167,25 @@ public class Bid implements Comparable<Bid>
 	@Override
 	public boolean equals(Object pBid)
 	{
-		return pBid instanceof Bid && this.hashCode() == pBid.hashCode();
+		boolean lReturn = false;
+		
+		if ( !(pBid instanceof Bid) )
+		{
+			return false;
+		}
+		
+	    //cast to native object is now safe
+		Bid lBid = (Bid)pBid;
+		
+		if(isPass() && lBid.isPass())
+		{
+			lReturn = true;
+		}
+		if(!isPass() && !lBid.isPass() && getTricksBid() == lBid.getTricksBid() && getSuit() == lBid.getSuit())
+		{
+			lReturn = true;
+		}
+		return lReturn;
 	}
 
 	/**
@@ -229,7 +246,7 @@ public class Bid implements Comparable<Bid>
 	
 	/**
 	 * Helper function which returns the index of the suit according to the fivehundred rules in
-	 * the following order { SPADES, CLUBS, DIAMONDS, HEARTS, NO-TRUMP};
+	 * the following order { SPADES, CLUBS, DIAMONDS, HEARTS, NO-TRUMP}.
 	 * @return the index of pSuit according to the fivehundred rules.
 	 */
 	private int getSuitIndex()

@@ -1,5 +1,6 @@
 package comp303.fivehundred.model;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 import comp303.fivehundred.util.Card;
@@ -8,6 +9,7 @@ import comp303.fivehundred.util.CardList;
 
 
 /**
+ * @author Eleyine Zarour
  * A card list specialized for handling cards discarded
  * as part of the play of a trick.
  */
@@ -17,14 +19,10 @@ public class Trick extends CardList
 	
 	/**
 	 * Constructs a new empty trick for the specified contract.
-	 * @pre !pContract.isPass()
-	 * @pre pContract != null
 	 * @param pContract The contract that this trick is played for.
 	 */
 	public Trick(Bid pContract)
 	{
-		assert pContract != null;
-		assert !pContract.isPass();
 		aTrump = pContract.getSuit();
 	}
 	
@@ -43,7 +41,6 @@ public class Trick extends CardList
 	 */
 	public Suit getSuitLed()
 	{
-		//TODO: does it make sense to use EffectiveSuit here
 		if(jokerLed())
 		{
 			throw new ModelException("Cannot get suit of leading joker.");
@@ -76,16 +73,8 @@ public class Trick extends CardList
 	 */
 	public Card highest()
 	{
-		Card lReturn;
-		if(aTrump == null)
-		{
-			lReturn = sort( new Card.BySuitNoTrumpComparator(getSuitLed())).getFirst();
-		}
-		else 
-		{
-			lReturn = sort(new Card.BySuitComparator(getTrumpSuit(), getSuitLed())).getFirst();
-		}
-		return lReturn;
+		assert size() > 0;
+		return sort(getBySuitComparator()).getFirst();
 	}
 	
 	/**
@@ -96,16 +85,58 @@ public class Trick extends CardList
 	public int winnerIndex()
 	{
 		Card lHighest = highest();
-		int lIndex = 0;
+		int lIndex;
 		Iterator<Card> lIter = iterator();
-		while(lIter.hasNext())
-		{
-			if(lIter.next().equals(lHighest))
-			{
-				break;
-			}
-			lIndex++;
-		}
+		for(lIndex = 0; lIter.hasNext() && !lIter.next().equals(lHighest); lIndex++){}
+		// not sure if the above works
 		return lIndex;
+	}
+	
+	//Helper Methods (non-specified by milestone 1)
+	
+	/**
+	 * Creates a comparator for this trick which uses suit as primary key, then rank. 
+	 * Adjusts for a trump (if there is one) and the suit led. Jacks rank above aces 
+	 * if they are in the trump suit.
+	 * @return a comparator which returns the highest card based on the trick TrumpSuit 
+	 * (which may be no-trump) and SuitLed.
+	 */
+	public Comparator<Card> getBySuitComparator()
+	{
+
+		Suit[] lSuitOrder = Card.Suit.values().clone();
+		int lTrumpSuitIndex = lSuitOrder.length - 1;
+		int lSuitLedIndex = lSuitOrder.length - 1; 
+		
+		// move trump
+		if(getTrumpSuit() != null)
+		{
+			lSuitLedIndex--;
+			for(int i = 0; i < lSuitOrder.length; i++)
+			{
+				if(lSuitOrder[i].equals(getTrumpSuit()))
+				{
+					Suit tmp = lSuitOrder[lTrumpSuitIndex];
+					lSuitOrder[lTrumpSuitIndex] = getTrumpSuit();
+					lSuitOrder[i] = tmp;
+				}
+			}
+		} 
+		
+		// move suitLed 
+		if(!getTrumpSuit().equals(getSuitLed()) || getTrumpSuit() == null)
+		{
+			for(int i = 0; i < lSuitOrder.length; i++)
+			{
+				if(lSuitOrder[i].equals(getSuitLed()))
+				{
+					Suit tmp = lSuitOrder[lSuitLedIndex];
+					lSuitOrder[lSuitLedIndex] = getSuitLed();
+					lSuitOrder[i] = tmp;
+				}
+			}
+		}
+
+		return new Card.GenericBySuitComparator(lSuitOrder, getTrumpSuit() != null);
 	}
 }
