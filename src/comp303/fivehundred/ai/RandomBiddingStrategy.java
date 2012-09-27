@@ -6,6 +6,7 @@ import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 
 /**
+ * @author Rayyan Khoury
  * Enters a valid but random bid. Passes a configurable number of times.
  * If the robot does not pass, it uses a universal probability
  * distribution across all bids permitted.
@@ -13,13 +14,23 @@ import comp303.fivehundred.model.Hand;
 public class RandomBiddingStrategy implements IBiddingStrategy
 {
 
-	private static final int MAX_INCLUSIVE = 100;
-	private static final int MIN_PERCENTAGE = 50;
-	private Bid aCurrent;
-	//private Bid lastBid;
+	// Maximum pass percentage
+	private static final int MAX_PERCENT_INCLUSIVE = 100;
+	
+	// Minimum pass percentage
+	private static final int MIN_PERCENT_INCLUSIVE = 0;
+	
+	// Maximum bid possible
+	private static final int MAX_BID_INCLUSIVE = 24;
+	
+	// For the initial constructor which passes 50 percent of the time
+	private static final int FIFTY_PERCENT = 50;
 	
 	// Creates a random object
-	private Random aRand = new Random();
+	private static Random aRand = new Random();
+	
+	// The probability of this robot passing
+	private int aProbPass;
 	
 	/**
 	 * Builds a robot that passes 50% of the time and bids randomly otherwise.
@@ -27,21 +38,7 @@ public class RandomBiddingStrategy implements IBiddingStrategy
 	public RandomBiddingStrategy()
 	{
 		
-		// Finds a random number between 0 and 100
-	    int prob = aRand.nextInt(MAX_INCLUSIVE + 1);
-		
-	    if (prob < MIN_PERCENTAGE)
-	    {
-	    	
-	    	
-	    	
-	    }
-	    
-	    else
-	    {
-	    	
-	    	
-	    }
+		aProbPass = FIFTY_PERCENT;
 		
 	}
 	
@@ -54,38 +51,57 @@ public class RandomBiddingStrategy implements IBiddingStrategy
 	public RandomBiddingStrategy(int pPassFrequency)
 	{
 
-		// Finds a random number between 0 and 100
-	    int prob = aRand.nextInt(MAX_INCLUSIVE + 1);
-	    
-	    // Robot never passes
-	    if (pPassFrequency == 0) 
-	    {
-	    
-	    	//aCurrent = 
-	    	
-	    }
-	    
-	    else if (pPassFrequency == MAX_INCLUSIVE) 
-	    {
-	    	
-	    	aCurrent = new Bid();
-	    	return;
-	    	
-	    }
-	    
-	    // Passes if random number is greater than 50
-	    else if (prob < pPassFrequency) 
-	    {
-	    	//aCurrent = selectBid(super.pPreviousBids, Hand pHand);
-	    	return;
-	    }
+		assert (pPassFrequency >= MIN_PERCENT_INCLUSIVE) && (pPassFrequency <= MAX_PERCENT_INCLUSIVE);
+		aProbPass = pPassFrequency;
 		
 	}
 	
 	@Override
 	public Bid selectBid(Bid[] pPreviousBids, Hand pHand)
 	{
-		return null;
+		
+	    // The index of the highest bid
+	    int highestBidIndex = Bid.max(pPreviousBids).toIndex();
+	    
+	    // If the maximum bid has already been bid
+	    if (highestBidIndex == MAX_BID_INCLUSIVE)
+	    {
+	    	
+	    	return new Bid();
+	    	
+	    }
+		
+		// Finds a random number between 0 and 100 to determine whether this robot will bid or not
+	    int pass = aRand.nextInt(MAX_PERCENT_INCLUSIVE + 1);
+	    
+	    // Finds a random index between lowest bid and maximum bid to bid should the robot bid
+	    int bid = aRand.nextInt(MAX_BID_INCLUSIVE - highestBidIndex) + highestBidIndex + 1;
+	    
+	    // The robot passes
+	    if (pass == MIN_PERCENT_INCLUSIVE || pass <= aProbPass) 
+	    {
+	    	
+	    	return new Bid();
+	    	
+	    }
+	    
+	    // The robot passes 
+	    else if (pass == MAX_PERCENT_INCLUSIVE || pass > aProbPass)
+	    {
+	    	
+	    	return new Bid(bid);
+
+	    	
+	    }
+	    
+	    // Contingency case
+	    else
+	    {
+	    	
+	    	return new Bid();
+	    	
+	    }
+	    
 	}
 
 }
