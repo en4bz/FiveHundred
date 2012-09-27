@@ -17,6 +17,9 @@ public class CardList implements Iterable<Card>, Cloneable
 	// The array list of all cards
 	private ArrayList<Card> aCards;
 	
+	// Random object
+	private Random aNum = new Random();
+	
 	/**
 	 * Creates a new, empty card list.
 	 */
@@ -180,9 +183,8 @@ public class CardList implements Iterable<Card>, Cloneable
 		assert aCards.size() > 0;
 
 		// Finding a random number between 0 and size
-	    Random num = new Random();
 		int size = aCards.size();
-	    int index = num.nextInt(size);
+	    int index = aNum.nextInt(size);
 	    
 	    // Returns the random card
 		return aCards.get(index);
