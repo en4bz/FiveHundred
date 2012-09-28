@@ -14,12 +14,11 @@ import comp303.fivehundred.util.CardList;
 public class Hand extends CardList
 {
 	/**
-	 * @throws CloneNotSupportedException 
 	 * @see java.lang.Object#clone()
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Hand clone() throws CloneNotSupportedException
+	public Hand clone()
 	{
 		return (Hand) super.clone();
 	}
