@@ -1,8 +1,6 @@
 package comp303.fivehundred.model;
 
 import java.util.Comparator;
-import java.util.Iterator;
-
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
@@ -85,10 +83,15 @@ public class Trick extends CardList
 	public int winnerIndex()
 	{
 		Card lHighest = highest();
-		int lIndex;
-		Iterator<Card> lIter = iterator();
-		for(lIndex = 0; lIter.hasNext() && !lIter.next().equals(lHighest); lIndex++){}
-		// not sure if the above works
+		int lIndex = 0;
+		for(Card c: this)
+		{
+			if(c.equals(lHighest))
+			{
+				break;
+			}
+			lIndex++;
+		}
 		return lIndex;
 	}
 	
@@ -123,7 +126,7 @@ public class Trick extends CardList
 			}
 		} 
 		
-		// move suitLed 
+		// move suit led 
 		if(!getTrumpSuit().equals(getSuitLed()) || getTrumpSuit() == null)
 		{
 			for(int i = 0; i < lSuitOrder.length; i++)
