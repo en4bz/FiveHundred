@@ -282,9 +282,10 @@ public final class Card implements Comparable<Card>
 	public static class ByRankComparator implements Comparator<Card>
 	{	
 		/**
-		 * Compares two cards by rank then suit. Suit order corresponds to enum ordinality.
+		 * Compares two cards by rank then suit. 
 		 * @param pCard1 the first card to compare
 		 * @param pCard2 the second card to compare
+		 * TODO: check if you can add the following preconditions
 		 * @pre pCard1 != null
 		 * @pre pCard2 != null
 		 * @return Returns a negative integer, zero, or a positive integer 
@@ -312,8 +313,7 @@ public final class Card implements Comparable<Card>
 	/**
 	 * Compares cards using their suit as primary key, then rank such that suit 
 	 * order is defined by the user. Jacks rank between 10 and queens of their suit if there is no trump.
-	 * Otherwise, they rank
-	 * @author Eleyine
+	 * Otherwise, they rank above aces.
 	 *
 	 */
 	public static class GenericBySuitComparator implements Comparator<Card> 
@@ -331,14 +331,10 @@ public final class Card implements Comparable<Card>
 		public GenericBySuitComparator(Suit[] pSuitOrder, boolean pIsFirstSuitTrump)
 		{
 			assert pSuitOrder.length == 4;
-			aSuitOrder = new Suit[pSuitOrder.length];
-			for(int i = 0; i < pSuitOrder.length; i++) 
-			{
-				aSuitOrder[i] = pSuitOrder[i];
-			}
+			aSuitOrder = pSuitOrder.clone();
 			if(pIsFirstSuitTrump)
 			{
-				aTrump = pSuitOrder[3];
+				aTrump = aSuitOrder[aSuitOrder.length-1];
 			}			
 		}
 		
@@ -351,10 +347,9 @@ public final class Card implements Comparable<Card>
 				return lReturn;
 			}
 			
-			// first compare by suit
+			// First, compare by suit.
 			if(!pCard1.isJoker() && !pCard2.isJoker())
-			// both cards are not jokers
-			{
+			{ // both cards are not jokers
 
 				ArrayList<Suit> lSuitOrder = new ArrayList<Suit>();
 				for(Suit s: aSuitOrder)
@@ -384,18 +379,17 @@ public final class Card implements Comparable<Card>
 					} 
 					else
 					{ // both cards have the current highest suit
-						lReturn = 0; // to compare by rank
+						lReturn = 0;
 						break;
 					}
 				}
 			}
 			else
-			// at least one card is a Joker
-			{
+			{ // at least one card is a Joker
 				lReturn = pCard1.compareTo(pCard2);
 			}
 
-			// then compare by rank
+			// Then, compare by rank.
 			if (lReturn == 0) 
 			// Note: If at least one of the cards is a joker, the only case where 
 			// lReturn == 0 is when the cards are equal. Hence, in this condition
@@ -438,23 +432,22 @@ public final class Card implements Comparable<Card>
 		
 		/**
 		 * Create a Comparator object which compares cards by suit, according to the natural
-		 * ordering of the game, then by rank. Jacks rank between 10 and queens of their suit. 
+		 * ordering of the game, then by rank. 
 		 */
 		public BySuitNoTrumpComparator()
 		{
 			aSuitOrder = Card.Suit.values().clone();
-			
 		}
 		
 		@Override
 		/**
 		 * Compare cards according to their suit then rank in a no trump round.
-		 * Suit order is the natural order of the game.
+		 * Suit order is the natural order of the game. Jacks rank between 10 and queens of their suit.
 		 * @param pCard1 the first card to compare
 		 * @param pCard2 the second card to compare
 		 * @return Returns a negative integer, zero, or a positive integer 
 		 * as pCard1 is less than, equal to, or greater than pCard2 by suit 
-		 * then by rank. Jacks rank between 10 and queens of their suit.
+		 * then by rank. 
 		 * @pre pCard1 != null
 		 * @pre pCard2 != null
 		 */
@@ -477,7 +470,7 @@ public final class Card implements Comparable<Card>
 
 		/**
 		 * Create a Comparator object which compares cards according to 
-		 * their suit then rank in a trump round. The trump suit is the highest.
+		 * their suit then rank in a trump round.
 		 * @param pTrump the trump suit of the round 
 		 * @pre pTrump != null;
 		 */
