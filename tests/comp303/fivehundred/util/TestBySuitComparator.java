@@ -18,7 +18,7 @@ import comp303.fivehundred.util.Card.Suit;
 
 public class TestBySuitComparator
 {
-	private BySuitComparator tester = new BySuitComparator(Suit.HEARTS, Suit.CLUBS);
+	private BySuitComparator tester = new BySuitComparator(Suit.HEARTS);
 	
 	@Test
 	public void testCompare()

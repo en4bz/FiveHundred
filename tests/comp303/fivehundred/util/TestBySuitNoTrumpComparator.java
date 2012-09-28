@@ -13,7 +13,7 @@ import comp303.fivehundred.util.Card.Suit;
 
 public class TestBySuitNoTrumpComparator
 {
-	private BySuitNoTrumpComparator tester = new BySuitNoTrumpComparator(Suit.SPADES);
+	private BySuitNoTrumpComparator tester = new BySuitNoTrumpComparator();
 	
 	@Test
 	public void testCompare()
