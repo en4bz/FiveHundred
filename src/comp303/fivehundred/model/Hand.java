@@ -1,6 +1,10 @@
 package comp303.fivehundred.model;
 
+import java.util.Comparator;
+import java.util.Iterator;
+
 import comp303.fivehundred.util.Card;
+import comp303.fivehundred.util.Card.Rank;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
 
@@ -11,13 +15,14 @@ import comp303.fivehundred.util.CardList;
 public class Hand extends CardList
 {
 	/**
+	 * @throws CloneNotSupportedException 
 	 * @see java.lang.Object#clone()
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Hand clone()
+	public Hand clone() throws CloneNotSupportedException
 	{
-		return null;
+		return (Hand) super.clone();
 	}
 	
 	/**
@@ -26,7 +31,16 @@ public class Hand extends CardList
 	 */
 	public CardList canLead(boolean pNoTrump)
 	{
-		return null;
+		CardList lReturn =  new CardList();
+		if(pNoTrump)
+		{
+			
+		}
+		else
+		{
+			
+		}
+		return lReturn;
 	}
 	
 	/**
@@ -34,7 +48,18 @@ public class Hand extends CardList
 	 */
 	public CardList getJokers()
 	{
-		return null;
+		CardList lReturn = new CardList();
+		Iterator<Card> it = this.iterator();
+		while(it.hasNext())
+		{
+			Card lTemp = it.next();
+			if(lTemp.isJoker())
+			{
+				lReturn.add(it.next());
+			}
+			
+		}
+		return lReturn;
 	}
 	
 	/**
@@ -42,7 +67,18 @@ public class Hand extends CardList
 	 */
 	public CardList getNonJokers()
 	{
-		return null;
+		CardList lReturn = new CardList();
+		Iterator<Card> it = this.iterator();
+		while(it.hasNext())
+		{
+			Card lTemp = it.next();
+			if(!lTemp.isJoker())
+			{
+				lReturn.add(it.next());
+			}
+			
+		}
+		return lReturn;
 	}
 	
 	/**
@@ -54,7 +90,19 @@ public class Hand extends CardList
 	 */
 	public CardList getTrumpCards(Suit pTrump)
 	{
-		return null;
+		assert pTrump != null;
+		CardList lReturn = new CardList();
+		Iterator<Card> it = this.iterator();
+		while(it.hasNext())
+		{
+			Card lTemp = it.next();
+			if(lTemp.getEffectiveSuit(pTrump).equals(pTrump) || lTemp.isJoker())
+			{
+				lReturn.add(it.next());
+			}
+			
+		}
+		return lReturn;
 	}
 	
 	/**
@@ -66,7 +114,19 @@ public class Hand extends CardList
 	 */
 	public CardList getNonTrumpCards(Suit pTrump)
 	{
-		return null;
+		assert pTrump != null;
+		CardList lReturn = new CardList();
+		Iterator<Card> it = this.iterator();
+		while(it.hasNext())
+		{
+			Card lTemp = it.next();
+			if(!lTemp.getEffectiveSuit(pTrump).equals(pTrump) || !lTemp.isJoker())
+			{
+				lReturn.add(it.next());
+			}
+			
+		}
+		return lReturn;
 	}
 	
 	
@@ -74,10 +134,21 @@ public class Hand extends CardList
 	 * Selects the least valuable card in the hand, if pTrump is the trump.
 	 * @param pTrump The trump suit. Can be null to indicate no-trump.
 	 * @return The least valuable card in the hand.
+	 * @throws CloneNotSupportedException 
 	 */
-	public Card selectLowest(Suit pTrump)
+	public Card selectLowest(Suit pTrump) throws CloneNotSupportedException
 	{
-		return null;
+		Comparator<Card> lComp;
+		if(pTrump == null)
+		{
+			lComp = new Card.BySuitNoTrumpComparator();
+		}
+		else
+		{
+			lComp = new Card.BySuitComparator(pTrump);
+		}
+		sort(lComp);
+		return this.sort(lComp).getFirst();
 	}
 	
 	/**
@@ -87,7 +158,17 @@ public class Hand extends CardList
 	 */
 	public CardList playableCards( Suit pLed, Suit pTrump )
 	{
-		return null;
+		CardList lReturn = new CardList();
+		Iterator<Card> iter = this.iterator();
+		while(iter.hasNext())
+		{
+			Card lTemp = iter.next();
+			if(lTemp.getSuit().equals(pLed) || lTemp.getSuit().equals(pTrump) || lTemp.isJoker())
+			{
+				lReturn.add(lTemp);
+			}
+		}
+		return lReturn;
 	}
 	
 	/**
@@ -100,6 +181,18 @@ public class Hand extends CardList
 	 */
 	public int numberOfCards(Suit pSuit, Suit pTrump)
 	{
-		return -1;
+		assert pSuit != null;
+		assert pTrump != null;
+		int lReturn = -1;
+		Iterator<Card> iter = this.iterator();
+		while(iter.hasNext())
+		{
+			Card lTemp = iter.next();
+			if(lTemp.getEffectiveSuit(pTrump).equals(pSuit))
+			{
+				lReturn++;
+			}
+		}
+		return lReturn;
 	}
 }
