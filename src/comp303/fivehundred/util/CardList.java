@@ -119,6 +119,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * @see java.lang.Object#clone()
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	public CardList clone()
 	{
 		
@@ -126,7 +127,7 @@ public class CardList implements Iterable<Card>, Cloneable
 		try
 		{
 			CardList copy = (CardList) super.clone();
-			copy.aCards = new ArrayList<Card>(aCards);
+			copy.aCards = (ArrayList<Card>) aCards.clone();
 			return copy;
 		}
 		
