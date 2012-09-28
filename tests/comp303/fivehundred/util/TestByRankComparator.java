@@ -24,10 +24,10 @@ public class TestByRankComparator
 	@Test
 	public void testCompareTo()
 	{
-		assertEquals(0, tester.compare(a5C, a5C));
-		assertEquals(-1, tester.compare(a4D, a7C));
-		assertEquals(1, tester.compare(aAC, a6C));
-		assertEquals(1, tester.compare(aHJo, aLJo));
-		assertEquals(1, tester.compare(a8H, a8C));
+		assertEquals(true, tester.compare(a5C, a5C) == 0);
+		assertEquals(true, tester.compare(a4D, a7C) < 0);
+		assertEquals(true, tester.compare(aAC, a6C) > 0);
+		assertEquals(true, tester.compare(aHJo, aLJo) > 0);
+		assertEquals(true, tester.compare(a8H, a8C) > 0);
 	}
 }
