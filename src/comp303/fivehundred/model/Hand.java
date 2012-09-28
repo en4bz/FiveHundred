@@ -2,13 +2,12 @@ package comp303.fivehundred.model;
 
 import java.util.Comparator;
 import java.util.Iterator;
-
 import comp303.fivehundred.util.Card;
-import comp303.fivehundred.util.Card.Rank;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
 
 /**
+ * @author Ian Forbes
  * Additional services to manage a card list that corresponds to
  * the cards in a player's hand.
  */
@@ -32,13 +31,19 @@ public class Hand extends CardList
 	public CardList canLead(boolean pNoTrump)
 	{
 		CardList lReturn =  new CardList();
-		if(pNoTrump)
+		Iterator<Card> iter = this.iterator();
+		while(iter.hasNext())
 		{
-			
-		}
-		else
-		{
-			
+			Card lTemp = iter.next();
+			//If the card is a joker, there is no trump and the joker isn't the only card in the hand
+			if(lTemp.isJoker() && pNoTrump && this.size() != 1)
+			{
+				continue;
+			}
+			else
+			{
+				lReturn.add(lTemp);
+			}
 		}
 		return lReturn;
 	}
