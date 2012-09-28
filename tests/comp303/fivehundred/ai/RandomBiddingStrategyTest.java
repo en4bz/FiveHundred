@@ -1,4 +1,4 @@
-package comp303.fivehundred.test;
+package comp303.fivehundred.ai;
 
 import static org.junit.Assert.*;
 

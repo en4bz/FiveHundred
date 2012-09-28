@@ -1,27 +1,29 @@
-package comp303.fivehundred.test;
+package comp303.fivehundred.ai;
 
 import static org.junit.Assert.*;
 
-/**
- * @author Gabrielle Germain
- * Test class for RandomPlayingStrategy
- */
-
 import org.junit.Test;
 
+import comp303.fivehundred.ai.RandomCardExchangeStrategy;
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
-import comp303.fivehundred.model.Trick;
 import comp303.fivehundred.util.AllCards;
+import comp303.fivehundred.util.CardList;
 
-public class RandomPlayingStrategyTest
+/**
+ * @author Gabrielle Germain
+ * Test class for RandomCardExchangeStrategy
+ */
+
+public class RandomCardExchangeStrategyTest
 {
 	
-	
-
 	@Test
-	public void testPlay()
-	{
+	public void testSelectCardsToDiscard()
+	{	
+		Bid[] testBid = {new Bid(20), new Bid(15), new Bid(12)}; //new array of bids
+		int pIndex = 0;//what value should have pIndex?
+		
 		//We create a new hand (10 cards)
 		Hand newHand = new Hand();
 		newHand.add(AllCards.a4D);
@@ -35,10 +37,9 @@ public class RandomPlayingStrategyTest
 		newHand.add(AllCards.a5S);
 		newHand.add(AllCards.a4H);
 		
-		Bid someBid = new Bid (6, null);//null = no trump
-		Trick highestBid = new Trick (someBid);
+		//selectCardsToDiscard(testBid, pIndex, newHand);
 		
-		//play(highestBid, newHand);
+		
 	}
 
 }
