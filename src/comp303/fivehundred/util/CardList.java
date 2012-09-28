@@ -1,7 +1,8 @@
 package comp303.fivehundred.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
+// TODO: uncomment here
+//import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
@@ -119,25 +120,19 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * @see java.lang.Object#clone()
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
+	
+	//TODO: implement clone
 	public CardList clone()
 	{
-		
-		// Creates a clone, and then copies this object's cards to the new cardlist's cards
-		try
-		{
-			CardList copy = (CardList) super.clone();
-			copy.aCards = (ArrayList<Card>) aCards.clone();
-			return copy;
-		}
-		
-		catch (CloneNotSupportedException e)
-		{
-			System.out.println(e);
-			return null;
-		}
-		
+		/*
+		super.clone();
+		CardList copy = (CardList) super.clone();
+		copy.aCards = (ArrayList<Card>) aCards.clone();
+		return new CardList();
+		*/
+		return null;
 	}
+	
 	
 	/**
 	 * @see java.lang.Iterable#iterator()
@@ -206,12 +201,13 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * method has no side effects.
 	 * @param pComparator Defines the sorting order.
 	 * @return the sorted CardList
-	 * @throws CloneNotSupportedException 
 	 * @pre pComparator != null
 	 */
-	public CardList sort(Comparator<Card> pComparator) throws CloneNotSupportedException
+	
+	//TODO : implement sort
+	public CardList sort(Comparator<Card> pComparator)
 	{
-		
+		/*
 		// Assertions
 		assert pComparator != null;
 		
@@ -223,6 +219,9 @@ public class CardList implements Iterable<Card>, Cloneable
 		
 		// Returns the copied sorted card list
 		return copy;
+		*/
+		return null;
 		
 	}
+
 }
