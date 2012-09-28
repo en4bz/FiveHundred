@@ -1,8 +1,6 @@
 package comp303.fivehundred.model;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import comp303.fivehundred.util.AllCards;
@@ -12,6 +10,11 @@ import comp303.fivehundred.util.CardList;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+/**
+ * JUnit test for the Hand class.
+ * @author Eleyine Zarour
+ *
+ */
 public class TestHand
 {
 	private Card[] aJoker = {AllCards.aLJo};
@@ -161,6 +164,7 @@ public class TestHand
 	}
 	
 	@Test
+	//TODO: should not throw CloneNotSupportedException
 	public void testSelectLowest() throws CloneNotSupportedException
 	{
 		// Expected values in a Clubs round.
@@ -181,13 +185,125 @@ public class TestHand
 		assertTrue(lTrumpTest.equals(toHand(aTrumpTest).selectLowest(lTrump)));
 	}
 	
+	@Test
 	public void testPlayableCards()
 	{
+		// Expected values in a no-trump round with a led Diamonds.
+		Suit lLed = Suit.DIAMONDS;
+		Suit lTrump = null;
+		Card[] lJokerD = {AllCards.aLJo};
+		Card[] lJokersD = {AllCards.aHJo, AllCards.aLJo};
+		Card[] lNonJokersD = {AllCards.aJD};
+		Card[] lMiscD = {AllCards.aHJo, AllCards.aJD};
+		Card[] lAllSuitsD = {AllCards.aJD};
+		Card[] lTrumpTestD = {AllCards.aJD};
 		
+		// Tests for a no-trump round with led Diamonds.
+		assertTrue(toSet(lJokerD).equals(toSet(toHand(aJoker).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lJokersD).equals(toSet(toHand(aJokers).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lNonJokersD).equals(toSet(toHand(aNonJokers).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lMiscD).equals(toSet(toHand(aMisc).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lAllSuitsD).equals(toSet(toHand(aAllSuits).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lTrumpTestD).equals(toSet(toHand(aTrumpTest).playableCards(lLed, lTrump))));
+	
+		// Expected values in a Clubs trump round with led Clubs.
+		lTrump = Suit.CLUBS;
+		lLed = Suit.CLUBS;
+		Card[] lJokerCC = {AllCards.aLJo};
+		Card[] lJokersCC = {AllCards.aHJo, AllCards.aLJo};
+		Card[] lNonJokersCC = {AllCards.a5C};
+		Card[] lMiscCC = {AllCards.aHJo, AllCards.a5C};
+		Card[] lAllSuitsCC = {AllCards.a5C};
+		Card[] lTrumpTestCC = {AllCards.aJC, AllCards.aJS};
+		
+		// Tests for a Clubs trump round with led Clubs.
+		assertTrue(toSet(lJokerCC).equals(toSet(toHand(aJoker).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lJokersCC).equals(toSet(toHand(aJokers).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lNonJokersCC).equals(toSet(toHand(aNonJokers).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lMiscCC).equals(toSet(toHand(aMisc).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lAllSuitsCC).equals(toSet(toHand(aAllSuits).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lTrumpTestCC).equals(toSet(toHand(aTrumpTest).playableCards(lLed, lTrump))));
+	
+		// Expected values in a Clubs trump round with led Spades.
+		lTrump = Suit.HEARTS;
+		lLed = Suit.SPADES;
+		Card[] lJokerHS = {AllCards.aLJo};
+		Card[] lJokersHS = {AllCards.aHJo, AllCards.aLJo};
+		Card[] lNonJokersHS = {AllCards.aJD, AllCards.aAS};
+		Card[] lMiscHS = {AllCards.aHJo, AllCards.aJD, AllCards.aAS};
+		Card[] lAllSuitsHS = {AllCards.aJD, AllCards.aAS, AllCards.aJH};
+		Card[] lTrumpTestHS = {AllCards.aJH,AllCards.aJS,AllCards.aJD};
+		
+		// Tests for a Clubs trump round with led Spades.
+		assertTrue(toSet(lJokerHS).equals(toSet(toHand(aJoker).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lJokersHS).equals(toSet(toHand(aJokers).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lNonJokersHS).equals(toSet(toHand(aNonJokers).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lMiscHS).equals(toSet(toHand(aMisc).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lAllSuitsHS).equals(toSet(toHand(aAllSuits).playableCards(lLed, lTrump))));
+		assertTrue(toSet(lTrumpTestHS).equals(toSet(toHand(aTrumpTest).playableCards(lLed, lTrump))));
 	}
+	
+	@Test
 	public void testNumberOfCards()
 	{
+		// Consider the following:
+		// Card[] aJoker = {AllCards.aLJo};
+		// Card[] aJokers = {AllCards.aHJo, AllCards.aLJo};
+		// Card[] aNonJokers = {AllCards.a5C, AllCards.aJD, AllCards.aAS};
+		// Card[] aMisc = {AllCards.aHJo, AllCards.a5C, AllCards.aJD, AllCards.aAS};
+		// Card[] aAllSuits = {AllCards.a5C, AllCards.aJD, AllCards.aAS, AllCards.aJH};
+		// Card[] aTrumpTest = {AllCards.aJC, AllCards.aJH,AllCards.aJS,AllCards.aJD};
 		
+		// number of expected cards of suit DIAMONDS in a HEARTS round
+		Suit lSuit = Suit.DIAMONDS;
+		Suit lTrump = Suit.HEARTS;
+		int lJokerDH = 0;
+		int lJokersDH = 0;
+		int lNonJokersDH = 0;
+		int lMiscDH = 0;
+		int lAllSuitsDH = 0;
+		int lTrumpTestDH = 0;
+		
+		assertEquals(lJokerDH, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lJokersDH, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lNonJokersDH, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lMiscDH, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lAllSuitsDH, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lTrumpTestDH, toHand(aJoker).numberOfCards(lSuit, lTrump));		
+		
+		// number of expected cards of suit CLUBS in a SPADES round
+		lSuit = Suit.CLUBS;
+		lTrump = Suit.SPADES;
+		int lJokerCS = 0;
+		int lJokersCS = 0;
+		int lNonJokersCS = 1;
+		int lMiscCS = 1;
+		int lAllSuitsCS = 1;
+		int lTrumpTestCS = 0;
+		
+		assertEquals(lJokerCS, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lJokersCS, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lNonJokersCS, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lMiscCS, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lAllSuitsCS, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lTrumpTestCS, toHand(aJoker).numberOfCards(lSuit, lTrump));		
+		
+		// number of expected cards of suit CLUBS in a CLUBS round
+		lSuit = Suit.CLUBS;
+		lTrump = Suit.CLUBS;
+		int lJokerCC = 0;
+		int lJokersCC = 0;
+		int lNonJokersCC = 1;
+		int lMiscCC = 1;
+		int lAllSuitsCC = 1;
+		int lTrumpTestCC = 2;
+		
+		assertEquals(lJokerCC, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lJokersCC, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lNonJokersCC, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lMiscCC, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lAllSuitsCC, toHand(aJoker).numberOfCards(lSuit, lTrump));
+		assertEquals(lTrumpTestCC, toHand(aJoker).numberOfCards(lSuit, lTrump));			
 	}
 	
 	private Hand toHand(Card[] pCardArray)
@@ -200,6 +316,7 @@ public class TestHand
 		return lReturn;
 	}
 	
+	// Helper methods
 	private Set<Card> toSet(CardList pHand)
 	{
 		Set<Card> lReturn = new HashSet<Card>();
