@@ -189,7 +189,6 @@ public class CardList implements Iterable<Card>, Cloneable
 		assert aCards != null;
 		assert aCards.size() > 0;
 		
-		
 		// Random object
 		Random aNum = new Random();
 
