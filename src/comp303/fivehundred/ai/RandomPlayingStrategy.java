@@ -25,17 +25,8 @@ public class RandomPlayingStrategy implements IPlayingStrategy
 		// Suit of the current play
 		Suit trumpSuit = pTrick.getTrumpSuit();
 		
-		// Leading card
-		Card leadingCard = pTrick.cardLed();
-		
-		// Leading card suit
-		Suit leadingCardSuit = leadingCard.getSuit();
-		
 		// CardList all cards in the hand without the jokers
 		CardList allCardsNoJokers = pHand.getNonJokers();
-		
-		// Cards that are of the current suit being led
-		CardList followSuit = pHand.playableCards(leadingCardSuit, trumpSuit);
 
 		// Checks if this player is leading or not and selects a card at random
 		if (pTrick.size() == 0) 
@@ -78,6 +69,15 @@ public class RandomPlayingStrategy implements IPlayingStrategy
 		// Otherwise, this player is not leading and responding to the first card
 		else 
 		{
+			
+			// Leading card
+			Card leadingCard = pTrick.cardLed();
+			
+			// Leading card suit
+			Suit leadingCardSuit = leadingCard.getSuit();
+			
+			// Cards that are of the current suit being led
+			CardList followSuit = pHand.playableCards(leadingCardSuit, trumpSuit);
 			
 			// Chooses from legal cards
 			if (followSuit.size() != 0) 
