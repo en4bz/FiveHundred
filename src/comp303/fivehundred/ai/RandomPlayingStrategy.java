@@ -1,37 +1,10 @@
 package comp303.fivehundred.ai;
 
-import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.model.Trick;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
-
-
-
-/* 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * NO ACCESS TO THE SUIT OF THE CONTRACT!
- * CANNOT FULFILL THE FIRST REQUIREMENT COMPLETELY!
- * MUST FIX!
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- */
 
 /**
  * @author Rayyan Khoury
@@ -49,50 +22,83 @@ public class RandomPlayingStrategy implements IPlayingStrategy
 		// The Card to return
 		Card chosen = null;
 		
+		// Suit of the current play
+		Suit trumpSuit = pTrick.getTrumpSuit();
+		
 		// Leading card
 		Card leadingCard = pTrick.cardLed();
-		Suit leadingSuit = leadingCard.getSuit();
 		
-		// Suit of the current play
-		// Suit current = Bid.getSuit();
+		// Leading card suit
+		Suit leadingCardSuit = leadingCard.getSuit();
 		
+		// CardList all cards in the hand without the jokers
+		CardList allCardsNoJokers = pHand.getNonJokers();
+		
+		// Cards that are of the current suit being led
+		CardList followSuit = pHand.playableCards(leadingCardSuit, trumpSuit);
+
 		// Checks if this player is leading or not and selects a card at random
 		if (pTrick.size() == 0) 
 		{
-			// While loop chosen in case method returns null
-			while (chosen != null)
+			// If the game is in no trump
+			if (trumpSuit == null)
 			{
-				chosen = pHand.random();
+				
+				// If there are no cards except for Jokers
+				if (allCardsNoJokers.size() == 0)
+				{
+					
+					chosen = pHand.random();
+					return chosen;
+					
+				}
+				
+				// Otherwise the hand contains some other cards
+				else
+				{
+					
+					chosen = allCardsNoJokers.random();
+					return chosen;
+					
+				}
+				
 			}
 			
-			return chosen;
+			// If the game is a trump game
+			else
+			{
+				
+				chosen = pHand.random();
+				return chosen;
+				
+			}
 			
 		}
 		
-		// Cards that are of the current suit being led
-		CardList playableCards = pHand.getTrumpCards(leadingSuit);
-		
-		// While loop chosen in case method returns null
-		while (chosen != null) 
+		// Otherwise, this player is not leading and responding to the first card
+		else 
 		{
 			
-			if (playableCards.size() != 0) 
+			// Chooses from legal cards
+			if (followSuit.size() != 0) 
 			{
 				
-				chosen = playableCards.random();
+				chosen = followSuit.random();
+				return chosen;
 				
 			}
 			
+			// Just plays from the hand as cannot follow suit
 			else 
 			{
 				
 				chosen = pHand.random();
+				return chosen;
 				
 			}
 			
 		}
-		
-		return chosen;
+
 	}
 	
 }
