@@ -119,13 +119,22 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * @see java.lang.Object#clone()
 	 * {@inheritDoc}
 	 */
-	public CardList clone() throws CloneNotSupportedException
+	public CardList clone()
 	{
 		
 		// Creates a clone, and then copies this object's cards to the new cardlist's cards
-		CardList copy = (CardList) super.clone();
-		copy.aCards = new ArrayList<Card>(aCards);
-		return copy;
+		try
+		{
+			CardList copy = (CardList) super.clone();
+			copy.aCards = new ArrayList<Card>(aCards);
+			return copy;
+		}
+		
+		catch (CloneNotSupportedException e)
+		{
+			System.out.println(e);
+			return null;
+		}
 		
 	}
 	
@@ -209,7 +218,7 @@ public class CardList implements Iterable<Card>, Cloneable
 		CardList copy = this.clone();
 		
 		// Sorts the clone's cards
-		Collections.sort(copy.aCards,  pComparator);
+		Collections.sort(copy.aCards, pComparator);
 		
 		// Returns the copied sorted card list
 		return copy;
