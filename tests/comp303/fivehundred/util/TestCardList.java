@@ -16,7 +16,6 @@ import org.junit.Test;
 
 public class TestCardList
 {
-//	private CardList lInitiallyEmpty = new CardList();
 
 	@Test
 	public void testCardList()

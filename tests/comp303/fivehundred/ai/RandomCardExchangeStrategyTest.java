@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import comp303.fivehundred.ai.RandomCardExchangeStrategy;
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.util.AllCards;

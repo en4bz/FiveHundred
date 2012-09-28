@@ -34,6 +34,7 @@ public class RandomPlayingStrategyTest
 		//Test 1: Leading(empty trick), no trump, hand contains a joker. The method must not return the joker
 		Bid someBid1 = new Bid (6, null); //null = no trump
 		Trick emptyTrick = new Trick (someBid1);
+		emptyTrick.add(AllCards.a5D);
 		
 		Card testCard1 = testStrategy.play(emptyTrick, newHand);
 		assertNotSame(testCard1, AllCards.aLJo); // the card returned must not be the joker
