@@ -28,7 +28,7 @@ public class RandomPlayingStrategyTest
 		Hand newHand = new Hand();
 		newHand.add(AllCards.a9S);
 		newHand.add(AllCards.aJH);
-		newHand.add(AllCards.aLJo); //low joker
+		newHand.add(AllCards.aLJo); //low joker 
 		newHand.add(AllCards.a8C);
 
 		//Test 1: Leading(empty trick), no trump, hand contains a joker. The method must not return the joker
@@ -49,7 +49,7 @@ public class RandomPlayingStrategyTest
 		assertEquals(testCard2, AllCards.aJH); //must return the only "heart" that the hand contains, since the suit played is heart
 		
 		
-		//Test 3: Not Leading, trump = Spades, hand does not contain card of the same suit as the tricks played, but contains a spade. Must return trump (spades)
+//		//Test 3: Not Leading, trump = Spades, hand does not contain card of the same suit as the tricks played, but contains a spade. Must return trump (spades)
 		Bid someBid3 = new Bid (6, Suit.SPADES);
 		Trick notEmptyTrick = new Trick (someBid3); // empty trick
 		notEmptyTrick.add(AllCards.a4D); 
