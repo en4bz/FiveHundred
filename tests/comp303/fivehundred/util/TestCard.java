@@ -91,12 +91,12 @@ public class TestCard
 	@Test
 	public void testCompareTo()
 	{
-		assertEquals(-1,a7D.compareTo(a8C));
-		assertEquals(0 ,a9C.compareTo(a9C));
-		assertEquals(1 ,a9C.compareTo(a4C));
-		assertEquals(1 ,aHJo.compareTo(a4C));
-		assertEquals(-1,a8C.compareTo(aLJo));
-		assertEquals(1, aHJo.compareTo(aLJo));
+		assertEquals(true,a7D.compareTo(a8C) < 0);
+		assertEquals(true ,a9C.compareTo(a9C) == 0);
+		assertEquals(true ,a9C.compareTo(a4C) > 0);
+		assertEquals(true ,aHJo.compareTo(a4C) > 0);
+		assertEquals(true,a8C.compareTo(aLJo) < 0);
+		assertEquals(true, aHJo.compareTo(aLJo) > 0);
 	}
 	
 	@Test
@@ -104,6 +104,7 @@ public class TestCard
 	{
 		assertEquals(true, a4C.equals(a4C));
 		assertEquals(false, a9D.equals(a4C));
+		assertEquals(false, aTH.equals(new Object()));
 	}
 	
 	@Test

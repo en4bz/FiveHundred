@@ -18,12 +18,12 @@ public class TestBySuitNoTrumpComparator
 	@Test
 	public void testCompare()
 	{
-		assertEquals(0, tester.compare(a4D, a4D));
-		assertEquals(1, tester.compare(a4S, a8D));
-		assertEquals(-1, tester.compare(a9D, a5S));
-		assertEquals(0, tester.compare(a4D, a4D));
-		assertEquals(1, tester.compare(aHJo, a4D));
-		assertEquals(-1, tester.compare(a9C, aLJo));
-		assertEquals(1, tester.compare(aHJo, aLJo));
+		assertEquals(true, tester.compare(a4D, a4D) == 0);
+		assertEquals(true, tester.compare(a4S, a8D) > 0);
+		assertEquals(true, tester.compare(a9D, a5S) > 0);
+		assertEquals(true, tester.compare(a4H, a4H) == 0);
+		assertEquals(true, tester.compare(aHJo, a4D) > 0);
+		assertEquals(true, tester.compare(a9C, aLJo) < 0);
+		assertEquals(true, tester.compare(aHJo, aLJo) > 0);
 	}
 }
