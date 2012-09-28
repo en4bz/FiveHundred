@@ -59,7 +59,7 @@ public class Hand extends CardList
 			Card lTemp = it.next();
 			if(lTemp.isJoker())
 			{
-				lReturn.add(it.next());
+				lReturn.add(lTemp);
 			}
 			
 		}
@@ -78,7 +78,7 @@ public class Hand extends CardList
 			Card lTemp = it.next();
 			if(!lTemp.isJoker())
 			{
-				lReturn.add(it.next());
+				lReturn.add(lTemp);
 			}
 			
 		}
@@ -100,9 +100,10 @@ public class Hand extends CardList
 		while(it.hasNext())
 		{
 			Card lTemp = it.next();
-			if(lTemp.getEffectiveSuit(pTrump).equals(pTrump) || lTemp.isJoker())
+			//Something maybe be wrong with equals()?
+			if(lTemp.getEffectiveSuit(pTrump) == pTrump || lTemp.isJoker())
 			{
-				lReturn.add(it.next());
+				lReturn.add(lTemp);
 			}
 			
 		}
@@ -124,9 +125,9 @@ public class Hand extends CardList
 		while(it.hasNext())
 		{
 			Card lTemp = it.next();
-			if(!lTemp.getEffectiveSuit(pTrump).equals(pTrump) || !lTemp.isJoker())
+			if(!(lTemp.getEffectiveSuit(pTrump) == pTrump) || !lTemp.isJoker())
 			{
-				lReturn.add(it.next());
+				lReturn.add(lTemp);
 			}
 			
 		}
@@ -192,7 +193,8 @@ public class Hand extends CardList
 		while(iter.hasNext())
 		{
 			Card lTemp = iter.next();
-			if(lTemp.getEffectiveSuit(pTrump).equals(pSuit))
+			//Equals()?
+			if(lTemp.getEffectiveSuit(pTrump) == pSuit)
 			{
 				lReturn++;
 			}
