@@ -1,6 +1,8 @@
 package comp303.fivehundred.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
 import comp303.fivehundred.util.Card.Suit;
@@ -12,6 +14,16 @@ public class TestBid
 	{
 		Bid testBid = new Bid(8, Suit.HEARTS);
 		assertEquals(Suit.HEARTS, testBid.getSuit());
+		testBid = new Bid();
+		try
+		{
+			testBid.getSuit();
+			fail();
+		}
+		catch(ModelException e)
+		{
+			
+		}
 	}
 	
 	@Test
@@ -19,6 +31,16 @@ public class TestBid
 	{
 		Bid testBid = new Bid(8, Suit.HEARTS);
 		assertEquals(8, testBid.getTricksBid());
+		testBid = new Bid();
+		try
+		{
+			testBid.getTricksBid();
+			fail();
+		}
+		catch(ModelException e)
+		{
+			
+		}
 	}
 	
 	@Test
@@ -26,6 +48,8 @@ public class TestBid
 	{
 		Bid testBid = new Bid();
 		assertEquals(true, testBid.isPass());
+		testBid = new Bid(8, Suit.HEARTS);
+		assertEquals(false, testBid.isPass());
 
 	}
 	
@@ -48,6 +72,8 @@ public class TestBid
 		assertEquals("10 of HEARTS", testBid.toString());
 		testBid = new Bid(10, null);
 		assertEquals("10 of NO TRUMP", testBid.toString());
+		testBid = new Bid();
+		assertEquals("PASS", testBid.toString());
 	}
 	
 	@Test
@@ -59,5 +85,47 @@ public class TestBid
 		testBid1 = new Bid(7, Suit.HEARTS);
 		assertEquals(false, testBid1.equals(testBid2));
 
+	}
+	
+	@Test
+	public void testToIndex()
+	{
+		Bid testBid = new Bid(12);
+		assertEquals(12, testBid.toIndex());
+		testBid = new Bid();
+		try
+		{
+			testBid.toIndex();
+			fail();
+		}
+		catch(ModelException e)
+		{
+			
+		}
+	}
+	
+	@Test
+	public void testHashCode()
+	{
+		Bid A = new Bid();
+		Bid B = new Bid();
+		assertEquals(A.hashCode(), B.hashCode());
+	}
+	
+	@Test
+	public void testGetScore()
+	{
+		Bid testBid = new Bid(6,Suit.SPADES);
+		assertEquals(40, testBid.getScore());
+		testBid = new Bid();
+		try
+		{
+			testBid.getScore();
+			fail();
+		}
+		catch(ModelException e)
+		{
+			
+		}
 	}
 }
