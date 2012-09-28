@@ -1,8 +1,7 @@
 package comp303.fivehundred.util;
 
 import java.util.ArrayList;
-// TODO: uncomment here
-//import java.util.Collections;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
@@ -18,12 +17,10 @@ public class CardList implements Iterable<Card>, Cloneable
 	// The array list of all cards
 	private ArrayList<Card> aCards;
 	
-	// Random object
-	private Random aNum = new Random();
-	
 	/**
 	 * Creates a new, empty card list.
 	 */
+	
 	public CardList()
 	{
 		
@@ -120,17 +117,22 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * @see java.lang.Object#clone()
 	 * {@inheritDoc}
 	 */
-	
-	//TODO: implement clone
+
 	public CardList clone()
 	{
-		/*
-		super.clone();
-		CardList copy = (CardList) super.clone();
-		copy.aCards = (ArrayList<Card>) aCards.clone();
-		return new CardList();
-		*/
-		return null;
+		
+		try 
+		{
+			CardList lCopy = (CardList)super.clone();
+			lCopy.aCards = (ArrayList<Card>) this.aCards.clone();
+			return lCopy;
+		} 
+		catch (CloneNotSupportedException e) 
+		{
+			// shouldn't happen
+			throw new AssertionError(e);
+		}
+		
 	}
 	
 	
@@ -186,6 +188,10 @@ public class CardList implements Iterable<Card>, Cloneable
 		// Assertions
 		assert aCards != null;
 		assert aCards.size() > 0;
+		
+		
+		// Random object
+		Random aNum = new Random();
 
 		// Finding a random number between 0 and size
 		int size = aCards.size();
@@ -203,11 +209,10 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * @return the sorted CardList
 	 * @pre pComparator != null
 	 */
-	
-	//TODO : implement sort
+
 	public CardList sort(Comparator<Card> pComparator)
 	{
-		/*
+		
 		// Assertions
 		assert pComparator != null;
 		
@@ -219,8 +224,6 @@ public class CardList implements Iterable<Card>, Cloneable
 		
 		// Returns the copied sorted card list
 		return copy;
-		*/
-		return null;
 		
 	}
 
