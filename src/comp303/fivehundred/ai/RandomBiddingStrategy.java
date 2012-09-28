@@ -10,6 +10,14 @@ import comp303.fivehundred.model.Hand;
  * Enters a valid but random bid. Passes a configurable number of times.
  * If the robot does not pass, it uses a universal probability
  * distribution across all bids permitted.
+ * 
+ * DESIGN DECISION 1: if the pass frequency is not within the 0 to 100 range, 
+ * the constructor creates a robot which passes 50% of the time.
+ * 
+ * DESIGN DECISION 2: The robot bids if THIS robot's possibility of passing is 
+ * LESS THAN (and not equal to) the computed probability of passing in the bid method.
+ * The robot passes otherwise (greater than or equal to).
+ * 
  */
 public class RandomBiddingStrategy implements IBiddingStrategy
 {
@@ -51,7 +59,15 @@ public class RandomBiddingStrategy implements IBiddingStrategy
 	public RandomBiddingStrategy(int pPassFrequency)
 	{
 
-		assert (pPassFrequency >= MIN_PERCENT_INCLUSIVE) && (pPassFrequency <= MAX_PERCENT_INCLUSIVE);
+		// If the pass frequency is not within the range of 0 to 100, sets the robot at a 50 percent passing rate
+		if ((pPassFrequency >= MIN_PERCENT_INCLUSIVE) && (pPassFrequency <= MAX_PERCENT_INCLUSIVE))
+		{
+			
+			aProbPass = FIFTY_PERCENT;
+			return;
+			
+		}
+		
 		aProbPass = pPassFrequency;
 		
 	}
@@ -77,28 +93,36 @@ public class RandomBiddingStrategy implements IBiddingStrategy
 	    // Finds a random index between lowest bid and maximum bid to bid should the robot bid
 	    int bid = aRand.nextInt(MAX_BID_INCLUSIVE - highestBidIndex) + highestBidIndex + 1;
 	    
-	    // The robot passes
-	    if (pass == MIN_PERCENT_INCLUSIVE || pass <= aProbPass) 
+	    
+	    /* Switch statements for the max and minimum probability of this robot bidding. 
+	     * EG if this robot's tendency to pass is 100%, this switch statement makes sure 
+	     * that this robot will pass, and if this robot's tendency to pass is 0%, this robot
+	     * will never pass
+	     * */
+	    
+	    switch (aProbPass)
 	    {
-	    	
-	    	return new Bid();
-	    	
+	    
+	    case MIN_PERCENT_INCLUSIVE: return new Bid(bid);
+	    case MAX_PERCENT_INCLUSIVE: return new Bid();
+	    default: break;
+
 	    }
 	    
-	    // The robot passes 
-	    else if (pass == MAX_PERCENT_INCLUSIVE || pass > aProbPass)
+	    // The robot bids if THIS robot's possibility of passing is LESS THAN the computed probability of passing in this method
+	    if (aProbPass < pass) 
 	    {
 	    	
 	    	return new Bid(bid);
-
 	    	
 	    }
 	    
-	    // Contingency case
+	    // The robot passes
 	    else
 	    {
 	    	
 	    	return new Bid();
+
 	    	
 	    }
 	    
