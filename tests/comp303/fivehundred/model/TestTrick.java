@@ -45,6 +45,6 @@ public class TestTrick
 		testTrick.add(AllCards.aTH);
 		testTrick.add(AllCards.aKD);
 		testTrick.add(AllCards.a8S);
-		assertEquals(4, testTrick.winnerIndex());
+		assertEquals(3 , testTrick.winnerIndex());
 	}
 }
