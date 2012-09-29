@@ -72,7 +72,7 @@ public class Trick extends CardList
 	public Card highest()
 	{
 		assert size() > 0;
-		return sort(getBySuitComparator()).getFirst();
+		return sort(getBySuitComparator()).getLast();
 	}
 	
 	/**
