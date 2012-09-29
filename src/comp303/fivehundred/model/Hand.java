@@ -30,18 +30,24 @@ public class Hand extends CardList
 	public CardList canLead(boolean pNoTrump)
 	{
 		CardList lReturn =  new CardList();
-		Iterator<Card> iter = this.iterator();
-		while(iter.hasNext())
+		
+		// check if there are only jokers in the hand
+		boolean lOnlyJokers = true;
+		for(Card c: this)
 		{
-			Card lTemp = iter.next();
-			//If the card is a joker, there is no trump and the joker isn't the only card in the hand
-			if(lTemp.isJoker() && pNoTrump && this.size() != 1)
+			if(!c.isJoker())
 			{
-				continue;
+				lOnlyJokers = false;
+				break;
 			}
-			else
+		}
+		
+		// cannot lead with a joker in no-trump unless there are only jokers
+		for(Card c: this)
+		{
+			if(!pNoTrump || (pNoTrump && !c.isJoker()) || lOnlyJokers)
 			{
-				lReturn.add(lTemp);
+				lReturn.add(c);
 			}
 		}
 		return lReturn;
@@ -53,15 +59,12 @@ public class Hand extends CardList
 	public CardList getJokers()
 	{
 		CardList lReturn = new CardList();
-		Iterator<Card> it = this.iterator();
-		while(it.hasNext())
+		for(Card c: this)
 		{
-			Card lTemp = it.next();
-			if(lTemp.isJoker())
+			if(c.isJoker())
 			{
-				lReturn.add(lTemp);
+				lReturn.add(c);
 			}
-			
 		}
 		return lReturn;
 	}
@@ -72,15 +75,12 @@ public class Hand extends CardList
 	public CardList getNonJokers()
 	{
 		CardList lReturn = new CardList();
-		Iterator<Card> it = this.iterator();
-		while(it.hasNext())
+		for(Card c: this)
 		{
-			Card lTemp = it.next();
-			if(!lTemp.isJoker())
+			if(!c.isJoker())
 			{
-				lReturn.add(lTemp);
+				lReturn.add(c);
 			}
-			
 		}
 		return lReturn;
 	}
@@ -96,16 +96,12 @@ public class Hand extends CardList
 	{
 		assert pTrump != null;
 		CardList lReturn = new CardList();
-		Iterator<Card> it = this.iterator();
-		while(it.hasNext())
+		for(Card c: this)
 		{
-			Card lTemp = it.next();
-			//Something maybe be wrong with equals()?
-			if(lTemp.getEffectiveSuit(pTrump) == pTrump || lTemp.isJoker())
+			if(c.isJoker() || c.getEffectiveSuit(pTrump).equals(pTrump))
 			{
-				lReturn.add(lTemp);
+				lReturn.add(c);
 			}
-			
 		}
 		return lReturn;
 	}
@@ -121,15 +117,12 @@ public class Hand extends CardList
 	{
 		assert pTrump != null;
 		CardList lReturn = new CardList();
-		Iterator<Card> it = this.iterator();
-		while(it.hasNext())
+		for(Card c: this)
 		{
-			Card lTemp = it.next();
-			if(!(lTemp.getEffectiveSuit(pTrump) == pTrump) || !lTemp.isJoker())
+			if(!c.isJoker() && !c.getEffectiveSuit(pTrump).equals(pTrump))
 			{
-				lReturn.add(lTemp);
+				lReturn.add(c);
 			}
-			
 		}
 		return lReturn;
 	}
@@ -143,17 +136,21 @@ public class Hand extends CardList
 	 */
 	public Card selectLowest(Suit pTrump) throws CloneNotSupportedException
 	{
-		Comparator<Card> lComp;
-		if(pTrump == null)
+
+		CardList lList = sort(new Card.ByRankComparator());
+		Card lReturn = lList.getFirst();
+		if(pTrump != null)
 		{
-			lComp = new Card.BySuitNoTrumpComparator();
+			for(Card c: lList)
+			{
+				if(!c.isJoker() && !c.getEffectiveSuit(pTrump).equals(pTrump))
+				{
+					lReturn = c;
+					break;
+				}	
+			}
 		}
-		else
-		{
-			lComp = new Card.BySuitComparator(pTrump);
-		}
-		sort(lComp);
-		return this.sort(lComp).getFirst();
+		return lReturn;
 	}
 	
 	/**
@@ -164,13 +161,11 @@ public class Hand extends CardList
 	public CardList playableCards( Suit pLed, Suit pTrump )
 	{
 		CardList lReturn = new CardList();
-		Iterator<Card> iter = this.iterator();
-		while(iter.hasNext())
+		for(Card c: this)
 		{
-			Card lTemp = iter.next();
-			if(lTemp.getSuit() == pLed || lTemp.getSuit() == pTrump || lTemp.isJoker())
+			if(c.isJoker() || c.getSuit().equals(pLed) || c.getEffectiveSuit(pTrump).equals(pTrump))
 			{
-				lReturn.add(lTemp);
+				lReturn.add(c);
 			}
 		}
 		return lReturn;
@@ -188,17 +183,14 @@ public class Hand extends CardList
 	{
 		assert pSuit != null;
 		assert pTrump != null;
-		int lReturn = -1;
-		Iterator<Card> iter = this.iterator();
-		while(iter.hasNext())
+		int lCounter = 0;
+		for(Card c: this)
 		{
-			Card lTemp = iter.next();
-			//Equals()?
-			if(lTemp.getEffectiveSuit(pTrump) == pSuit)
+			if (!c.isJoker() && c.getEffectiveSuit(pTrump).equals(pSuit))
 			{
-				lReturn++;
+				lCounter++;
 			}
 		}
-		return lReturn;
+		return lCounter;
 	}
 }
