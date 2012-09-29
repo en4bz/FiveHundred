@@ -26,7 +26,7 @@ public class RandomCardExchangeStrategy implements ICardExchangeStrategy
 		 *  there are six cards, and keeps adding cards at random using the add method 
 		 *  from CardList which does not add a card if the card already exists
 		 */
-		while (removeCards.size() < (NUMBER_CARDS + 1))
+		while (removeCards.size() < NUMBER_CARDS )
 		{
 			
 			removeCards.add(pHand.random());
