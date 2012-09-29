@@ -65,7 +65,14 @@ public class TestBid
 		testBid = new Bid(10, Suit.CLUBS);
 		assertEquals(false, testBid.isNoTrump());
 		testBid = new Bid();
-		assertEquals(false, testBid.isNoTrump());
+		try
+		{
+			testBid.isNoTrump();
+		}
+		catch(ModelException e)
+		{
+			
+		}
 
 	}
 	
