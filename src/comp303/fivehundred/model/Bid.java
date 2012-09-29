@@ -125,7 +125,7 @@ public class Bid implements Comparable<Bid>
 		assert pBid != null;
 		int lBidScore = 0;
 		int lThisScore = 0;
-		if(!aPass) 
+		if(!pBid.isPass()) //I think this should be pBid.isPass(). Was originally !aPass - Ian
 		{
 			lBidScore = pBid.getScore();
 		}
