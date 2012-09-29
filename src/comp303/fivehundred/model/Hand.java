@@ -168,7 +168,7 @@ public class Hand extends CardList
 		while(iter.hasNext())
 		{
 			Card lTemp = iter.next();
-			if(lTemp.getSuit().equals(pLed) || lTemp.getSuit().equals(pTrump) || lTemp.isJoker())
+			if(lTemp.getSuit() == pLed || lTemp.getSuit() == pTrump || lTemp.isJoker())
 			{
 				lReturn.add(lTemp);
 			}
