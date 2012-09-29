@@ -9,7 +9,7 @@ import org.junit.Test;
 import comp303.fivehundred.util.AllCards;
 import comp303.fivehundred.util.Card.Suit;
 
-/*
+/**
  * @author Ian Forbes
  */
 public class TestTrick
