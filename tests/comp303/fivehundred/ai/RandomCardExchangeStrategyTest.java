@@ -28,15 +28,21 @@ public class RandomCardExchangeStrategyTest
 		newHand.add(AllCards.a4D);
 		newHand.add(AllCards.aJH);
 		newHand.add(AllCards.a7D);
-		newHand.add(AllCards.a8D);
-		newHand.add(AllCards.a5H);
+		newHand.add(AllCards.a8S);
+		newHand.add(AllCards.aQD);
+		newHand.add(AllCards.aAH);
+		newHand.add(AllCards.a5D);
+		newHand.add(AllCards.a7C);
 		newHand.add(AllCards.a9C);
-		newHand.add(AllCards.aAC);
-		newHand.add(AllCards.aAS);
-		newHand.add(AllCards.a5S);
-		newHand.add(AllCards.a4H);
+		newHand.add(AllCards.a4S);
+
 		
-		//selectCardsToDiscard(testBid, pIndex, newHand);
+		RandomCardExchangeStrategy testStrategy = new RandomCardExchangeStrategy();
+		
+		CardList listofCardsTest = testStrategy.selectCardsToDiscard(testBid, pIndex, newHand);
+		
+		assertEquals(listofCardsTest.size(), 6);
+		
 		
 		
 	}
