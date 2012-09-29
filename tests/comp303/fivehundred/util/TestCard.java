@@ -18,6 +18,7 @@ import static comp303.fivehundred.util.AllCards.aQH;
 import static comp303.fivehundred.util.AllCards.aTC;
 import static comp303.fivehundred.util.AllCards.aTH;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -25,7 +26,7 @@ import comp303.fivehundred.util.Card.Joker;
 import comp303.fivehundred.util.Card.Rank;
 import comp303.fivehundred.util.Card.Suit;
 
-/*
+/**
  * @author Ian Forbes
  */
 
@@ -91,12 +92,12 @@ public class TestCard
 	@Test
 	public void testCompareTo()
 	{
-		assertEquals(true,a7D.compareTo(a8C) < 0);
-		assertEquals(true ,a9C.compareTo(a9C) == 0);
-		assertEquals(true ,a9C.compareTo(a4C) > 0);
-		assertEquals(true ,aHJo.compareTo(a4C) > 0);
-		assertEquals(true,a8C.compareTo(aLJo) < 0);
-		assertEquals(true, aHJo.compareTo(aLJo) > 0);
+		assertTrue(a7D.compareTo(a8C) < 0);
+		assertTrue(a9C.compareTo(a9C) == 0);
+		assertTrue(a9C.compareTo(a4C) > 0);
+		assertTrue(aHJo.compareTo(a4C) > 0);
+		assertTrue(a8C.compareTo(aLJo) < 0);
+		assertTrue(aHJo.compareTo(aLJo) > 0);
 	}
 	
 	@Test
