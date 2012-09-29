@@ -171,6 +171,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	    while (it.hasNext())
 	    {
 	    	sb.append(cardNumber+ ": " + it.next().toString() + NEWLINE);
+	    	cardNumber++;
 	    }
 	    
 	    // Returns the full string of cards
