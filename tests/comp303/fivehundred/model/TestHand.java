@@ -265,11 +265,11 @@ public class TestHand
 		int lTrumpTestDH = 0;
 		
 		assertEquals(lJokerDH, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lJokersDH, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lNonJokersDH, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lMiscDH, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lAllSuitsDH, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lTrumpTestDH, toHand(aJoker).numberOfCards(lSuit, lTrump));		
+		assertEquals(lJokersDH, toHand(aJokers).numberOfCards(lSuit, lTrump));
+		assertEquals(lNonJokersDH, toHand(aNonJokers).numberOfCards(lSuit, lTrump));
+		assertEquals(lMiscDH, toHand(aMisc).numberOfCards(lSuit, lTrump));
+		assertEquals(lAllSuitsDH, toHand(aAllSuits).numberOfCards(lSuit, lTrump));
+		assertEquals(lTrumpTestDH, toHand(aTrumpTest).numberOfCards(lSuit, lTrump));		
 		
 		// number of expected cards of suit CLUBS in a SPADES round
 		lSuit = Suit.CLUBS;
@@ -282,11 +282,11 @@ public class TestHand
 		int lTrumpTestCS = 0;
 		
 		assertEquals(lJokerCS, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lJokersCS, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lNonJokersCS, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lMiscCS, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lAllSuitsCS, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lTrumpTestCS, toHand(aJoker).numberOfCards(lSuit, lTrump));		
+		assertEquals(lJokersCS, toHand(aJokers).numberOfCards(lSuit, lTrump));
+		assertEquals(lNonJokersCS, toHand(aNonJokers).numberOfCards(lSuit, lTrump));
+		assertEquals(lMiscCS, toHand(aMisc).numberOfCards(lSuit, lTrump));
+		assertEquals(lAllSuitsCS, toHand(aAllSuits).numberOfCards(lSuit, lTrump));
+		assertEquals(lTrumpTestCS, toHand(aTrumpTest).numberOfCards(lSuit, lTrump));		
 		
 		// number of expected cards of suit CLUBS in a CLUBS round
 		lSuit = Suit.CLUBS;
@@ -299,11 +299,11 @@ public class TestHand
 		int lTrumpTestCC = 2;
 		
 		assertEquals(lJokerCC, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lJokersCC, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lNonJokersCC, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lMiscCC, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lAllSuitsCC, toHand(aJoker).numberOfCards(lSuit, lTrump));
-		assertEquals(lTrumpTestCC, toHand(aJoker).numberOfCards(lSuit, lTrump));			
+		assertEquals(lJokersCC, toHand(aJokers).numberOfCards(lSuit, lTrump));
+		assertEquals(lNonJokersCC, toHand(aNonJokers).numberOfCards(lSuit, lTrump));
+		assertEquals(lMiscCC, toHand(aMisc).numberOfCards(lSuit, lTrump));
+		assertEquals(lAllSuitsCC, toHand(aAllSuits).numberOfCards(lSuit, lTrump));
+		assertEquals(lTrumpTestCC, toHand(aTrumpTest).numberOfCards(lSuit, lTrump));		
 	}
 	
 	private Hand toHand(Card[] pCardArray)
