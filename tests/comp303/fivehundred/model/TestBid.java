@@ -82,9 +82,11 @@ public class TestBid
 	{
 		Bid testBid1 = new Bid(8, Suit.HEARTS);
 		Bid testBid2 = new Bid(8, Suit.HEARTS);
-		assertEquals(true, testBid1.equals(testBid2));
+		assertTrue(testBid1.equals(testBid2));
 		testBid1 = new Bid(7, Suit.HEARTS);
 		assertEquals(false, testBid1.equals(testBid2));
+		assertEquals(false, testBid1.equals(new Object()));
+		assertEquals(true, ((new Bid()).equals(new Bid())));
 
 	}
 	
@@ -111,6 +113,11 @@ public class TestBid
 		Bid A = new Bid();
 		Bid B = new Bid();
 		assertEquals(A.hashCode(), B.hashCode());
+		A = new Bid(10, Suit.HEARTS);
+		B = new Bid(10, Suit.HEARTS);
+		assertEquals(A.hashCode(), B.hashCode());
+		B = new Bid(6, Suit.SPADES);
+		assertTrue(A.hashCode() != B.hashCode());
 	}
 	
 	@Test
@@ -118,6 +125,8 @@ public class TestBid
 	{
 		Bid testBid = new Bid(6,Suit.SPADES);
 		assertEquals(40, testBid.getScore());
+		testBid = new Bid(10, Suit.HEARTS);
+		assertEquals(500, testBid.getScore());
 		testBid = new Bid();
 		try
 		{
@@ -136,5 +145,7 @@ public class TestBid
 		assertTrue((new Bid(7, Suit.SPADES)).compareTo( new Bid(8, Suit.SPADES)) < 0);
 		assertTrue((new Bid()).compareTo(new Bid(9, Suit.HEARTS)) < 0);
 		assertTrue((new Bid()).compareTo(new Bid()) == 0);
+		assertTrue((new Bid(9, Suit.CLUBS).compareTo(new Bid(9, Suit.CLUBS))) == 0);
+		assertTrue((new Bid(10, Suit.HEARTS).compareTo(new Bid(6, Suit.CLUBS))) > 0);
 	}
 }
