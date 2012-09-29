@@ -60,7 +60,7 @@ public class RandomBiddingStrategy implements IBiddingStrategy
 	{
 
 		// If the pass frequency is not within the range of 0 to 100, sets the robot at a 50 percent passing rate
-		if ((pPassFrequency >= MIN_PERCENT_INCLUSIVE) && (pPassFrequency <= MAX_PERCENT_INCLUSIVE))
+		if ((pPassFrequency < MIN_PERCENT_INCLUSIVE) || (pPassFrequency > MAX_PERCENT_INCLUSIVE))
 		{
 			
 			aProbPass = FIFTY_PERCENT;
