@@ -1,5 +1,6 @@
 package comp303.fivehundred.model;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -127,5 +128,13 @@ public class TestBid
 		{
 			
 		}
+	}
+	
+	@Test
+	public void testCompareTo()
+	{
+		assertTrue((new Bid(7, Suit.SPADES)).compareTo( new Bid(8, Suit.SPADES)) < 0);
+		assertTrue((new Bid()).compareTo(new Bid(9, Suit.HEARTS)) < 0);
+		assertTrue((new Bid()).compareTo(new Bid()) == 0);
 	}
 }
