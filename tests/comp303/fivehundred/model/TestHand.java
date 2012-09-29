@@ -164,8 +164,7 @@ public class TestHand
 	}
 	
 	@Test
-	//TODO: should not throw CloneNotSupportedException
-	public void testSelectLowest() throws CloneNotSupportedException
+	public void testSelectLowest()
 	{
 		// Expected values in a Clubs round.
 		Suit lTrump = Suit.CLUBS;

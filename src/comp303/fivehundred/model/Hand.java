@@ -132,9 +132,8 @@ public class Hand extends CardList
 	 * Selects the least valuable card in the hand, if pTrump is the trump.
 	 * @param pTrump The trump suit. Can be null to indicate no-trump.
 	 * @return The least valuable card in the hand.
-	 * @throws CloneNotSupportedException 
 	 */
-	public Card selectLowest(Suit pTrump) throws CloneNotSupportedException
+	public Card selectLowest(Suit pTrump)
 	{
 
 		CardList lList = sort(new Card.ByRankComparator());
