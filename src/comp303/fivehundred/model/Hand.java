@@ -11,7 +11,7 @@ import comp303.fivehundred.util.CardList;
  */
 public class Hand extends CardList
 {
-	/*
+	/**
 	 * @see java.lang.Object#clone()
 	 * {@inheritDoc}
 	 */
