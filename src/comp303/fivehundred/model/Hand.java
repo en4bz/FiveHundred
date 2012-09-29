@@ -1,7 +1,5 @@
 package comp303.fivehundred.model;
 
-import java.util.Comparator;
-import java.util.Iterator;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
@@ -13,7 +11,7 @@ import comp303.fivehundred.util.CardList;
  */
 public class Hand extends CardList
 {
-	/**
+	/*
 	 * @see java.lang.Object#clone()
 	 * {@inheritDoc}
 	 */
