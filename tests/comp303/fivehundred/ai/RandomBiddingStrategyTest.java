@@ -8,7 +8,6 @@ import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.model.ModelException;
 import comp303.fivehundred.util.AllCards;
-import comp303.fivehundred.util.GameUtilException;
 
 public class RandomBiddingStrategyTest
 {
