@@ -9,6 +9,8 @@ import org.junit.Test;
 //import java.util.Collections;
 //import java.util.Comparator;
 
+import comp303.fivehundred.util.Card.ByRankComparator;
+
 /**
  * @author Gabrielle Germain
  * Test Class for CardList
@@ -177,7 +179,7 @@ public class TestCardList
 		lList.add(AllCards.a6C);
 		lList.add(AllCards.a7S);
 		
-		lList.sort(null); // what is the pComparator?
+		lList.sort(new Card.ByRankComparator()); // what is the pComparator?
 		
 		assertEquals(lList.getFirst(), AllCards.a5C);
 		assertEquals(lList.getLast(), AllCards.a7S); 

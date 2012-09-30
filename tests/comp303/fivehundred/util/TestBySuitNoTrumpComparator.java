@@ -18,7 +18,7 @@ public class TestBySuitNoTrumpComparator
 	public void testCompare()
 	{
 		assertTrue(tester.compare(a4D, a4D) == 0);
-		assertTrue(tester.compare(a4S, a8D) > 0);
+		assertTrue(tester.compare(a4S, a8D) < 0);
 		assertTrue(tester.compare(a9D, a9S) > 0);
 		assertTrue(tester.compare(a4H, a4H) == 0);
 		assertTrue(tester.compare(aHJo, a4D) > 0);
