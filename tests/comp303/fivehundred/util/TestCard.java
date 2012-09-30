@@ -113,6 +113,10 @@ public class TestCard
 	{
 		assertEquals(a4C.hashCode(),a4C.hashCode());
 		assertEquals(aHJo.hashCode(), aHJo.hashCode());
+		assertEquals(3*11 + 6 ,aTH.hashCode());
+		assertEquals(3*11 + 11 + 1, aHJo.hashCode());
+		assertEquals(3*11 + 11, aLJo.hashCode());
+		assertEquals(0*11 + 0, AllCards.a4S.hashCode());
 	}
 	
 	@Test
