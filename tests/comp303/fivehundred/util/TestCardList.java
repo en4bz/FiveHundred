@@ -1,13 +1,13 @@
 package comp303.fivehundred.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
 
+import org.junit.Test;
 //import java.util.ArrayList;
 //import java.util.Collections;
 //import java.util.Comparator;
-import java.util.Iterator;
-
-import org.junit.Test;
 
 /**
  * @author Gabrielle Germain
@@ -21,6 +21,7 @@ public class TestCardList
 	public void testCardList()
 	{
 		CardList lInitiallyEmpty = new CardList();
+		assertEquals(0, lInitiallyEmpty.size());
 	}
 
 	@Test 
@@ -134,17 +135,6 @@ public class TestCardList
 		lList.add(AllCards.a5H);
 		lList.add(AllCards.a4S);
 		lList.add(AllCards.aAS);
-		
-		
-		Iterator<Card> it = lList.iterator();
-		int sizeOfList = 0;
-
-	    while (it.hasNext()){
-	    	
-	    	Card newCard = it.next();
-	    	sizeOfList++;
-	    }
-	    
 	    assertEquals(lList.size(), 3); 
 	}
 	
@@ -174,9 +164,8 @@ public class TestCardList
 		//We make sure that the random card chosen is originally in lList
 		if (randomCard != AllCards.a5C && randomCard != AllCards.a6C && randomCard != AllCards.a7S){
 			fail();
-		}
-				
-		}
+		}		
+	}
 
 	@Test
 	public void testSort() throws CloneNotSupportedException
@@ -194,5 +183,4 @@ public class TestCardList
 		assertEquals(lList.getLast(), AllCards.a7S); 
 		
 	}
-
 }
