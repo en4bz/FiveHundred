@@ -1,11 +1,7 @@
 package comp303.fivehundred.util;
 
-import static comp303.fivehundred.util.AllCards.a4H;
-import static comp303.fivehundred.util.AllCards.aHJo;
-import static comp303.fivehundred.util.AllCards.aKC;
-import static comp303.fivehundred.util.AllCards.aLJo;
-import static comp303.fivehundred.util.AllCards.aTC;
-import static org.junit.Assert.assertEquals;
+import static comp303.fivehundred.util.AllCards.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -23,9 +19,11 @@ public class TestBySuitComparator
 	@Test
 	public void testCompare()
 	{
-		assertEquals(0, tester.compare(a4H, a4H));
-		assertEquals(1, tester.compare(a4H, aTC));
-		assertEquals(-1, tester.compare(aLJo, aHJo));
-		assertEquals(1, tester.compare(aHJo, aKC));
+		assertTrue(tester.compare(a4H, a4H) == 0);
+		assertTrue(tester.compare(a4H, aTC) > 0);
+		assertTrue(tester.compare(aLJo, aHJo) < 0);
+		assertTrue(tester.compare(aHJo, aKC) > 0);
+		assertTrue(tester.compare(aJH, aJD) > 0);
+		assertTrue(tester.compare(aJD, aJS) > 0);
 	}
 }
