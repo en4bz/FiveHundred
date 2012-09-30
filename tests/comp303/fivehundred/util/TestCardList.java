@@ -1,5 +1,6 @@
 package comp303.fivehundred.util;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
@@ -10,6 +11,8 @@ import org.junit.Test;
 //import java.util.Comparator;
 
 import comp303.fivehundred.util.Card.ByRankComparator;
+
+import comp303.fivehundred.util.Card.Suit;
 
 /**
  * @author Gabrielle Germain
@@ -169,20 +172,52 @@ public class TestCardList
 		}		
 	}
 
-	@Test
+	@Test 
 	public void testSort() throws CloneNotSupportedException
 	{
 		
 		CardList lList = new CardList();
 		
 		lList.add(AllCards.a5C);
-		lList.add(AllCards.a6C);
 		lList.add(AllCards.a7S);
+		lList.add(AllCards.a6C);
 		
+
+		lList.sort(null);
+		
+		// Test assertions
+		try
+		{
+			lList.sort(null);
+			fail();
+		}
+		catch(AssertionError e)
+		{
+			
+		}
+		
+		CardList test = lList.sort(new Card.ByRankComparator());
+
 		lList.sort(new Card.ByRankComparator()); // what is the pComparator?
+
 		
-		assertEquals(lList.getFirst(), AllCards.a5C);
-		assertEquals(lList.getLast(), AllCards.a7S); 
+		assertEquals(test.size(), lList.size());
+        assertTrue(test != lList);
+        assertFalse(test.getLast().equals(lList.getLast()));
+   
+        //By RankComparatorSorting
+		assertEquals(test.getFirst(), AllCards.a5C);
+		assertEquals(test.getLast(), AllCards.a7S); 
+		
+		// Test BySuitComparator sorting
+        CardList lBySuit = lList.sort(new Card.BySuitComparator(Suit.SPADES));
+        assertEquals(lBySuit.getFirst(), AllCards.a5C);
+        assertEquals(lBySuit.getLast(), AllCards.a7S);  
+        
+       //Test BySuitNoTrumpComparator sorting
+        CardList lBySuitNoTrump = lList.sort(new Card.BySuitNoTrumpComparator());
+        assertEquals(lBySuitNoTrump.getFirst(), AllCards.a7S);
+        assertEquals(lBySuitNoTrump.getLast(), AllCards.a6C); 
 		
 	}
 }
