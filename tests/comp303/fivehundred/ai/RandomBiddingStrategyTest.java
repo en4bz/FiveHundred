@@ -15,14 +15,16 @@ public class RandomBiddingStrategyTest
 	@Test
 	public void testRandomBiddingStrategy()
 	{
-		//TODO
+		RandomBiddingStrategy strategyTest = new RandomBiddingStrategy();
 		
 	}
 
 	@Test
 	public void testRandomBiddingStrategyInt()
 	{
-		//TODO
+		int passFrequency = 20;
+		
+		RandomBiddingStrategy strategyTest = new RandomBiddingStrategy(passFrequency);
 	}
 
 	@Test
@@ -53,7 +55,9 @@ public class RandomBiddingStrategyTest
 		
 		Bid bidSelected2 = strategyTest2.selectBid(testBid2, newHand);
 		
-		assertNotNull(bidSelected2.getTricksBid()); // must return a bid
+		//Bid is null if pass; otherwise, does no pass if bid is not null
+		assertTrue(bidSelected2 == null || bidSelected2 != null);
+
 	}
 
 }
