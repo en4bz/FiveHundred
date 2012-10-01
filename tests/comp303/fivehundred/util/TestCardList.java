@@ -1,18 +1,9 @@
 package comp303.fivehundred.util;
 
+import static comp303.fivehundred.util.AllCards.*;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.fail;
-
 import org.junit.Test;
-//import java.util.ArrayList;
-//import java.util.Collections;
-//import java.util.Comparator;
-
-import comp303.fivehundred.util.Card.ByRankComparator;
-
-import comp303.fivehundred.util.Card.Suit;
+import comp303.fivehundred.util.Card.*;
 
 /**
  * @author Gabrielle Germain
@@ -34,20 +25,20 @@ public class TestCardList
 	{
 		CardList lList = new CardList();
 		
-		lList.add(AllCards.aAH);
+		lList.add(aAH);
 		assertEquals(lList.size(), 1);
 		
-		lList.add(AllCards.a7H);
-		lList.add(AllCards.aAD);
+		lList.add(a7H);
+		lList.add(aAD);
 		
 		assertEquals(lList.size(), 3);
 		
 		//Since the card is already in the set, it will not be added to the hand
-		lList.add(AllCards.a7H);
+		lList.add(a7H);
 		assertEquals(lList.size(), 3); // size must remain the same
 		
-		assertEquals(lList.getFirst(), AllCards.aAH);
-		assertEquals(lList.getLast(), AllCards.aAD);
+		assertEquals(lList.getFirst(), aAH);
+		assertEquals(lList.getLast(), aAD);
 		
 	}
 
@@ -57,7 +48,7 @@ public class TestCardList
 		CardList lList = new CardList();
 		
 		assertEquals(lList.size(), 0);
-		lList.add(AllCards.aAH);
+		lList.add(aAH);
 		assertEquals(lList.size(), 1);
 	}
 
@@ -70,10 +61,10 @@ public class TestCardList
 		lList.getFirst();
 		
 		//fill lList with cards and test if it returns the first card inserted
-		lList.add(AllCards.a4C);
-		lList.add(AllCards.a5D);
-		lList.add(AllCards.aAS);
-		assertEquals(AllCards.a4C, lList.getFirst());
+		lList.add(a4C);
+		lList.add(a5D);
+		lList.add(aAS);
+		assertEquals(a4C, lList.getFirst());
 			
 	}
 
@@ -86,10 +77,10 @@ public class TestCardList
 		lList.getLast();
 		
 		//fill lList with cards and test if it returns the last card inserted
-		lList.add(AllCards.a9C);
-		lList.add(AllCards.aAS);
-		lList.add(AllCards.a5D);
-		assertEquals(AllCards.a5D, lList.getLast());
+		lList.add(a9C);
+		lList.add(aAS);
+		lList.add(a5D);
+		assertEquals(a5D, lList.getLast());
 		
 	}
 
@@ -99,14 +90,14 @@ public class TestCardList
 		
 		CardList lList = new CardList();
 		
-		lList.add(AllCards.a7H);
-		lList.add(AllCards.a8S);
-		lList.add(AllCards.a5H);
+		lList.add(a7H);
+		lList.add(a8S);
+		lList.add(a5H);
 		assertEquals(lList.size(), 3);
-		lList.remove(AllCards.a8S);
-		lList.remove(AllCards.a5H);
+		lList.remove(a8S);
+		lList.remove(a5H);
 		assertEquals(lList.size(), 1);
-		lList.remove(AllCards.a7H);
+		lList.remove(a7H);
 		assertEquals(lList.size(), 0);//lList is supposed to be empty
 		
 	}
@@ -117,9 +108,9 @@ public class TestCardList
 		CardList lList = new CardList();
 		
 		//we create a new list and add cards to it
-		lList.add(AllCards.a7H);
-		lList.add(AllCards.a8S);
-		lList.add(AllCards.aAS);
+		lList.add(a7H);
+		lList.add(a8S);
+		lList.add(aAS);
 		
 		CardList copy = lList.clone();
 		
@@ -128,7 +119,7 @@ public class TestCardList
 		assertEquals(lList.getLast(), copy.getLast());
 		
 		//We modify lList. We remove the first card
-		lList.remove(AllCards.a7H);
+		lList.remove(a7H);
 		assertNotSame(lList.size(), copy.size());
 
 	}
@@ -137,9 +128,9 @@ public class TestCardList
 	public void testIterator()
 	{
 		CardList lList = new CardList();
-		lList.add(AllCards.a5H);
-		lList.add(AllCards.a4S);
-		lList.add(AllCards.aAS);
+		lList.add(a5H);
+		lList.add(a4S);
+		lList.add(aAS);
 	    assertEquals(lList.size(), 3); 
 	}
 	
@@ -150,7 +141,7 @@ public class TestCardList
 		
 		CardList lList = new CardList();
 		
-		lList.add(AllCards.aKH);
+		lList.add(aKH);
 		assertEquals("The Cards in this List are as follows in order:\n1: KING of HEARTS\n",lList.toString());
 		//\n is the "line separator"	
 	}
@@ -160,30 +151,26 @@ public class TestCardList
 	{
 		CardList lList = new CardList();
 		
-		lList.add(AllCards.a5C);
-		lList.add(AllCards.a6C);
-		lList.add(AllCards.a7S);
+		lList.add(a5C);
+		lList.add(a6C);
+		lList.add(a7S);
 		
 		Card randomCard = lList.random();
 		
 		//We make sure that the random card chosen is originally in lList
-		if (randomCard != AllCards.a5C && randomCard != AllCards.a6C && randomCard != AllCards.a7S){
+		if (randomCard != a5C && randomCard != a6C && randomCard != a7S){
 			fail();
 		}		
 	}
 
-	@Test 
-	public void testSort() throws CloneNotSupportedException
+	public void testSort()
 	{
-		
 		CardList lList = new CardList();
-		
-		lList.add(AllCards.a5C);
-		lList.add(AllCards.a7S);
-		lList.add(AllCards.a6C);
-		
-
-		lList.sort(null);
+		lList.add(a5C);
+		lList.add(aTC);
+		lList.add(a7S);
+		lList.add(aKH);
+		lList.add(aJD);
 		
 		// Test assertions
 		try
@@ -196,28 +183,26 @@ public class TestCardList
 			
 		}
 		
-		CardList test = lList.sort(new Card.ByRankComparator());
+		// Test method has no side effects
+		CardList lByRank = lList.sort(new Card.ByRankComparator());
+		assertEquals(lByRank.size(), lList.size());
+		assertTrue(lByRank != lList);
+		assertTrue(!lByRank.getLast().equals(lList.getLast()));
 
-		lList.sort(new Card.ByRankComparator()); // what is the pComparator?
+		// Test ByRankComparator sorting
+		assertEquals(lByRank.getFirst(), a5C);
+		assertEquals(lByRank.getLast(), aKH); 		
 
-		
-		assertEquals(test.size(), lList.size());
-        assertTrue(test != lList);
-        assertFalse(test.getLast().equals(lList.getLast()));
-   
-        //By RankComparatorSorting
-		assertEquals(test.getFirst(), AllCards.a5C);
-		assertEquals(test.getLast(), AllCards.a7S); 
-		
 		// Test BySuitComparator sorting
-        CardList lBySuit = lList.sort(new Card.BySuitComparator(Suit.SPADES));
-        assertEquals(lBySuit.getFirst(), AllCards.a5C);
-        assertEquals(lBySuit.getLast(), AllCards.a7S);  
-        
-       //Test BySuitNoTrumpComparator sorting
-        CardList lBySuitNoTrump = lList.sort(new Card.BySuitNoTrumpComparator());
-        assertEquals(lBySuitNoTrump.getFirst(), AllCards.a7S);
-        assertEquals(lBySuitNoTrump.getLast(), AllCards.a6C); 
+		CardList lBySuit = lList.sort(new Card.BySuitComparator(Suit.HEARTS));
+		assertEquals(lBySuit.getFirst(), a7S);
+		assertEquals(lBySuit.getLast(), aJD); 	
+		
+		// Test BySuitNoTrumpComparator sorting
+		CardList lBySuitNoTrump = lList.sort(new Card.BySuitNoTrumpComparator());
+		assertEquals(lBySuitNoTrump.getFirst(), a7S);
+		assertEquals(lBySuitNoTrump.getLast(), aKH); 	
+
 		
 	}
 }
