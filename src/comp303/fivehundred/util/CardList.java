@@ -168,19 +168,21 @@ public class CardList implements Iterable<Card>, Cloneable
 
 		// Starts building the string
 		StringBuilder sb = new StringBuilder();
-		String NEWLINE = System.getProperty("line.separator");
-		
-		sb.append("The Cards in this List are as follows in order:" + NEWLINE);
 		
 		// Creates the iterator for this object
 		Iterator<Card> it = this.iterator();
-		int cardNumber = 1;
 		
 		// Goes through the card list and prints all the cards to the console in order
 	    while (it.hasNext())
 	    {
-	    	sb.append(cardNumber+ ": " + it.next().toString() + NEWLINE);
-	    	cardNumber++;
+	    	sb.append(it.next().toString());
+	    	
+	    	if (it.hasNext()){
+	    		
+	    		sb.append(" ,");
+	    		
+	    	}
+	    	
 	    }
 	    
 	    // Returns the full string of cards
