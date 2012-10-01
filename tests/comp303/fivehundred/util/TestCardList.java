@@ -2,7 +2,10 @@ package comp303.fivehundred.util;
 
 import static comp303.fivehundred.util.AllCards.*;
 import static org.junit.Assert.*;
+
 import org.junit.Test;
+
+import comp303.fivehundred.model.ModelException;
 import comp303.fivehundred.util.Card.*;
 
 /**
@@ -52,13 +55,21 @@ public class TestCardList
 		assertEquals(lList.size(), 1);
 	}
 
-	@Test(expected=GameUtilException.class)
+	@Test
 	public void testGetFirst()
 	{
 		CardList lList = new CardList();
 		
 		//exception expected since the list is empty
-		lList.getFirst();
+		try
+		{
+			lList.getFirst();
+			fail();
+		}
+		catch(GameUtilException e)
+		{
+		
+		}
 		
 		//fill lList with cards and test if it returns the first card inserted
 		lList.add(a4C);
@@ -68,13 +79,21 @@ public class TestCardList
 			
 	}
 
-	@Test(expected=GameUtilException.class)
+	@Test
 	public void testGetLast()
 	{
 		CardList lList = new CardList();
 		
 		//exception expected since the list is empty
-		lList.getLast();
+		try
+		{
+			lList.getLast();
+			fail();
+		}
+		catch(GameUtilException e)
+		{
+		
+		}
 		
 		//fill lList with cards and test if it returns the last card inserted
 		lList.add(a9C);
