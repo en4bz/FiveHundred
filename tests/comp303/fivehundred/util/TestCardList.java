@@ -96,7 +96,6 @@ public class TestCardList
 		}
 		
 		//fill lList with cards and test if it returns the last card inserted
-		System.out.println("This line is not executed.");
 		lList.add(a9C);
 		lList.add(aAS);
 		lList.add(a5D);
