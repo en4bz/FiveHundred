@@ -8,6 +8,7 @@ import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 /**
@@ -106,6 +107,19 @@ public class TestHand
 	@Test
 	public void testGetTrumpCards()
 	{
+		// AssertionError test
+		try
+		{
+			Hand testHand = toHand(aMisc);
+			testHand.getTrumpCards(null);
+			fail();
+		}
+		catch(AssertionError e)
+		{
+			
+		}
+		
+		
 		// Expected values in a Hearts round
 		Suit lTrump = Suit.HEARTS;
 		Card[] lJokerH = {aLJo};
@@ -145,6 +159,18 @@ public class TestHand
 	@Test
 	public void testGetNonTrumpCards()
 	{
+		// AssertionError test
+		try
+		{
+			Hand testHand = toHand(aMisc);
+			testHand.getNonTrumpCards(null);
+			fail();
+		}
+		catch(AssertionError e)
+		{
+			
+		}
+		
 		// Expected values in a Hearts round.
 		Suit lTrump = Suit.HEARTS;
 		Card[] lJoker = {};
@@ -182,6 +208,24 @@ public class TestHand
 		assertTrue(lMisc.equals(toHand(aMisc).selectLowest(lTrump)));
 		assertTrue(lAllSuits.equals(toHand(aAllSuits).selectLowest(lTrump)));
 		assertTrue(lTrumpTest.equals(toHand(aTrumpTest).selectLowest(lTrump)));
+		
+		// Expected values in a no-trump round.
+		lTrump = null;
+		Card lJokerNT = aLJo;
+		Card lJokersNT = aLJo;
+		Card lNonJokersNT = a5C;
+		Card lMiscNT = a5C;
+		Card lAllSuitsNT = a5C;
+		Card lTrumpTestNT = aJS;
+		
+		// Tests
+		assertTrue(lJokerNT.equals(toHand(aJoker).selectLowest(lTrump)));
+		assertTrue(lJokersNT.equals(toHand(aJokers).selectLowest(lTrump)));
+		assertTrue(lNonJokersNT.equals(toHand(aNonJokers).selectLowest(lTrump)));
+		assertTrue(lMiscNT.equals(toHand(aMisc).selectLowest(lTrump)));
+		assertTrue(lAllSuitsNT.equals(toHand(aAllSuits).selectLowest(lTrump)));
+		assertTrue(lTrumpTestNT.equals(toHand(aTrumpTest).selectLowest(lTrump)));
+	
 	}
 	
 	@Test
@@ -253,6 +297,18 @@ public class TestHand
 		// Card[] aAllSuits = {a5C, aJD, aAS, aJH};
 		// Card[] aTrumpTest = {aJC, aJH,aJS,aJD};
 		
+		// AssertionError test
+		try
+		{
+			Hand testHand = toHand(aMisc);
+			testHand.numberOfCards(null, null);
+			fail();
+		}
+		catch(AssertionError e)
+		{
+			
+		}
+		
 		// number of expected cards of suit DIAMONDS in a HEARTS round
 		Suit lSuit = Suit.DIAMONDS;
 		Suit lTrump = Suit.HEARTS;
@@ -304,7 +360,8 @@ public class TestHand
 		assertEquals(lAllSuitsCC, toHand(aAllSuits).numberOfCards(lSuit, lTrump));
 		assertEquals(lTrumpTestCC, toHand(aTrumpTest).numberOfCards(lSuit, lTrump));		
 	}
-	
+
+	// Helper methods
 	private Hand toHand(Card[] pCardArray)
 	{
 		Hand lReturn = new Hand();
@@ -315,7 +372,6 @@ public class TestHand
 		return lReturn;
 	}
 	
-	// Helper methods
 	private Set<Card> toSet(CardList pHand)
 	{
 		Set<Card> lReturn = new HashSet<Card>();
