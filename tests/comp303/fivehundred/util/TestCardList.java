@@ -161,7 +161,8 @@ public class TestCardList
 		CardList lList = new CardList();
 		
 		lList.add(aKH);
-		assertEquals("The Cards in this List are as follows in order:\n1: KING of HEARTS\n",lList.toString());
+		lList.add(a5C);
+		assertEquals("KING of HEARTS, FIVE of CLUBS",lList.toString());
 		//\n is the "line separator"	
 	}
 
