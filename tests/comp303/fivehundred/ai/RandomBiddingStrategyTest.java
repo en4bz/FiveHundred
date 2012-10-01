@@ -2,6 +2,11 @@ package comp303.fivehundred.ai;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Gabrielle Germain
+ * Test class for RandomBiddingStrategy 
+ */
+
 import org.junit.Test;
 
 import comp303.fivehundred.model.Bid;

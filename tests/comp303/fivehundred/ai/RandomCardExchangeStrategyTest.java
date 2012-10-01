@@ -11,7 +11,7 @@ import comp303.fivehundred.util.CardList;
 
 /**
  * @author Gabrielle Germain
- * Test class for RandomCardExchangeStrategy
+ * Test class for RandomCardExchangeStrategy 
  */
 
 public class RandomCardExchangeStrategyTest

@@ -2,6 +2,7 @@ package comp303.fivehundred.ai;
 
 import static org.junit.Assert.*;
 
+
 /**
  * @author Gabrielle Germain
  * Test class for RandomPlayingStrategy
