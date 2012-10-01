@@ -76,7 +76,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * order is currently being used. 
 	 * @throws GameUtilException if the list is empty.
 	 */
-	public Card getFirst() throws GameUtilException
+	public Card getFirst()
 	{
 
 		// Throws an exception if the card list is empty
@@ -93,7 +93,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * order is currently being used. 
 	 * @throws GameUtilException If the list is empty.
 	 */
-	public Card getLast() throws GameUtilException
+	public Card getLast()
 	{
 		
 		// Throws an exception if the card list is empty
