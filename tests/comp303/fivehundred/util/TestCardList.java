@@ -96,6 +96,7 @@ public class TestCardList
 		}
 		
 		//fill lList with cards and test if it returns the last card inserted
+		System.out.println("This line is not executed.");
 		lList.add(a9C);
 		lList.add(aAS);
 		lList.add(a5D);
@@ -122,7 +123,7 @@ public class TestCardList
 	}
 
 	@Test
-	public void testClone() throws CloneNotSupportedException
+	public void testClone()
 	{
 		CardList lList = new CardList();
 		
@@ -182,6 +183,7 @@ public class TestCardList
 		}		
 	}
 
+	@Test
 	public void testSort()
 	{
 		CardList lList = new CardList();
