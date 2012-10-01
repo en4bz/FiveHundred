@@ -179,7 +179,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	    	
 	    	if (it.hasNext()){
 	    		
-	    		sb.append(" ,");
+	    		sb.append(", ");
 	    		
 	    	}
 	    	
