@@ -179,7 +179,6 @@ public class Hand extends CardList
 	public int numberOfCards(Suit pSuit, Suit pTrump)
 	{
 		assert pSuit != null;
-		assert pTrump != null;
 		int lCounter = 0;
 		for(Card c: this)
 		{
