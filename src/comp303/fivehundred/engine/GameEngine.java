@@ -129,18 +129,30 @@ public class GameEngine
 		//Contractor Index
 		int lContractorIndex = Arrays.asList(aPlayers).indexOf(aContractor) % 2; //Mod 2 to get right team
 		if(aTricksWon[lContractorIndex] >= aContract.getTricksBid())
-		{
-			aScores[lContractorIndex] += aContract.getScore();
+		{	
+			if(aTricksWon[lContractorIndex] == 10 && aContract.getScore() < 250)
+			{
+				aScores[lContractorIndex] += 250; //Slam Value
+			}
+			else
+			{
+				aScores[lContractorIndex] += aContract.getScore();
+			}
 		}
 		else{
 			aScores[lContractorIndex] -= aContract.getScore();
-			aScores[(lContractorIndex + 1) % 2] += 10 * aTricksWon[(lContractorIndex +1) % 2];
 		}
+		aScores[(lContractorIndex + 1) % 2] += 10 * aTricksWon[(lContractorIndex +1) % 2];
 		for(int i : aScores)
 		{
 			if(i >= 500)
 			{
-				aWinners = new IPlayer[]{aPlayers[i],aPlayers[i+2]};
+				aWinners = new IPlayer[]{aPlayers[i], aPlayers[i+2]};
+				aIsOver = true;
+			}
+			else if( i <= -500)
+			{
+				aWinners = new IPlayer[]{aPlayers[i+1], aPlayers[(i+3) % 2]};
 				aIsOver = true;
 			}
 		}
