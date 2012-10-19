@@ -1,19 +1,10 @@
 package comp303.fivehundred.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
-
-import org.junit.Test;
-
-import comp303.fivehundred.util.Card.Suit;
 
 /**
  * @author Rayyan Khoury
@@ -32,10 +23,8 @@ public class CardList implements Iterable<Card>, Cloneable
 	
 	public CardList()
 	{
-		
 		// Creates a new array list of type card
 		aCards = new ArrayList<Card>();
-		
 	}
 	
 	/**
@@ -47,18 +36,12 @@ public class CardList implements Iterable<Card>, Cloneable
 	 */
 	public void add(Card pCard)
 	{
-		
-		assert pCard != null;
-		
-		// If the card is already contained, returns without adding card
-		if (aCards.contains(pCard))
+		assert pCard != null;	
+		// If the card is already contained don't do anything
+		if (!aCards.contains(pCard))
 		{
-			return;
+			aCards.add(pCard);
 		}
-		
-		// Adds the unique card
-		aCards.add(pCard);
-		
 	}
 	
 	/**
@@ -129,7 +112,6 @@ public class CardList implements Iterable<Card>, Cloneable
 
 	public CardList clone()
 	{
-		
 		try 
 		{
 			CardList lCopy = (CardList)super.clone();
@@ -141,7 +123,6 @@ public class CardList implements Iterable<Card>, Cloneable
 			// shouldn't happen
 			throw new AssertionError(e);
 		}
-		
 	}
 	
 	
@@ -152,11 +133,9 @@ public class CardList implements Iterable<Card>, Cloneable
 	@Override
 	public Iterator<Card> iterator()
 	{
-		
 		// Returns an iterator
 		Iterator<Card> it = aCards.iterator();
 		return it;
-		
 	}
 	
 	/**
@@ -165,7 +144,6 @@ public class CardList implements Iterable<Card>, Cloneable
 	 */
 	public String toString()
 	{
-
 		// Starts building the string
 		StringBuilder sb = new StringBuilder();
 		
