@@ -3,17 +3,32 @@ package comp303.fivehundred.ai;
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.model.Trick;
+import comp303.fivehundred.player.ARobotPlayer;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardList;
 
 /**
  * Plays correctly but randomly, i.e., very badly.
  */
-public class RandomRobot implements IRobotPlayer
+// TODO ask TA if it is okay to replace "implements IRobotPlayer" by "extends ARobotPlayer"
+// However ARobotPlayer implements IRobotPlayer, so really this should not be a problem
+public class RandomRobot extends ARobotPlayer
 {
 	private IBiddingStrategy aBiddingStrategy = new RandomBiddingStrategy();
 	private ICardExchangeStrategy aCardExchangeStrategy = new RandomCardExchangeStrategy();
 	private IPlayingStrategy aPlayingStrategy = new RandomPlayingStrategy();
+	
+	// TODO ask TA if it is okay to add this constructor
+	// Fall gracefully back if no parameter specified
+	protected RandomRobot()
+	{
+		super("RandomRobot");
+	}
+	
+	protected RandomRobot(String pName)
+	{
+		super(pName);
+	}
 	
 	@Override
 	public Bid selectBid(Bid[] pPreviousBids, Hand pHand)
