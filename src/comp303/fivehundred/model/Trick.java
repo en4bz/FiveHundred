@@ -1,5 +1,6 @@
 package comp303.fivehundred.model;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.Card.Suit;
@@ -83,16 +84,7 @@ public class Trick extends CardList
 	public int winnerIndex()
 	{
 		Card lHighest = highest();
-		int lIndex = 0;
-		for(Card c: this)
-		{
-			if(c.equals(lHighest))
-			{
-				break;
-			}
-			lIndex++;
-		}
-		return lIndex;
+		return indexOf(lHighest);
 	}
 	
 	//Helper Methods (non-specified by milestone 1)
@@ -115,31 +107,41 @@ public class Trick extends CardList
 		if(getTrumpSuit() != null)
 		{
 			lSuitLedIndex--;
-			for(int i = 0; i < lSuitOrder.length; i++)
-			{
-				if(lSuitOrder[i].equals(getTrumpSuit()))
-				{
-					Suit tmp = lSuitOrder[lTrumpSuitIndex];
-					lSuitOrder[lTrumpSuitIndex] = getTrumpSuit();
-					lSuitOrder[i] = tmp;
-				}
-			}
+			lSuitOrder = moveUp(lSuitOrder, getTrumpSuit(), lTrumpSuitIndex);
 		} 
 		
-		// move suit led 
-		if(!getTrumpSuit().equals(getSuitLed()) || getTrumpSuit() == null)
+		// move suit led
+		if(!jokerLed() && (getTrumpSuit() == null || (getTrumpSuit() != null && !getTrumpSuit().equals(getSuitLed()))))
 		{
-			for(int i = 0; i < lSuitOrder.length; i++)
+			lSuitOrder = moveUp(lSuitOrder, getSuitLed(), lSuitLedIndex);
+		}
+		
+		return new Card.GenericBySuitComparator(lSuitOrder, getTrumpSuit() != null);
+	}
+	
+	/**
+	 * Helper method to move a given suit up the array to new position.
+	 */
+	private Suit[] moveUp(Suit[] pSuitArray, Suit pSuit, int pNewPosition)
+	{
+		// get index of pSuit
+		int lOldPosition;
+		for(lOldPosition = 0; lOldPosition < pSuitArray.length; lOldPosition++)
+		{
+			if(pSuitArray[lOldPosition].equals(pSuit))
 			{
-				if(lSuitOrder[i].equals(getSuitLed()))
-				{
-					Suit tmp = lSuitOrder[lSuitLedIndex];
-					lSuitOrder[lSuitLedIndex] = getSuitLed();
-					lSuitOrder[i] = tmp;
-				}
+				break;
 			}
 		}
-
-		return new Card.GenericBySuitComparator(lSuitOrder, getTrumpSuit() != null);
+		
+		if (lOldPosition < pNewPosition)
+		{
+			for(int i = lOldPosition; i < pNewPosition; i++)
+			{
+				pSuitArray[i] = pSuitArray[i+1];
+			}
+			pSuitArray[pNewPosition] = pSuit;
+		}
+		return pSuitArray;
 	}
 }

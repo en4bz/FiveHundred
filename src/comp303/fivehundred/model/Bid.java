@@ -125,7 +125,7 @@ public class Bid implements Comparable<Bid>
 		assert pBid != null;
 		int lBidScore = 0;
 		int lThisScore = 0;
-		if(!pBid.isPass()) //I think this should be pBid.isPass(). Was originally !aPass - Ian
+		if(!pBid.isPass())
 		{
 			lBidScore = pBid.getScore();
 		}
@@ -222,13 +222,13 @@ public class Bid implements Comparable<Bid>
 	
 	/**
 	 * Returns the highest bid in pBids. If they are all passing
-	 * bids, returns pass.
+	 * bids, returns pass. 
 	 * @param pBids The bids to compare.
 	 * @return the highest bid.
 	 */
 	public static Bid max(Bid[] pBids)
 	{
-		return 	Collections.max(Arrays.asList(pBids));
+		return Collections.max(Arrays.asList(pBids));
 	}
 	
 	/**
