@@ -362,7 +362,6 @@ public final class Card implements Comparable<Card>
 				{
 					// the current highest suit
 					lCurSuit = lSuitOrder.remove(0);
-				
 					if(!pCard1.getEffectiveSuit(aTrump).equals(lCurSuit) && !pCard2.getEffectiveSuit(aTrump).equals(lCurSuit))
 					{ // both cards do not have the current highest suit, try again with the next highest suit
 						continue;

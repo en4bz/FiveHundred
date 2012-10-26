@@ -153,14 +153,12 @@ public class CardList implements Iterable<Card>, Cloneable
 		// Goes through the card list and prints all the cards to the console in order
 	    while (it.hasNext())
 	    {
-	    	sb.append(it.next().toString());
+	    	sb.append(it.next().toShortString());
 	    	
-	    	if (it.hasNext()){
-	    		
-	    		sb.append(", ");
-	    		
+	    	if (it.hasNext())
+	    	{	
+	    		sb.append(", ");	
 	    	}
-	    	
 	    }
 	    
 	    // Returns the full string of cards
@@ -215,8 +213,31 @@ public class CardList implements Iterable<Card>, Cloneable
 		return copy;
 		
 	}
+	
+	/**
+	 * Returns another CardList in reverse order. This
+	 * method has no side effects.
+	 * @return the reversed CardList
+	 */
 
+	public CardList reverse()
+	{
+		
+		// Clones the current CardList
+		CardList copy = this.clone();
+		
+		// Reverse the clone's cards
+		Collections.reverse(copy.aCards);
+		
+		// Returns the copied sorted card list
+		return copy;
+		
+	}
 
+	public int indexOf(Card pCard)
+	{
+		return aCards.indexOf(pCard);
+	}
 
 	
 
