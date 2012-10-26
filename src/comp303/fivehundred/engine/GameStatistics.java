@@ -125,7 +125,7 @@ public class GameStatistics implements Observer
 	public void printStatistics()
 	{
 		Set<APlayer> lPlayers = aNumbers.keySet();
-		logger.info("\t\t Trick\t Cont\t Made\t Game\t Score");
+		logger.info(String.format("%-10s Trick\t Cont\t Made\t Game\t Score", ""));
 		for(APlayer p: lPlayers)
 		{
 			if(!aRatios.containsKey(p))
@@ -141,11 +141,12 @@ public class GameStatistics implements Observer
 			double lAccScore = (double) aNumbers.get(p).get(aAccumulatedScore)/(getSum(aGamesWon) * 500);
 			aRatios.get(p).put(aAccumulatedScore, lAccScore);
 			
-			logger.info(p.getName() + "\t" + String.format("%2.1f", aRatios.get(p).get(aTricksWon)) + "\t"
-										   + String.format("%2.1f", aRatios.get(p).get(aContractsWon)) + "\t" 
-					                       + String.format("%2.1f", aRatios.get(p).get(aContractsMade)) + "\t" 
-										   + String.format("%2.1f", aRatios.get(p).get(aGamesWon)) + "\t" 
-										   + String.format("%2.2f", aRatios.get(p).get(aAccumulatedScore)));
+			logger.info(String.format("%-10s %2.1f\t %2.1f\t %2.1f\t %2.1f\t %2.1f" , p.getName()
+					, aRatios.get(p).get(aTricksWon)
+					, aRatios.get(p).get(aContractsWon)
+					, aRatios.get(p).get(aContractsMade)
+					, aRatios.get(p).get(aGamesWon) 
+					, aRatios.get(p).get(aAccumulatedScore)));
 		}
 		
 	}
