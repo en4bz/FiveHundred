@@ -30,6 +30,7 @@ public class RandomBiddingStrategy implements IBiddingStrategy
 	
 	// Maximum bid possible
 	private static final int MAX_BID_INCLUSIVE = 24;
+	private static final int MIN_BID_INCLUSIVE = 0;
 	
 	// For the initial constructor which passes 50 percent of the time
 	private static final int FIFTY_PERCENT = 50;
@@ -77,16 +78,18 @@ public class RandomBiddingStrategy implements IBiddingStrategy
 	{
 		
 	    // The index of the highest bid
-	    int highestBidIndex = Bid.max(pPreviousBids).toIndex();
+	    int highestBidIndex = MIN_BID_INCLUSIVE - 1;
+	    if(pPreviousBids.length > 0 && !Bid.max(pPreviousBids).isPass())
+	    {
+	    	highestBidIndex = Bid.max(pPreviousBids).toIndex();
+	    }
+	    
 	    
 	    // If the maximum bid has already been bid
 	    if (highestBidIndex == MAX_BID_INCLUSIVE)
 	    {
-	    	
-	    	return new Bid();
-	    	
+	    	return new Bid();	
 	    }
-		
 		// Finds a random number between 0 and 100 to determine whether this robot will bid or not
 	    int pass = aRand.nextInt(MAX_PERCENT_INCLUSIVE + 1);
 	    
@@ -102,28 +105,22 @@ public class RandomBiddingStrategy implements IBiddingStrategy
 	    
 	    switch (aProbPass)
 	    {
-	    
-	    case MIN_PERCENT_INCLUSIVE: return new Bid(bid);
-	    case MAX_PERCENT_INCLUSIVE: return new Bid();
-	    default: break;
+	    	case MIN_PERCENT_INCLUSIVE: return new Bid(bid);
+	    	case MAX_PERCENT_INCLUSIVE: return new Bid();
+	    	default: break;
 
 	    }
 	    
 	    // The robot bids if THIS robot's possibility of passing is LESS THAN the computed probability of passing in this method
 	    if (aProbPass < pass) 
 	    {
-	    	
 	    	return new Bid(bid);
-	    	
 	    }
 	    
 	    // The robot passes
 	    else
-	    {
-	    	
+	    {	
 	    	return new Bid();
-
-	    	
 	    }
 	    
 	}

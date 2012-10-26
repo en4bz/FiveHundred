@@ -20,12 +20,12 @@ public class RandomRobot extends ARobotPlayer
 	
 	// TODO ask TA if it is okay to add this constructor
 	// Fall gracefully back if no parameter specified
-	protected RandomRobot()
+	public RandomRobot()
 	{
 		super("RandomRobot");
 	}
 	
-	protected RandomRobot(String pName)
+	public RandomRobot(String pName)
 	{
 		super(pName);
 	}
