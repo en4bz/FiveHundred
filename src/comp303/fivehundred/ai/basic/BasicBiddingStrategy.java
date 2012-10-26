@@ -101,6 +101,14 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	// Whether or not the cards in this hand can have a no trump bid
 	private boolean noTrumpPossible = false;
 	
+	// Number of points in the no trump hand
+	private static int totalNoTrumpPoints = 0;
+	private static int noTrumpValue = 0;
+	private static int clubsValue = 0;
+	private static int spadesValue = 0;
+	private static int heartsValue = 0;
+	private static int diamondsValue = 0;
+	
 	
 	// Creates a new basic bidding strategy object
 	public BasicBiddingStrategy ()
@@ -109,7 +117,10 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		for (int i = 0; i < SUITS.length; i++)
 		{
 			
-			aSuitPoints.put(SUITS[i], 0);
+			aSuitPointsTrump.put(SUITS[i], 0);
+			aSuitPointsNoTrump.put(SUITS[i], 0);
+			aSuitPointsTrumpAdjusted.put(SUITS[i], 0);
+			aSuitPointsNoTrumpAdjusted.put(SUITS[i], 0);
 			aCompareSuit.put(SUITS[i], new BySuitComparator(SUITS[i]));
 			
 		}
@@ -128,24 +139,87 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		{
 			
 			updatePointsOfHand (pHand);
+			noTrumpPossible = noTrumpCheck();
 			
 		}
 		
 		// Readjusts points based on previous bids
-		adjustPoints(pPreviousBids);
-
-
+		adjustPointsTrump(pPreviousBids);
+		
+		updatePointValuesTrump();
+		
+		
+		if (noTrumpPossible)
+		{
+			
+			noTrumpValue = totalNoTrumpPoints;
+			
+		}
 		
 
+		return adjustedBid(highestBidIndex);
+		
+	}
+	
+	private static Bid adjustedBid(int pHighestPreviousBid)
+	{
+		
+		Suit biddableSuit = null;
+		int pointsBiddableSuit = 0;
+		
+		for (int i = 0; i < SUITS.length; i++)
+		{
+			
+			if (pointsBiddableSuit < aSuitPointsTrumpAdjusted.get(SUITS[i]))
+			{
+				
+				biddableSuit = SUITS[i];
+				pointsBiddableSuit = aSuitPointsTrumpAdjusted.get(SUITS[i]);
+				
+			}
+			
+			else if (pointsBiddableSuit == aSuitPointsTrumpAdjusted.get(SUITS[i]) && pointsInBestPossibleSuit > 0)
+			{
+				
+				if (biddableSuit.compareTo(SUITS[i]) < 0)
+				{
+					
+					biddableSuit = SUITS[i];
+					pointsBiddableSuit = aSuitPointsTrumpAdjusted.get(SUITS[i]);
+					
+				}
+				
+			}
+			
+		}
+		
+		if (pointsInBestPossibleSuit == 0)
+		{
+			
+			return new Bid();
+			
+		}
+		
+		
 		return null;
 		
 		
-		
-		
-		
-	
 	}
 	
+	private static void updatePointValuesTrump()
+	{
+		
+		clubsValue = aSuitPointsTrumpAdjusted.get(Suit.CLUBS);
+		diamondsValue = aSuitPointsTrumpAdjusted.get(Suit.DIAMONDS);
+		spadesValue = aSuitPointsTrumpAdjusted.get(Suit.SPADES);
+		heartsValue = aSuitPointsTrumpAdjusted.get(Suit.HEARTS);
+		
+	}
+	
+	/**
+	 * Updates the points of a both a no trump and a trump game in both the adjusted and unadjusted point maps
+	 * @param pHand The hand of the robot
+	 */
 	private static void updatePointsOfHand (Hand pHand)
 	{
 		
@@ -153,19 +227,27 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		for (int i = 0; i < SUITS.length; i++)
 		{
 			
+			int noTrumpPoints = countPointsInSuit(pHand.playableCards(SUITS[i], SUITS[i]), SUITS[i], false);
+			
 			// Base points
 			aSuitPointsTrump.put(SUITS[i], countPointsInSuit(pHand.getTrumpCards(SUITS[i]), SUITS[i], true));
-			aSuitPointsNoTrump.put(SUITS[i], countPointsInSuit(pHand.playableCards(SUITS[i], SUITS[i]), SUITS[i], false));
+			aSuitPointsNoTrump.put(SUITS[i], noTrumpPoints);
 			
 			// Adjusted points (keeps track of all adjustments)
 			aSuitPointsTrumpAdjusted.put(SUITS[i], countPointsInSuit(pHand.getTrumpCards(SUITS[i]), SUITS[i], true));
-			aSuitPointsNoTrumpAdjusted.put(SUITS[i], countPointsInSuit(pHand.playableCards(SUITS[i], SUITS[i]), SUITS[i], false));
+			
+			// Updates total points of no trump
+			totalNoTrumpPoints += noTrumpPoints;
 			
 		}
 
 	}
 	
-	private static int adjustPoints(Bid[] pPreviousBids)
+	/**
+	 * Adjust the points of a trump game in the adjusted point max
+	 * @param pPreviousBids The previous bids of all players
+	 */
+	private static void adjustPointsTrump(Bid[] pPreviousBids)
 	{
 		
 		Bid partnerBid = null;
@@ -179,89 +261,74 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		case 0 : 
 			break;
 		case 1 : 
-			rightBid = pPreviousBids[0]; 
+			rightBid = pPreviousBids[0];
+			adjustPointsPreviousBids(rightBid, OPPONENT);
 			break;
 		case 2 : 
 			rightBid = pPreviousBids[1];
 			partnerBid = pPreviousBids[0];
+			adjustPointsPreviousBids(partnerBid, PARTNER);
+			adjustPointsPreviousBids(rightBid, OPPONENT);
 			break;
 		case 3 : 
 			rightBid = pPreviousBids[2];
 			partnerBid = pPreviousBids[1];
 			leftBid = pPreviousBids[0];
+			adjustPointsPreviousBids(partnerBid, PARTNER);
+			adjustPointsPreviousBids(rightBid, OPPONENT);
+			adjustPointsPreviousBids(leftBid, OPPONENT);
 			break;
 		default :
 			break;
 		
 		}
 		
-		if (leftBid != null)
-		{
-			
-			if (!leftBid.isPass())
-			{
-				
-				int bidStrength = rightBid.getTricksBid();
-				Suit bidSuit = rightBid.getSuit();
-				
-				// Adjustment based on previous points
-				aSuitPointsTrumpAdjusted.put(bidSuit , (aSuitPointsTrump.get(bidSuit) - ));
-				
-			}
-			
-		}
-		
-		for (int i = 0; i < SUITS.length; i++)
-		{
-			
-			if (rightBid.equals(SUITS[i]))
-			{
-				
-				int bidStrength = rightBid.getTricksBid();
-				aSuitPointsTrump.put(rightSuit, (aSuitPointsTrump.get(rightSuit)));
-				
-			}
-			
-			if (leftBid.equals(SUITS[i]))
-			{
-				
-				aSuitPointsTrump.put(rightSuit, (aSuitPointsTrump.get(rightSuit)));
-				
-			}
-			
-			if (partnerBid.equals(SUITS[i]))
-			{
-				
-				aSuitPointsTrump.put(rightSuit, (aSuitPointsTrump.get(rightSuit)));
-				
-				
-			}
-			
-			
-		}
-		
-		if (!rightBid.isPass())
-		{
-			
-			Suit rightSuit = rightBid.getSuit();
-			
-			if (rightSuit != null)
-			{
-				
-				
-				aSuitPointsTrump.put(rightSuit, (aSuitPointsTrump.get(rightSuit)));
-				
-			}
-			
-			
-		}
-		Suit leftSuit = leftBid.getSuit();
-		Suit partnerSuit = partnerBid.getSuit();
-				
-		
-		
 	}
 	
+	/**
+	 * Adjusts points in favor of this robot if the partner bid a suit, and against if the opponents bid a suit
+	 * @assert pBid is not null
+	 * @param pBid The Bid of either the partner or the player
+	 * @param pPlayer A boolean stating whether the bid is of the partner or the opponent
+	 */
+	private static void adjustPointsPreviousBids (Bid pBid, boolean pPlayer)
+	{
+
+		assert (pBid != null);
+
+		if (!pBid.isPass())
+		{
+
+			int bidStrength = pBid.getTricksBid();
+			Suit bidSuit = pBid.getSuit();
+
+			// Adjustment based on previous points
+
+			// The adjustment is in favor of this robot
+			if (pPlayer == PARTNER)
+			{
+
+				aSuitPointsTrumpAdjusted.put(bidSuit, (aSuitPointsTrump.get(bidSuit) + partnerAdjustmentTrump(bidStrength)));
+
+			}
+
+			// The adjustment is not in favor of this robot
+			else
+			{
+
+				aSuitPointsTrumpAdjusted.put(bidSuit, Math.max(0,(aSuitPointsTrump.get(bidSuit) - opponentAdjustmentTrump(bidStrength))));
+
+			}
+			
+		}
+
+	}
+	
+	/**
+	 * Gets the value of the readjustment when an opponent bids a suit
+	 * @param pTricksBid The number of tricks bid by the opponent
+	 * @return The value of the readjustment based on the opponent's bid
+	 */
 	private static int opponentAdjustmentTrump (int pTricksBid)
 	{
 		
@@ -279,6 +346,11 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 
 	}
 	
+	/**
+	 * Gets the value of the readjustment when the partner bids a suit
+	 * @param pTricksBid The number of tricks bid by the partner
+	 * @return The value of the readjustment based on the partner's bid
+	 */
 	private static int partnerAdjustmentTrump (int pTricksBid)
 	{
 		
@@ -295,22 +367,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		}
 
 	}
-	
-	private static int bidToIndex (Bid pBid)
-	{
-		
-		if (pBid.isPass())
-		{
-			
-			return 0;
-			
-		}
-		
-		return pBid.toIndex()
-		
-	}
 
-	
 	/**
 	 * Checks to see whether this hand can play a no trump bid
 	 * @return true when hand can play a no trump bid, else false
