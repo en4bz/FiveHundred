@@ -1,165 +1,405 @@
 package comp303.fivehundred.engine;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import comp303.fivehundred.mvc.Observable;
+import javax.management.Notification;
 
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.model.Trick;
-import comp303.fivehundred.player.IPlayer;
+import comp303.fivehundred.player.APlayer;
+import comp303.fivehundred.player.Team;
 import comp303.fivehundred.util.Card;
-import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
 import comp303.fivehundred.util.Deck;
 
-public class GameEngine
+
+public class GameEngine extends Observable
 {
-	private boolean aIsOver;
-	private final IPlayer[] aPlayers;
-	private int[] aTricksWon;
-	private int[] aScores;
-	private Bid[] aBids;
-	private CardList aWidow;
-	private Bid aContract;
-	private IPlayer aContractor;
-	private int aStartIndex;
-	private IPlayer[] aWinners;
+	// State fields
+    private APlayer[] aPlayers; // keeps the current playing order
+    private APlayer aCurrentPlayer; // player who is currently executing a game action
+    private Team aTeam1;
+    private Team aTeam2;
+    private ArrayList<Bid> aBids;
+    private boolean aAllPasses;
+    private Bid aContract;
+    private APlayer aContractor;
+    private Hand aWidow;
+    private boolean aGameOver;
+    private int aTrickCounter;
+    private Card aCardPlayed;
+    private APlayer aTrickWinner;
+    private boolean aContractWon;
+    private int aContractorRoundScore;
+    private int aNonContractorRoundScore;
+    private int aContractorTotalScore;
+    private int aNonContractorTotalScore;
+    private Team aWinningTeam;
+    private Team aLosingTeam;
+    
+
+    
+    public GameEngine(Team pTeam1, Team pTeam2)
+    {
+        aTeam1 = pTeam1;
+        aTeam2 = pTeam2;
+        APlayer[] lTeam1Players = aTeam1.getPlayers();
+        APlayer[] lTeam2Players = aTeam2.getPlayers();
+        // TODO write method to customize initial playing order 
+        // e.g. flip a coin, table disposition etc.
+        aPlayers = new APlayer[4];
+        aPlayers[0] = lTeam1Players[0];
+        aPlayers[1] = lTeam2Players[0];
+        aPlayers[2] = lTeam1Players[1];
+        aPlayers[3] = lTeam2Players[1];
+    }
+    
+
+    // --------------------- Game flow methods ---------------------
+    
+    
+    public void newCustomGame(boolean shuffle, boolean automatic)
+    {
+        aAllPasses = true;
+        aBids = new ArrayList<Bid>();
+        aContract = null;
+        aContractor = null;
+        aWidow = new Hand();
+        aGameOver = false;
+        aTrickCounter = 0;
+        aTrickWinner = null;
+        aCardPlayed = null;
+        aContractorRoundScore = 0;
+        aNonContractorRoundScore = 0;
+        aContractorTotalScore = 0;
+        aNonContractorTotalScore = 0;
+        aWinningTeam = null;
+        aLosingTeam = null;
+        
+        if(automatic)
+        {
+            if(shuffle)
+            {
+            	// TODO CODESTYLE find more elegant way to shuffle array
+            	List<APlayer> lPlayersList = Arrays.asList(aPlayers);
+            	Collections.shuffle(lPlayersList);
+                aPlayers = (APlayer[]) lPlayersList.toArray();
+                aTeam1 = new Team(aPlayers[0], aPlayers[2]);
+                aTeam1 = new Team(aPlayers[1], aPlayers[3]);
+            }
+            else
+            {
+                aTeam1.reset();
+                aTeam2.reset();
+            }
+        }
+        else
+        {
+            // TODO INTERACTIVE prompt to assign teams
+            // TODO INTERACTIVE prompt to shuffle
+        }
+        // TODO some new game cases
+        // Case 1: teams stay the same
+        // Case 2: teams get randomly shuffled
+        // Case 3: human chooses new team
+    }
+    
+    public void newGame()
+    {
+        newCustomGame(false, true);
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newGame"));
+    }
+
+    public void deal()
+    {
+
+    	Deck lDeck = new Deck();
+        for(APlayer p: aPlayers)
+        {
+            Hand lHand = new Hand();
+            for(int i = 0; i < 10; i++)
+            {
+               lHand.add(lDeck.draw());
+            }
+            p.setHand(lHand);
+        }
+        
+        while(lDeck.size() > 0)
+        {
+            aWidow.add(lDeck.draw());
+        }
+        
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newDeal"));
+    }
+    
+
+    public void bid()
+    {
+        aAllPasses = true;
+        aBids = new ArrayList<Bid>();
+        aContract = new Bid(); // default is pass
+        Bid lBid = new Bid(); // last bid
+        do
+        {
+	        for(APlayer p: aPlayers)
+	        {
+	        	aCurrentPlayer = p;
+	        	lBid = p.selectBid(aBids.toArray(new Bid[aBids.size()]));
+	            aBids.add(lBid);
+	            notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newBid"));
 	
-	/**
-	 * 
-	 * @param pPlayer1 : Player 1 on team one
-	 * @param pPlayer2 : Player 1 on team two
-	 * @param pPlayer3 : Player 2 on team one
-	 * @param pPlayer4 : Player 2 on team two
-	 */
-	public GameEngine(IPlayer pPlayer1, IPlayer pPlayer2, IPlayer pPlayer3, IPlayer pPlayer4)
-	{
-		aBids = new Bid[4];
-		aTricksWon = new int[2];
-		aScores = new int[2];
-		
-		aPlayers = new IPlayer[]{pPlayer1,pPlayer2, pPlayer3, pPlayer4};
-	}
-	
-	public void newGame()
-	{
-		this.aIsOver = false;
-		for(IPlayer p : aPlayers)
-		{
-			p.setHand(new Hand());
-		}
-	}
-	
-	public boolean gameOver()
-	{
-		return this.aIsOver;
-	}
-	
-	public void dealCards()
-	{
-		Deck lTempDeck = new Deck();
-		lTempDeck.shuffle();
-		for(IPlayer p : aPlayers)
-		{
-			p.setHand(new Hand()); //Clear old hand in case of left over cards
-			for(int j = 0; j < 10; j++)
-			{
-				p.getHand().add(lTempDeck.draw());
-			}
-		}
-		aWidow = new CardList(); //Reset
-		for(int i = 0; i < 6; i++)
-		{
-			aWidow.add(lTempDeck.draw());
-		}
-		//Re-Initialize
-		aBids = new Bid[4];
-		aTricksWon = new int[2];
-		aContract = null;
-		aContractor = null;
-	}
-	
-	public void bid()
-	{
-		boolean allPasses;
-		do{
-			allPasses = true;
-			for(int i = 0; i < aPlayers.length; i++)
-			{
-				aBids[i] = aPlayers[i].selectBid(aBids, aPlayers[i].getHand());
-				if(aBids[i] == null)
-				{
-					continue;
-				}
-				allPasses = false;//Someone has made a non-passing bid
-				if(aContract == null || aBids[i].compareTo(aContract) > 0)
-				{
-					aContract = aBids[i];
-					aContractor = aPlayers[i];//Highest Bidder
-					aStartIndex = i;//Set StartingIndex to the contractor for first round
-				}
-			}
-		}while(!allPasses && !aContract.equals(new Bid(10, Suit.HEARTS)));//Max Bid Reached	
-	}
-	
-	public void exchange()
-	{
-		for(Card c : aWidow){
-			aContractor.getHand().add(c);
-		}
-		CardList lToDiscard = aContractor.selectCardsToDiscard(aBids, 0, aContractor.getHand());//What does index do?
-		for(Card c : lToDiscard)
-		{
-			aContractor.getHand().remove(c);
-		}
-	}
-	
-	public void playTrick()
-	{
-		Trick lCurrentTrick = new Trick(aContract);
-		for(IPlayer p : aPlayers)
-		{
-			p.play(lCurrentTrick, p.getHand());
-		}
-		aStartIndex = lCurrentTrick.winnerIndex() + aStartIndex % 4;
-		aTricksWon[aStartIndex % 2] += 1;
-	}
-	
-	public void computeScore()
-	{
-		//Contractor Index
-		int lContractorIndex = Arrays.asList(aPlayers).indexOf(aContractor) % 2; //Mod 2 to get right team
-		if(aTricksWon[lContractorIndex] >= aContract.getTricksBid())
-		{	
-			if(aTricksWon[lContractorIndex] == 10 && aContract.getScore() < 250)
-			{
-				aScores[lContractorIndex] += 250; //Slam Value
-			}
-			else
-			{
-				aScores[lContractorIndex] += aContract.getScore();
-			}
-		}
-		else{
-			aScores[lContractorIndex] -= aContract.getScore();
-		}
-		aScores[(lContractorIndex + 1) % 2] += 10 * aTricksWon[(lContractorIndex +1) % 2];
-		for(int i : aScores)
-		{
-			if(i >= 500)
-			{
-				aWinners = new IPlayer[]{aPlayers[i], aPlayers[i+2]};
-				aIsOver = true;
-			}
-			else if( i <= -500)
-			{
-				aWinners = new IPlayer[]{aPlayers[i+1], aPlayers[(i+3) % 2]};
-				aIsOver = true;
-			}
-		}
-	}
-	
-	public IPlayer[] declareWinner()
-	{
-		return aWinners; //Do something with aWinners
+	            if (lBid.compareTo(aContract) > 0)
+	            {
+	                aContractor = p;
+	                aContract = lBid;
+	                aAllPasses = false;
+	            }
+	        }
+        } while (!lBid.isPass() && !allPasses());
+        
+        if(!allPasses())
+        {
+	        // update contractor team
+	        Team lContractorTeam = (aTeam1.isInTeam(aContractor))? aTeam1: aTeam2;
+	        lContractorTeam.setContract(aContract);
+	        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newContract"));
+        }
+    }
+    
+    public boolean allPasses()
+    {
+        return aAllPasses;
+    }
+    
+    public void exchange()
+    {
+    	Bid[] lastFourBids = aBids.subList(aBids.size()-4, aBids.size()).toArray(new Bid[4]);
+    	
+    	// get contractor index (I don't even understand why this is necessary in the strategy)
+    	int lContractorIndex;
+    	for(lContractorIndex = 0; lContractorIndex < aPlayers.length ; lContractorIndex++)
+    	{
+    		if(aContractor == aPlayers[lContractorIndex]) 
+    		{
+    			break;
+    		}
+    	}
+        CardList lDiscarded = aContractor.exchange(lastFourBids, lContractorIndex, aWidow);
+        aWidow = new Hand();
+        for(Card c: lDiscarded)
+        {
+        	aWidow.add(c);
+        }
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "cardsDiscarded"));
+
+    }
+    
+    public void playRound()
+    {
+    	for(aTrickCounter = 1; aTrickCounter <= 10; aTrickCounter++)
+    	{
+    		playTrick();
+    	}
+    }
+    
+    public void playTrick()
+    {
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newTrick"));
+        Trick lTrick = new Trick(aContract);
+        for(APlayer p: aPlayers)
+        {
+        	aCurrentPlayer = p;
+        	aCardPlayed = p.play(lTrick);
+            lTrick.add(aCardPlayed);
+            notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "cardPlayed"));
+        }
+        
+        // update tricks won
+        int lWinnerIndex = lTrick.winnerIndex(); 
+        aTrickWinner = aPlayers[lWinnerIndex];
+        Team lWinningTeam = (aTeam1.isInTeam(aTrickWinner))? aTeam1: aTeam2;
+        lWinningTeam.setTricksWon(lWinningTeam.getTricksWon()+1);
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "trickWon"));
+        
+        // winner now leads
+        aPlayers = rotate(aPlayers, -lWinnerIndex);
+        
+    }
+    /**
+     * Helper method to rotate the player array such that the winner now leads.
+     * @param pPlayers the playing order during the trick
+     * @param pWinnerIndex the trick's winner index
+     * @return the playing order after the trick such that the winner now leads
+     */
+    private APlayer[] rotate(APlayer[] pPlayers, int pWinnerIndex)
+    {
+    	List<APlayer> lPlayerList = Arrays.asList(aPlayers);
+        Collections.rotate(lPlayerList, -pWinnerIndex);
+        return (APlayer[]) lPlayerList.toArray();
+    }
+    
+    public void computeScore()
+    {
+        Team lContractorTeam = (aTeam1.isContractor())? aTeam1: aTeam2;
+        Team lNonContractorTeam = (aTeam1.isContractor())? aTeam2: aTeam1;
+        
+        // compute round scores
+        aContractorRoundScore = lContractorTeam.getContract().getScore();
+        aContractWon = lContractorTeam.getTricksWon() >= lContractorTeam.getContract().getTricksBid();        
+        if(aContractWon)
+        {
+            // If there's a slam
+            if(lContractorTeam.getTricksWon() == 10 && aContractorRoundScore < 250)
+            {
+                aContractorRoundScore = 250;
+            }
+        } 
+        else
+        {
+            aContractorRoundScore = -aContractorRoundScore;
+        }
+
+        aNonContractorRoundScore = lNonContractorTeam.getTricksWon() * 10;
+        
+        
+        // compute total scores
+        aContractorTotalScore = lContractorTeam.getScore() + aContractorRoundScore;
+        lContractorTeam.setScore(aContractorTotalScore);        
+        aNonContractorTotalScore = lNonContractorTeam.getScore() + aNonContractorRoundScore;
+        lNonContractorTeam.setScore(aNonContractorTotalScore);
+        
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "roundEnd"));
+
+        // End game if necessary
+        // Note: According to the rules, NonContractor can't win the game by simply winning odd tricks.
+        if(aContractorTotalScore >= 500)
+        {
+            endGame(lContractorTeam); 
+        } 
+        
+        if(aContractorTotalScore <= -500)
+        {
+            endGame(lNonContractorTeam);
+        }
+    }
+
+    // can come in handy for logging
+    private void endGame(Team pWinningTeam)
+    {
+    	aWinningTeam = pWinningTeam;
+    	aLosingTeam = aTeam1.isInTeam(pWinningTeam.getPlayers()[0])? aTeam2: aTeam1;
+    	aGameOver = true;
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "gameOver"));   
+    }
+    
+    // --------------------- Game state methods ------------
+    // TODO CODESTYLE wonder if this violates encapsulation laws...
+    // makes it possible for any observer to change players and teams through setters
+    // consider making clones
+    
+    public APlayer[] getPlayersInOrder()
+    {
+    	return Arrays.copyOf(aPlayers, aPlayers.length);
+    }
+    
+    public Team[] getTeams()
+    {
+    	Team[] lTeams = {aTeam1, aTeam2};
+    	return lTeams;
+    }
+    
+    public APlayer getCurrentPlayer()
+    {
+    	return aCurrentPlayer;
+    }
+    
+    public APlayer getTrickWinner()
+    {
+    	return aTrickWinner;
+    }
+    
+    public Bid[] getBids()
+    {
+    	return aBids.toArray(new Bid[aBids.size()]);
+    }
+    
+    public CardList getWidow()
+    {
+    	return aWidow.clone();
+    }
+    
+    public APlayer getContractor()
+    {
+    	return aContractor;
+    }
+    
+    public Bid getContract()
+    {
+    	return aContract;
+    }
+    
+    public Card getCardPlayed()
+    {
+    	return aCardPlayed;
+    }
+    
+    public boolean isContractWon()
+    {
+    	return aContractWon;
+    }
+    
+    public int getTrickCounter()
+    {
+    	return aTrickCounter;
+    }
+    
+    public int getContractorRoundScore()
+    {
+    	return aContractorRoundScore;
+    }
+    public int getNonContractorRoundScore()
+    {
+    	return aNonContractorRoundScore;
+    }
+    public int getContractorTotalScore()
+    {
+    	return aContractorTotalScore;
+    }
+    public int getNonContractorTotalScore()
+    {
+    	return aNonContractorTotalScore;
+    }
+    
+    public Team getWinningTeam()
+    {
+    	return aWinningTeam;
+    }
+    
+    public Team getLosingTeam()
+    {
+    	return aLosingTeam;
+    } 
+    
+    public boolean isGameOver()
+    {
+        return aGameOver;
+    }
+    
+	public enum State {
+		newGame,
+		newDeal,
+		newBid,
+		newContract,
+		cardsDiscarded,
+		cardPlayed,
+		newTrick,
+		trickWon,
+		roundEnd,
+		gameOver
 	}
 }

@@ -1,22 +1,39 @@
 package comp303.fivehundred.engine;
 
+import comp303.fivehundred.ai.RandomRobot;
+import comp303.fivehundred.player.Team;
+
 public class Driver
 {	
+	
 	public static void main(String[] args)
 	{
-		GameEngine lEngine = new GameEngine(null, null, null, null);
+		int MAX_GAMES = 10000;
+		Team lTeam1 = new Team(new RandomRobot("RandomA"), new RandomRobot("RandomB"));
+		Team lTeam2 = new Team(new RandomRobot("RandomC"), new RandomRobot("RandomD"));
+		GameEngine lEngine = new GameEngine(lTeam1, lTeam2);
+		GameStatistics lGameStats = new GameStatistics();
+		lEngine.addObserver(lGameStats);
+		lEngine.addObserver(new GameLogger());
 		
-		lEngine.newGame();
-		while(!lEngine.gameOver())
+		for(int i = 0; i < MAX_GAMES; i++)
 		{
-			lEngine.dealCards();
-			lEngine.bid();
-			lEngine.exchange();
-			for(int i = 0; i < 10; i++){
-				lEngine.playTrick();
+			lEngine.newGame();
+			while(!lEngine.isGameOver())
+			{
+				do
+				{
+					lEngine.deal();
+					lEngine.bid();
+				}
+				while (lEngine.allPasses());
+				
+				lEngine.exchange();
+				lEngine.playRound();
+				lEngine.computeScore();
 			}
-			lEngine.computeScore();
 		}
-		lEngine.declareWinner();
+		lGameStats.printStatistics();
+		
 	}
 }
