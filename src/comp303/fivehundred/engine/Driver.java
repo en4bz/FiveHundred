@@ -8,9 +8,9 @@ public class Driver
 	
 	public static void main(String[] args)
 	{
-		int MAX_GAMES = 10000;
+		int MAX_GAMES = 50;
 		Team lTeam1 = new Team(new RandomRobot("RandomA"), new RandomRobot("RandomB"));
-		Team lTeam2 = new Team(new RandomRobot("RandomC"), new RandomRobot("RandomD"));
+		Team lTeam2 = new Team(new RandomRobot("BasicA"), new RandomRobot("BasicB"));
 		GameEngine lEngine = new GameEngine(lTeam1, lTeam2);
 		GameStatistics lGameStats = new GameStatistics();
 		lEngine.addObserver(lGameStats);
