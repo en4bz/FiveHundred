@@ -32,7 +32,7 @@ public abstract class APlayer
     }
     
     // to implement
-    abstract public CardList exchange(Bid[] pBids, int pIndex, Hand pWidow);
+    abstract public CardList exchange(Bid[] pBids, int pIndex, Hand aWidow);
     abstract public Bid selectBid(Bid[] pPreviousBids);
     abstract public Card play(Trick pTrick);
 }

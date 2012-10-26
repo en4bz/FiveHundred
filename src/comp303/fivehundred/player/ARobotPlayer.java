@@ -17,17 +17,18 @@ public abstract class ARobotPlayer extends APlayer implements IRobotPlayer
 	public CardList exchange(Bid[] pBids, int pIndex, Hand pWidow)
     {
 		// merge widow and hand together
-        Hand lHandAndWidow = getHand().clone();
+        Hand lHand = getHand().clone();
         for(Card c: pWidow)
         {
-            lHandAndWidow.add(c);
+            lHand.add(c);
         }
-        CardList lDiscarded = selectCardsToDiscard(pBids, pIndex, lHandAndWidow);
+        CardList lDiscarded = selectCardsToDiscard(pBids, pIndex, lHand);
         for(Card c: lDiscarded)
         {
-            lHandAndWidow.remove(c);   
+            lHand.remove(c);   
         }
-        return lHandAndWidow;
+        this.setHand(lHand);
+        return lDiscarded;
     }
     
     public Bid selectBid(Bid[] pPreviousBids)
