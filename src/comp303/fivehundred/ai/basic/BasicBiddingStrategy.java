@@ -14,6 +14,7 @@ import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.Card.Joker;
 import comp303.fivehundred.util.Card.Rank;
 import comp303.fivehundred.util.Card.BySuitComparator;
+import comp303.fivehundred.util.Card.BySuitNoTrumpComparator;
 
 /**
  * @author Rayyan Khoury
@@ -25,13 +26,35 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 
 	private static final Suit[] SUITS = Suit.values();
 	
-	private static EnumMap<Suit, Integer> aSuitPoints = new EnumMap<Suit, Integer>(Suit.class);
+	// Counts the points in a particular suit given that the robot will bid a trump bid
+	private static EnumMap<Suit, Integer> aSuitPointsTrump = new EnumMap<Suit, Integer>(Suit.class);
 	
+	// Counts the points in a particular suit given that the robot will bid a no trump bid
+	private static EnumMap<Suit, Integer> aSuitPointsNoTrump = new EnumMap<Suit, Integer>(Suit.class);
+
 	// Checks whether this hand has already been counted
 	private static Hand aCloneHand = new Hand();
 
-	// Comparators to compare by suit
-	private static EnumMap<Suit, BySuitComparator> aCompareSuit = new EnumMap<Suit, BySuitComparator>(Suit.class);
+	// Comparators to compare by suit given the robot will bid a trump bid
+	private static EnumMap<Suit, BySuitComparator> aCompareSuitTrump = new EnumMap<Suit, BySuitComparator>(Suit.class);
+	
+	// Comparators to compare by suit given the robot will bid a no trump bid
+	private static EnumMap<Suit, BySuitNoTrumpComparator> aCompareSuitNoTrump = new EnumMap<Suit, BySuitNoTrumpComparator>(Suit.class);
+	
+	// Points of the cards
+	private final static int FIRST = 4;
+	private final static int SECOND = 3;
+	private final static int THIRD = 2;
+	private final static int FOURTH = 1;
+	private final static int HIGH_JOKER = 6;
+	private final static int LOW_JOKER = 5;
+	
+	// Minimum possible points per suit for a no trump bid
+	private final static int MIN_NO_TRUMP_POINTS = 3;
+	
+	// Whether or not the cards in this hand can have a no trump bid
+	private boolean noTrumpPossible = false;
+	
 	
 	// Creates a new basic bidding strategy object
 	public BasicBiddingStrategy ()
@@ -50,37 +73,72 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	@Override
 	public Bid selectBid(Bid[] pPreviousBids, Hand pHand)
 	{
-		
-		Suit toBid = null;
-		
+
+		// If this hand has not already been checked by this robot
 		if (!handChecked(pHand))
 		{
+			for (int i = 0; i < SUITS.length; i++)
+			{
+				
+				aSuitPointsTrump.put(SUITS[i], countPointsInSuit(pHand.getTrumpCards(SUITS[i]), SUITS[i], true));
+				aSuitPointsNoTrump.put(SUITS[i], countPointsInSuit(pHand.playableCards(SUITS[i], SUITS[i]), SUITS[i], false));
+				
+			}
+
+			// Updates to make sure this hand will not be checked again
+			aCloneHand = pHand.clone();
 			
-			toBid = suitToBid(pHand);
+			// Updates if this hand can be a no trump bid
+			noTrumpPossible = noTrumpCheck();
 			
 		}
 		
 		
+		
+		
 	
 	}
 	
-	private static boolean contractCanBeNoTrump (CardList pCardsSuit)
+	/**
+	 * Checks to see whether this hand can play a no trump bid
+	 * @return true when hand can play a no trump bid, else false
+	 */
+	private static boolean noTrumpCheck()
 	{
 		
+		int check = 0;
 		
+		for (int i = 0; i < SUITS.length; i++)
+		{
+			
+			check = (int) aSuitPointsNoTrump.get(SUITS[i]);
+			
+			if (check < MIN_NO_TRUMP_POINTS)
+			{
+				
+				return false;
+				
+			}
+			
+		}
 		
-		return false;
+		return true;
 		
 	}
+	
+	
 	
 	/** 
 	 * Counts the points in a particular suit
-	 * Takes in to account the converse jokers
+	 * Takes in to account the converse jokers when pTrump is true (TRUMP BID)
+	 * Does not take in to account converse jokers when pTrump is false (NO TRUMP BID)
 	 * @assert pCardsSuit is not null
 	 * @param pCardsSuit Cards of a particular suit
 	 * @param pSuit The suit to check
+	 * @param pTrump Whether we are checking for a trump game or not
+	 * @return Points in hand based on whether trump bid or not
 	 */
-	private static int countPointsInSuit (CardList pCardsSuit, Suit pSuit)
+	private static int countPointsInSuit (CardList pCardsSuit, Suit pSuit, boolean pTrump)
 	{
 		
 		// Makes sure the card list is not null
@@ -115,7 +173,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 			}
 			
 			// Otherwise card is not a joker and we will count the points
-			currentCardPoint = valueOfCardSuit(currentCard, pSuit);
+			currentCardPoint = valueOfCardSuit(currentCard, pSuit, pTrump);
 			
 			// If the value of the card is 0, then we have counted all the cards worth counting
 			if (currentCardPoint == 0)
@@ -138,16 +196,64 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	
 	/**
 	 * Returns the value of the card in the case of a suit game
+	 * @assert pCard is not a joker
 	 * @param pCard The card to check
 	 * @param pSuit The suit currently being checked
-	 * @return Value of the card: 4 if Jack of suit, 3 if Jack of converse suit, 2 if Ace of suit, 1 if King of suit
+	 * @param pTrump Whether we are checking for a trump game or not
+	 * @return Value of the card
 	 */
-	private static int valueOfCardSuit (Card pCard, Suit pSuit)
+	private static int valueOfCardSuit (Card pCard, Suit pSuit, boolean pTrump)
 	{
 		
 		// Makes sure the card is not a joker
 		assert (!pCard.isJoker());
+		
+		// If we are checking for a trump bid
+		if (pTrump)
+		{
+			
+			return valueOfCardTrump(pCard,pSuit);
+			
+		}
+		
+		// Otherwise we are checking for a no trump bid
+		else
+		{
+			
+			return valueOfCardNoTrump(pCard);
+			
+		}
+		
+	}
+	
+	/**
+	 * Returns the value of the card when checking for a no trump bid
+	 * @param pCard The card to check
+	 * @return Value of the card based on: 4:Ace, 3:King, 2:Queen, 1:Jack
+	 */
+	private static int valueOfCardNoTrump (Card pCard)
+	{
+		
+		switch (pCard.getRank())
+		{
+			case ACE : return FIRST;
+			case KING : return SECOND;
+			case QUEEN : return THIRD;
+			case JACK : return FOURTH;
+			default : return 0;
+		}
 
+	}
+	
+	/**
+	 * Returns the value of the card when checking for a trump bid
+	 * @param pCard The card to check
+	 * @param pSuit Current trump whose bid is being checked
+	 * @return 4:Jack(suit), 3:Jack(converse suit), 2:Ace(suit), 1:King(suit)
+	 */
+	private static int valueOfCardTrump (Card pCard, Suit pSuit)
+	{
+		
 		switch (pCard.getRank())
 		{
 		
@@ -157,7 +263,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 				if (pCard.getSuit().equals(pSuit))
 				{
 
-					return 4;
+					return FIRST;
 					
 				}
 				
@@ -165,12 +271,12 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 				else
 				{
 					
-					return 3;
+					return SECOND;
 					
 				}
 				
-			case ACE : return 2;
-			case KING : return 1;
+			case ACE : return THIRD;
+			case KING : return FOURTH;
 			default : return 0;
 		
 		}	
@@ -192,22 +298,24 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		if (pCard.getJokerValue().equals(Joker.HIGH))
 		{
 			
-			return 4;
+			return HIGH_JOKER;
 			
 		}
 		
 		else
 		{
 			
-			return 3;
+			return LOW_JOKER;
 			
 		}
 		
 	}
 	
+	
+
 	/** 
 	 * Counts the points in a particular suit
-	 * Takes in to account the converse jokers
+	 * Takes in to account the converse jacks
 	 * @param pCardsSuit Cards of a particular suit
 	 */
 	
