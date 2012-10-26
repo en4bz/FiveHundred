@@ -25,23 +25,11 @@ public class BasicCardExchangeStrategy implements ICardExchangeStrategy
 		CardList discards = new CardList();
 		
 		// Determining which bid is the winning bid, and storing this suit
-		Bid winningBid = pBids[0];
+		Bid winningBid = Bid.max(pBids);
 		Suit currentTrump = winningBid.getSuit();
-		for (int i = 1; i < 4; i++)
-		{
-			
-			if (winningBid.compareTo(pBids[i]) < 0)
-			{
-				
-				winningBid = pBids[i];
-				currentTrump = winningBid.getSuit();
-				
-			}
-			
-		}
 
 		// Select lowest takes in to account a no trump game
-		while (discards.size() < 6)
+		while (discards.size() < NUMBER_CARDS)
 		{
 			
 			discards.add(pHand.selectLowest(currentTrump));
