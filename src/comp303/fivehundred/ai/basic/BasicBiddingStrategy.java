@@ -46,7 +46,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private static EnumMap<Suit, BySuitComparator> aCompareSuitTrump = new EnumMap<Suit, BySuitComparator>(Suit.class);
 	
 	// Comparators to compare by suit given the robot will bid a no trump bid
-	private static EnumMap<Suit, BySuitNoTrumpComparator> aCompareSuitNoTrump = new EnumMap<Suit, BySuitNoTrumpComparator>(Suit.class);
+	private static BySuitNoTrumpComparator aCompareSuitNoTrump;
 	
 	// Points of the cards
 	private final static int HIGH_JOKER = 6;
@@ -56,12 +56,19 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private final static int THIRD = 2;
 	private final static int FOURTH = 1;
 	
-	// Threshold of the different kinds of bids
-	private final static int TEN = 14;
-	private final static int NINE = 12;
-	private final static int EIGHT = 10;
-	private final static int SEVEN = 8;
-	private final static int SIX = 6;
+	// Threshold of the different kinds of bids for a trump bid
+	private final static int TEN_TRUMP = 14;
+	private final static int NINE_TRUMP = 12;
+	private final static int EIGHT_TRUMP = 10;
+	private final static int SEVEN_TRUMP = 8;
+	private final static int SIX_TRUMP = 6;
+	
+	// Threshold of the different kinds of bids for a no trump bid
+	private final static int TEN_NO_TRUMP = 29;
+	private final static int NINE_NO_TRUMP = 24;
+	private final static int EIGHT_NO_TRUMP = 20;
+	private final static int SEVEN_NO_TRUMP = 16;
+	private final static int SIX_NO_TRUMP = 12;
 	
 	// Points added if the partner has bid a particular trump
 	private final static int PARTNER_TEN_TRUMP = 14;
@@ -69,27 +76,14 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private final static int PARTNER_EIGHT_TRUMP = 10;
 	private final static int PARTNER_SEVEN_TRUMP = 8;
 	private final static int PARTNER_SIX_TRUMP = 6;
-	
-	// Points added if the partner has bid a no trump bid
-	private final static int PARTNER_TEN_NO_TRUMP = 14;
-	private final static int PARTNER_NINE_NO_TRUMP = 12;
-	private final static int PARTNER_EIGHT_NO_TRUMP = 10;
-	private final static int PARTNER_SEVEN_NO_TRUMP = 8;
-	private final static int PARTNER_SIX_NO_TRUMP = 6;
-	
+
 	// Points taken away if opponent has bid a particular trump
 	private final static int OPPONENT_TEN_TRUMP = 14;
 	private final static int OPPONENT_NINE_TRUMP = 12;
 	private final static int OPPONENT_EIGHT_TRUMP = 10;
 	private final static int OPPONENT_SEVEN_TRUMP = 8;
 	private final static int OPPONENT_SIX_TRUMP = 6;
-	
-	// Points taken away if opponent has bid a no trump bid
-	private final static int OPPONENT_TEN_NO_TRUMP = 14;
-	private final static int OPPONENT_NINE_NO_TRUMP = 12;
-	private final static int OPPONENT_EIGHT_NO_TRUMP = 10;
-	private final static int OPPONENT_SEVEN_NO_TRUMP = 8;
-	private final static int OPPONENT_SIX_NO_TRUMP = 6;
+
 	
 	// Minimum possible points per suit for a no trump bid
 	private final static int MIN_NO_TRUMP_POINTS = 3;
@@ -99,16 +93,11 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private final static boolean PARTNER = true;
 	
 	// Whether or not the cards in this hand can have a no trump bid
-	private boolean noTrumpPossible = false;
+	private static boolean noTrumpPossible = false;
 	
 	// Number of points in the no trump hand
 	private static int totalNoTrumpPoints = 0;
 	private static int noTrumpValue = 0;
-	private static int clubsValue = 0;
-	private static int spadesValue = 0;
-	private static int heartsValue = 0;
-	private static int diamondsValue = 0;
-	
 	
 	// Creates a new basic bidding strategy object
 	public BasicBiddingStrategy ()
@@ -121,7 +110,8 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 			aSuitPointsNoTrump.put(SUITS[i], 0);
 			aSuitPointsTrumpAdjusted.put(SUITS[i], 0);
 			aSuitPointsNoTrumpAdjusted.put(SUITS[i], 0);
-			aCompareSuit.put(SUITS[i], new BySuitComparator(SUITS[i]));
+			aCompareSuitTrump.put(SUITS[i], new BySuitComparator(SUITS[i]));
+			aCompareSuitNoTrump = new BySuitNoTrumpComparator();
 			
 		}
 		
@@ -145,17 +135,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		
 		// Readjusts points based on previous bids
 		adjustPointsTrump(pPreviousBids);
-		
-		updatePointValuesTrump();
-		
-		
-		if (noTrumpPossible)
-		{
-			
-			noTrumpValue = totalNoTrumpPoints;
-			
-		}
-		
 
 		return adjustedBid(highestBidIndex);
 		
@@ -166,6 +145,9 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		
 		Suit biddableSuit = null;
 		int pointsBiddableSuit = 0;
+		
+		Bid noTrumpBid = null;
+		Bid trumpBid = null;
 		
 		for (int i = 0; i < SUITS.length; i++)
 		{
@@ -178,7 +160,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 				
 			}
 			
-			else if (pointsBiddableSuit == aSuitPointsTrumpAdjusted.get(SUITS[i]) && pointsInBestPossibleSuit > 0)
+			else if (pointsBiddableSuit == aSuitPointsTrumpAdjusted.get(SUITS[i]) && pointsBiddableSuit > 0)
 			{
 				
 				if (biddableSuit.compareTo(SUITS[i]) < 0)
@@ -193,26 +175,125 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 			
 		}
 		
-		if (pointsInBestPossibleSuit == 0)
+		if (noTrumpPossible)
+		{
+			
+			noTrumpValue = totalNoTrumpPoints;
+			noTrumpBid = getNoTrumpBid(noTrumpValue);
+			
+			
+		}
+		
+		trumpBid = getTrumpBid(biddableSuit, pointsBiddableSuit);
+		
+		if (trumpBid.compareTo(noTrumpBid) < 0)
+		{
+			
+			return noTrumpBid;
+			
+		}
+		
+		else
+		{
+			
+			return trumpBid;
+			
+		}
+		
+	}
+	
+	private static Bid getNoTrumpBid (int noTrumpValue)
+	{
+		
+		if (noTrumpValue < SIX_NO_TRUMP)
 		{
 			
 			return new Bid();
 			
 		}
 		
+		else if (noTrumpValue < SEVEN_NO_TRUMP && noTrumpValue >= SIX_NO_TRUMP)
+		{
+			
+			return new Bid(6, null);
+			
+		}
 		
-		return null;
+		else if (noTrumpValue < EIGHT_NO_TRUMP && noTrumpValue >= SEVEN_NO_TRUMP)
+		{
+			
+			return new Bid(7, null);
+			
+		}
+		
+		else if (noTrumpValue < NINE_NO_TRUMP && noTrumpValue >= EIGHT_NO_TRUMP)
+		{
+			
+			return new Bid(8, null);
+			
+		}
+		
+		else if (noTrumpValue < TEN_NO_TRUMP && noTrumpValue >= NINE_NO_TRUMP)
+		{
+			
+			return new Bid(9, null);
+			
+		}
+		
+		else
+		{
+			
+			return new Bid(10, null);
+			
+		}
 		
 		
 	}
 	
-	private static void updatePointValuesTrump()
+	private static Bid getTrumpBid(Suit pSuit, int pPoints)
 	{
 		
-		clubsValue = aSuitPointsTrumpAdjusted.get(Suit.CLUBS);
-		diamondsValue = aSuitPointsTrumpAdjusted.get(Suit.DIAMONDS);
-		spadesValue = aSuitPointsTrumpAdjusted.get(Suit.SPADES);
-		heartsValue = aSuitPointsTrumpAdjusted.get(Suit.HEARTS);
+		if (pPoints < SIX_TRUMP)
+		{
+			
+			return new Bid();
+			
+		}
+		
+		else if (pPoints < SEVEN_TRUMP && pPoints >= SIX_TRUMP)
+		{
+			
+			return new Bid(6, pSuit);
+			
+		}
+		
+		else if (pPoints < EIGHT_TRUMP && pPoints >= SEVEN_TRUMP)
+		{
+			
+			return new Bid(7, pSuit);
+			
+		}
+		
+		else if (pPoints < NINE_TRUMP && pPoints >= EIGHT_TRUMP)
+		{
+			
+			return new Bid(8, pSuit);
+			
+		}
+		
+		else if (pPoints < TEN_TRUMP && pPoints >= NINE_TRUMP)
+		{
+			
+			return new Bid(9, pSuit);
+			
+		}
+		
+		else
+		{
+			
+			return new Bid(10, pSuit);
+			
+		}
 		
 	}
 	
@@ -415,7 +496,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		Card currentCard = null;
 		
 		// Sorts the cards by the comparator for this suit
-		pCardsSuit.sort(aCompareSuit.get(pSuit));
+		pCardsSuit.sort(aCompareSuitTrump.get(pSuit));
 		
 		// Creates the iterator for this card list
 		Iterator<Card> it = pCardsSuit.iterator();
@@ -577,39 +658,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		}
 		
 	}
-	
-	
 
-	/** 
-	 * Counts the points in a particular suit
-	 * Takes in to account the converse jacks
-	 * @param pCardsSuit Cards of a particular suit
-	 */
-	
-	private static Suit suitToBid (Hand pHand)
-	{
-		
-		Suit mostPoints = null;
-		
-		CardList maxSuitCards = new CardList();
-		Suit maxSuit = null;
-		int maxPoints = 0;
-		
-		CardList currentSuitCards = new CardList();
-		Suit currentSuit = null;
-		int currentPoints = 0;
-		
-		for (int i = 0; i < SUITS.length; i++) {
-			
-			currentSuitCards = pHand.getTrumpCards(SUITS[i]);
-			currentPoints = countPointsInSuit(currentSuitCards, SUITS[i]);
-			aSuitPoints.put(SUITS[i], currentPoints);
-			
-		}
-		
-		return mostPoints;
-		
-	}
 	
 	/** 
 	 * Checks whether this hand has already had
