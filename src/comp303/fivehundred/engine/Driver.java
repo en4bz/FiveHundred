@@ -11,7 +11,10 @@ import comp303.fivehundred.player.Team;
  */
 public class Driver
 {	
-	
+	/**
+	 * Play a customizable number of games in automatic mode.
+	 * @param args
+	 */
 	public static void main(String[] args)
 	{
 		int MAX_GAMES = 2;

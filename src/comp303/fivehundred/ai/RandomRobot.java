@@ -20,11 +20,18 @@ public class RandomRobot extends ARobotPlayer
 	
 	// TODO ask TA if it is okay to add this constructor
 	// Falls gracefully back if no parameter specified as in TA test classes.
+	/**
+	 * Constructs a robot that plays correctly but randomly with the name "RandomRobot".
+	 */
 	public RandomRobot()
 	{
 		super("RandomRobot");
 	}
 	
+	/**
+	 * Constructs a robot that plays correctly but randomly.
+	 * @param pName the robot's name
+	 */
 	public RandomRobot(String pName)
 	{
 		super(pName);
