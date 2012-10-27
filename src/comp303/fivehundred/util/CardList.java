@@ -233,14 +233,25 @@ public class CardList implements Iterable<Card>, Cloneable
 		return copy;
 		
 	}
-
+	/**
+	 * Get the first index of the specified card in the cardlist.
+	 * @param pCard the card to get the index of
+	 * @return the first index of the card
+	 */
 	public int indexOf(Card pCard)
 	{
 		return aCards.indexOf(pCard);
 	}
-
 	
-
-
+	/**
+	 * Returns true if the card list contains the specified card.
+	 * @param pCard the card to look for
+	 * @return true if the card list contains pCard
+	 */
+	public boolean contains(Card pCard)
+	{
+		return aCards.contains(pCard);
+		
+	}
 }
 
