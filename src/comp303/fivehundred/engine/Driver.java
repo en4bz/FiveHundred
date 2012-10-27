@@ -6,7 +6,7 @@ import comp303.fivehundred.player.Team;
 
 /**
  * Uses the GameEngine to play a customizable number of games in automatic mode.
- * @author Eleyine Zarour
+ * @author Ian Forbes and Eleyine Zarour 
  *
  */
 public class Driver
