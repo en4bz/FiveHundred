@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
 
+import comp303.fivehundred.player.APlayer;
+
 /**
  * @author Rayyan Khoury
  * A mutable list of cards. Does not support duplicates.
@@ -251,7 +253,25 @@ public class CardList implements Iterable<Card>, Cloneable
 	public boolean contains(Card pCard)
 	{
 		return aCards.contains(pCard);
-		
 	}
+	
+	@Override
+	public boolean equals(Object pCardList)
+	{
+    	boolean lReturn = false;
+    	if (pCardList != null && pCardList instanceof CardList)
+    	{
+    		CardList lList = (CardList) pCardList;
+    		lReturn = aCards.equals(lList.aCards);
+    	}
+    	return lReturn;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return toString().hashCode();
+	}
+	
 }
 
