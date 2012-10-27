@@ -30,9 +30,7 @@ public class Observable
      */
     protected long getNotificationSequenceNumber()
     {
-    	// TODO CODESTYLE wonder if I can shorten this to return counter++;
-    	aNotificationSequenceNumber++;
-    	return aNotificationSequenceNumber;	
+    	return ++aNotificationSequenceNumber;	
     }
 
 }
