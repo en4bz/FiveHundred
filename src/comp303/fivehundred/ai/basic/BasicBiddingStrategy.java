@@ -1,7 +1,6 @@
 package comp303.fivehundred.ai.basic;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.EnumMap;
 import java.util.Iterator;
 
@@ -12,13 +11,12 @@ import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardList;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.Card.Joker;
-import comp303.fivehundred.util.Card.Rank;
 import comp303.fivehundred.util.Card.BySuitComparator;
 import comp303.fivehundred.util.Card.BySuitNoTrumpComparator;
 
 /**
  * @author Rayyan Khoury
- * Discards the six lowest non-trump cards. 
+ * Supports a point-based bidding strategy
  */
 
 public class BasicBiddingStrategy implements IBiddingStrategy
@@ -49,48 +47,48 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private static BySuitNoTrumpComparator aCompareSuitNoTrump;
 	
 	// Points of the cards
-	private final static int HIGH_JOKER = 6;
-	private final static int LOW_JOKER = 5;
-	private final static int FIRST = 4;
-	private final static int SECOND = 3;
-	private final static int THIRD = 2;
-	private final static int FOURTH = 1;
+	private static final int HIGH_JOKER = 6;
+	private static final int LOW_JOKER = 5;
+	private static final int FIRST = 4;
+	private static final int SECOND = 3;
+	private static final int THIRD = 2;
+	private static final int FOURTH = 1;
 	
 	// Threshold of the different kinds of bids for a trump bid
-	private final static int TEN_TRUMP = 14;
-	private final static int NINE_TRUMP = 12;
-	private final static int EIGHT_TRUMP = 10;
-	private final static int SEVEN_TRUMP = 8;
-	private final static int SIX_TRUMP = 6;
+	private static final int TEN_TRUMP = 14;
+	private static final int NINE_TRUMP = 12;
+	private static final int EIGHT_TRUMP = 10;
+	private static final int SEVEN_TRUMP = 8;
+	private static final int SIX_TRUMP = 6;
 	
 	// Threshold of the different kinds of bids for a no trump bid
-	private final static int TEN_NO_TRUMP = 29;
-	private final static int NINE_NO_TRUMP = 24;
-	private final static int EIGHT_NO_TRUMP = 20;
-	private final static int SEVEN_NO_TRUMP = 16;
-	private final static int SIX_NO_TRUMP = 12;
+	private static final int TEN_NO_TRUMP = 29;
+	private static final int NINE_NO_TRUMP = 24;
+	private static final int EIGHT_NO_TRUMP = 20;
+	private static final int SEVEN_NO_TRUMP = 16;
+	private static final int SIX_NO_TRUMP = 12;
 	
 	// Points added if the partner has bid a particular trump
-	private final static int PARTNER_TEN_TRUMP = 14;
-	private final static int PARTNER_NINE_TRUMP = 12;
-	private final static int PARTNER_EIGHT_TRUMP = 10;
-	private final static int PARTNER_SEVEN_TRUMP = 8;
-	private final static int PARTNER_SIX_TRUMP = 6;
+	private static final int PARTNER_TEN_TRUMP = 14;
+	private static final int PARTNER_NINE_TRUMP = 12;
+	private static final int PARTNER_EIGHT_TRUMP = 10;
+	private static final int PARTNER_SEVEN_TRUMP = 8;
+	private static final int PARTNER_SIX_TRUMP = 6;
 
 	// Points taken away if opponent has bid a particular trump
-	private final static int OPPONENT_TEN_TRUMP = 14;
-	private final static int OPPONENT_NINE_TRUMP = 12;
-	private final static int OPPONENT_EIGHT_TRUMP = 10;
-	private final static int OPPONENT_SEVEN_TRUMP = 8;
-	private final static int OPPONENT_SIX_TRUMP = 6;
+	private static final int OPPONENT_TEN_TRUMP = 14;
+	private static final int OPPONENT_NINE_TRUMP = 12;
+	private static final int OPPONENT_EIGHT_TRUMP = 10;
+	private static final int OPPONENT_SEVEN_TRUMP = 8;
+	private static final int OPPONENT_SIX_TRUMP = 6;
 
 	
 	// Minimum possible points per suit for a no trump bid
-	private final static int MIN_NO_TRUMP_POINTS = 3;
+	private static final int MIN_NO_TRUMP_POINTS = 3;
 	
 	// Whether we are looking at opponent or partner
-	private final static boolean OPPONENT = false;
-	private final static boolean PARTNER = true;
+	private static final boolean OPPONENT = false;
+	private static final boolean PARTNER = true;
 	
 	// Whether or not the cards in this hand can have a no trump bid
 	private static boolean noTrumpPossible = false;
@@ -99,8 +97,10 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private static int totalNoTrumpPoints = 0;
 	private static int noTrumpValue = 0;
 	
-	// Creates a new basic bidding strategy object
-	public BasicBiddingStrategy ()
+	/**
+	 * 
+	 */
+	public BasicBiddingStrategy()
 	{
 		
 		for (int i = 0; i < SUITS.length; i++)
@@ -121,7 +121,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	public Bid selectBid(Bid[] pPreviousBids, Hand pHand)
 	{
 
-	    // The index of the highest bid
+	    // The index of the highest bid 
 	    int highestBidIndex = Bid.max(pPreviousBids).toIndex();
 		
 		// If this hand has not already been checked by this robot
