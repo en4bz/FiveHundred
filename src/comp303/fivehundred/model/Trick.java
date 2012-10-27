@@ -79,8 +79,6 @@ public class Trick extends CardList
 	/**
 	 * @return The index of the card that wins the trick.
 	 */
-	// TODO: might want to add a getIndexOf(Card) method to CardList, it could be useful 
-	// if we have more methods like the one below
 	public int winnerIndex()
 	{
 		Card lHighest = highest();
