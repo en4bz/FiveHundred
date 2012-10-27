@@ -11,7 +11,7 @@ import comp303.fivehundred.util.CardList;
  * Plays correctly but randomly, i.e., very badly.
  */
 // TODO ask TA if it is okay to replace "implements IRobotPlayer" by "extends ARobotPlayer"
-// However ARobotPlayer implements IRobotPlayer, so really this should not be a problem
+// ARobotPlayer implements IRobotPlayer, so really this should not be a problem.
 public class RandomRobot extends ARobotPlayer
 {
 	private IBiddingStrategy aBiddingStrategy = new RandomBiddingStrategy();
@@ -19,7 +19,7 @@ public class RandomRobot extends ARobotPlayer
 	private IPlayingStrategy aPlayingStrategy = new RandomPlayingStrategy();
 	
 	// TODO ask TA if it is okay to add this constructor
-	// Fall gracefully back if no parameter specified
+	// Falls gracefully back if no parameter specified as in TA test classes.
 	public RandomRobot()
 	{
 		super("RandomRobot");
