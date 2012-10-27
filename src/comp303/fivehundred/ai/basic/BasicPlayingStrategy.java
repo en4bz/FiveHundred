@@ -180,6 +180,18 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 		
 	}
 	
+	/**
+	 * Returns the card to play when following a trump game according to:
+	 * 1) If suit led is trump
+	 * 2) If suit led is not trump and:
+	 * 		a) The card can/must follow suit.
+	 * 		b) Card cannot follow suit and can beat winning card with trump.
+	 * 		c) Card cannot follow suit and cannot beat winning card.
+	 * @param pHand Hand of robot
+	 * @param pWinningCard Winning Card
+	 * @param pLeadingCard Leading card
+	 * @return Card to play
+	 */
 	private static Card followingTrumpGame(Hand pHand, Card pWinningCard, Card pLeadingCard)
 	{
 		
