@@ -239,6 +239,13 @@ public class GameEngine extends Observable
         {
         	aCurrentPlayer = p;
         	aCardPlayed = p.play(lTrick);
+         	//Forgot to remove card from hand, this is a bad way to do this consider 
+        	//having APlayer have no get hand method, just add and remove from hand
+        	Hand temp = p.getHand();
+        	temp.remove(aCardPlayed);
+        	p.setHand(temp); 
+        	System.out.println(p.getHand().size());
+        	//
             lTrick.add(aCardPlayed);
             notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "cardPlayed"));
         }
