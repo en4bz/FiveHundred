@@ -48,6 +48,14 @@ public class GameEngine extends Observable
     private Team aWinningTeam;
     private Team aLosingTeam;
     
+    // constants
+    private final int aMAXTRICKS = 10;
+    private final int aCARDSINHAND = 10;
+    private final int aWINSCORE = 500;
+    private final int aLOSESCORE = -500;
+    private final int aSLAM = 250;
+    private final int aTRICKSCORE = 10;
+    
     /**
      * Constructs a new game engine for two teams of two players. The
      * players cannot change teams. Methods in the game engine will
@@ -61,8 +69,6 @@ public class GameEngine extends Observable
         aTeam2 = pTeam2;
         APlayer[] lTeam1Players = aTeam1.getPlayers();
         APlayer[] lTeam2Players = aTeam2.getPlayers();
-        // TODO write method to customize initial playing order 
-        // e.g. flip a coin, table disposition etc.
         aPlayers = new APlayer[4];
         aPlayers[0] = lTeam1Players[0];
         aPlayers[1] = lTeam2Players[0];
@@ -112,7 +118,7 @@ public class GameEngine extends Observable
         for(APlayer p: aPlayers)
         {
             Hand lHand = new Hand();
-            for(int i = 0; i < 10; i++)
+            for(int i = 0; i < aCARDSINHAND; i++)
             {
                lHand.add(lDeck.draw());
             }
@@ -172,7 +178,7 @@ public class GameEngine extends Observable
         if(!allPasses())
         {
 	        // update contractor team
-	        Team lContractorTeam = (aTeam1.isInTeam(aContractor))? aTeam1: aTeam2;
+	        Team lContractorTeam = getTeamFromPlayer(aContractor);
 	        lContractorTeam.setContract(aContract);
 	        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newContract"));
 	        // update dealer
@@ -214,7 +220,7 @@ public class GameEngine extends Observable
     	aPlayers = rotate(aPlayers, aContractor);
     	aContractorRoundScore = 0;
     	aNonContractorRoundScore = 0;
-    	for(aTrickCounter = 1; aTrickCounter <= 10; aTrickCounter++)
+    	for(aTrickCounter = 1; aTrickCounter <= aMAXTRICKS; aTrickCounter++)
     	{
     		playTrick();
     	}
@@ -246,27 +252,13 @@ public class GameEngine extends Observable
         // update tricks won
         int lWinnerIndex = lTrick.winnerIndex(); 
         aTrickWinner = aPlayers[lWinnerIndex];
-        Team lWinningTeam = (aTeam1.isInTeam(aTrickWinner))? aTeam1: aTeam2;
+        Team lWinningTeam = getTeamFromPlayer(aTrickWinner);
         lWinningTeam.setTricksWon(lWinningTeam.getTricksWon()+1);
         notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "trickWon"));
         
         // winner now leads
         aPlayers = rotate(aPlayers, aTrickWinner);
         
-    }
-    /**
-     * Helper method to rotate the circular player array such that the specified player 
-     * becomes first while conserving the playing order. 
-     * @param pPlayers the current playing order
-     * @param pPlayer the player who will become first
-     * @return the playing order such that the specified player is now at index 0
-     */
-    private APlayer[] rotate(APlayer[] pPlayers, APlayer pPlayer)
-    {
-    	List<APlayer> lPlayerList = Arrays.asList(aPlayers);
-    	int lIndex = lPlayerList.indexOf(pPlayer);
-        Collections.rotate(lPlayerList, -lIndex);
-        return (APlayer[]) lPlayerList.toArray();
     }
     
     /**
@@ -277,8 +269,8 @@ public class GameEngine extends Observable
      */
     public void computeScore()
     {
-        Team lContractorTeam = (aTeam1.isContractor())? aTeam1: aTeam2;
-        Team lNonContractorTeam = (aTeam1.isContractor())? aTeam2: aTeam1;
+        Team lContractorTeam = getTeamFromPlayer(aContractor);
+        Team lNonContractorTeam = getOpponentTeam(lContractorTeam);
         
         // compute round scores
         aContractorRoundScore = lContractorTeam.getContract().getScore();
@@ -286,9 +278,9 @@ public class GameEngine extends Observable
         if(aContractWon)
         {
             // If there's a slam
-            if(lContractorTeam.getTricksWon() == 10 && aContractorRoundScore < 250)
+            if(lContractorTeam.getTricksWon() == aMAXTRICKS && aContractorRoundScore < aSLAM)
             {
-                aContractorRoundScore = 250;
+                aContractorRoundScore = aSLAM;
             }
         } 
         else
@@ -296,7 +288,7 @@ public class GameEngine extends Observable
             aContractorRoundScore = -aContractorRoundScore;
         }
 
-        aNonContractorRoundScore = lNonContractorTeam.getTricksWon() * 10;
+        aNonContractorRoundScore = lNonContractorTeam.getTricksWon() * aTRICKSCORE;
         
         
         // compute total scores
@@ -313,22 +305,21 @@ public class GameEngine extends Observable
         }
         
         // End game if necessary
-        if(aContractorTotalScore >= 500)
+        if(aContractorTotalScore >= aWINSCORE)
         {
             endGame(lContractorTeam); 
         } 
         
-        if(aContractorTotalScore <= -500)
+        if(aContractorTotalScore <= aLOSESCORE)
         {
             endGame(lNonContractorTeam);
         }
     }
 
-    // can come in handy for logging
     private void endGame(Team pWinningTeam)
     {
     	aWinningTeam = pWinningTeam;
-    	aLosingTeam = aTeam1.isInTeam(pWinningTeam.getPlayers()[0])? aTeam2: aTeam1;
+    	aLosingTeam = getOpponentTeam(aWinningTeam);
     	aGameOver = true;
         notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "gameOver"));   
     }
@@ -410,6 +401,9 @@ public class GameEngine extends Observable
     	return aContractor;
     }
     
+
+    
+    
     /**
      * Returns the game contract.
      * @return the game contract. If there's no contract, returns null.
@@ -487,7 +481,7 @@ public class GameEngine extends Observable
      * Returns the winners' team when the game is over.
      * @return the winners' team 
      */
-    public Team getWinningTeam()
+    protected Team getWinningTeam()
     {
     	return aWinningTeam;
     }
@@ -496,7 +490,7 @@ public class GameEngine extends Observable
      * Returns the losers' team when the game is over.
      * @return the losers' team
      */
-    public Team getLosingTeam()
+    protected Team getLosingTeam()
     {
     	return aLosingTeam;
     } 
@@ -508,6 +502,58 @@ public class GameEngine extends Observable
     public boolean isGameOver()
     {
         return aGameOver;
+    }
+    
+    /*----------------- Helper methods --------------------*/
+    /**
+     * Returns the team to which the player belongs.
+     * @param pPlayer the player who belongs to the team
+     * @return the team that contains the player
+     */
+    private Team getTeamFromPlayer(APlayer pPlayer)
+    {
+    	Team lTeam;
+    	if(aTeam1.isInTeam(pPlayer))
+    	{
+    		lTeam = aTeam1;
+    	}
+    	else
+    	{
+    		lTeam = aTeam2;
+    	}
+    	return lTeam;
+    }
+    
+    /**
+     * Helper method to rotate the circular player array such that the specified player 
+     * becomes first while conserving the playing order. 
+     * @param pPlayers the current playing order
+     * @param pPlayer the player who will become first
+     * @return the playing order such that the specified player is now at index 0
+     */
+    private APlayer[] rotate(APlayer[] pPlayers, APlayer pPlayer)
+    {
+    	List<APlayer> lPlayerList = Arrays.asList(aPlayers);
+    	int lIndex = lPlayerList.indexOf(pPlayer);
+        Collections.rotate(lPlayerList, -lIndex);
+        return (APlayer[]) lPlayerList.toArray();
+    }
+    
+    /**
+     * Helper method to get the team opposing pTeam.
+     * @param pTeam
+     * @return
+     */
+    private Team getOpponentTeam(Team pTeam)
+    {
+    	if(pTeam == aTeam1)
+    	{
+    		return aTeam2;
+    	}
+    	else
+    	{
+    		return aTeam1;
+    	}
     }
     
     /**
