@@ -5,15 +5,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import comp303.fivehundred.ai.BasicRobot;
 import comp303.fivehundred.ai.RandomRobot;
 import comp303.fivehundred.model.Bid;
-import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.player.Team;
 
@@ -88,7 +84,10 @@ public class TestEngine
 			aTester.deal();
 			aTester.bid();
 		}while(aTester.allPasses());
-		assertEquals(Bid.max(aTester.getBids()), aTester.getContract() );
+		assertTrue(!aTester.allPasses());
+		assertEquals(Bid.max(aTester.getBids()), aTester.getContract());
+		assertTrue(!aTester.isGameOver());
+		
 	}
 	
 	@Test
@@ -101,6 +100,13 @@ public class TestEngine
 	@Test 
 	public void test()
 	{
+		int lTrickCounter = 1;
 		testExchange();
+		for(int i = 1; i <= 10; i++){
+			aTester.playTrick();
+			for(APlayer p : aPlayers){
+				assertEquals(10-i,p.getHand().size());
+			}
+		}
 	} 
 }
