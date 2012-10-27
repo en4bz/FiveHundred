@@ -4,6 +4,11 @@ import comp303.fivehundred.ai.BasicRobot;
 import comp303.fivehundred.ai.RandomRobot;
 import comp303.fivehundred.player.Team;
 
+/**
+ * Uses the GameEngine to play a customizable number of games in automatic mode.
+ * @author Eleyine Zarour
+ *
+ */
 public class Driver
 {	
 	
@@ -11,7 +16,7 @@ public class Driver
 	{
 		int MAX_GAMES = 2;
 		Team lTeam1 = new Team(new RandomRobot("RandomA"), new RandomRobot("RandomB"));
-		Team lTeam2 = new Team(new RandomRobot("BasicA"), new RandomRobot("BasicB"));
+		Team lTeam2 = new Team(new RandomRobot("Random1"), new RandomRobot("Random2"));
 		GameEngine lEngine = new GameEngine(lTeam1, lTeam2);
 		GameStatistics lGameStats = new GameStatistics();
 		lEngine.addObserver(lGameStats);
