@@ -249,12 +249,6 @@ public class GameEngine extends Observable
     		playTrick();
     	}
     	
-    	//10 tricks must have been played
-    	if (aTrickCounter+1 != aMAXTRICKS) // we add 1 to aTrickCounter since the loop that calls playTrick() ends when aTrickCounter=11
-    	{
-    		throw new GameException("A round must contain 10 tricks");
-    	}
-    	
     	//When all the tricks were played, the hand of the players must be empty since they played 1 card per trick
     	for(APlayer p: aPlayers)
     	{
@@ -363,16 +357,17 @@ public class GameEngine extends Observable
 
     private void endGame(Team pWinningTeam)
     {
-    	 
-        /*Can't end the game if there is no winner*/
-        if (!aGameOver && aWinningTeam == null || aLosingTeam == null)
-        {
-            throw new GameException("The game can't be over if there is no winning/losing team");
-        }
         
     	aWinningTeam = pWinningTeam;
     	aLosingTeam = getOpponentTeam(aWinningTeam);
     	aGameOver = true;
+    	
+        /*Can't end the game if there is no winner*/
+        if (aGameOver && aWinningTeam == null || aLosingTeam == null)
+        {
+            throw new GameException("The game can't be over if there is no winning/losing team");
+        }
+        
         notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "gameOver"));   
     }
     
