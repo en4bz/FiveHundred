@@ -1,7 +1,7 @@
 package comp303.fivehundred.engine;
 
+import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import comp303.fivehundred.player.APlayer;
@@ -14,22 +14,18 @@ import org.slf4j.LoggerFactory;
 
 import comp303.fivehundred.mvc.Observer;
 
+/**
+ * 
+ * @author Eleyine
+ *
+ */
 public class GameStatistics implements Observer
 {
-	final Logger logger = LoggerFactory.getLogger(GameLogger.class);
+	final Logger logger = LoggerFactory.getLogger("GameStatistics");
 	
-	HashMap<APlayer, HashMap<String, Integer>> aNumbers = new HashMap<APlayer, HashMap<String, Integer>>();
-	HashMap<APlayer, HashMap<String, Double>> aRatios = new HashMap<APlayer, HashMap<String, Double>>();
-	
-	// fields to populate for each player
-	private String aContractsWon = "contractsWon";
-	private String aTricksWon = "tricksWon";
-	private String aContractsMade = "contractsMade";
-	private String aGamesWon = "gamesWon";
-	private String aAccumulatedScore = "accumulatedScore";
-	
-	
-	GameEngine aGame;
+	private HashMap<APlayer, EnumMap<Stats, Integer>> aNumbers = new HashMap<APlayer, EnumMap<Stats, Integer>>();
+	private HashMap<APlayer, EnumMap<Stats, Double>> aRatios = new HashMap<APlayer, EnumMap<Stats, Double>>();
+	private GameEngine aGame;
 		
 	@Override
 	public void update(Notification pNotification)
@@ -42,28 +38,28 @@ public class GameStatistics implements Observer
 			switch (lState) 
 			{
 			   case newContract:
-				   incrementNumber(aGame.getContractor(), aContractsWon, 1);
+				   incrementNumber(aGame.getContractor(), Stats.contractsWon, 1);
 				   break;
 			   case trickWon:
-				   incrementNumber(aGame.getTrickWinner(), aTricksWon, 1);
+				   incrementNumber(aGame.getTrickWinner(), Stats.tricksWon, 1);
 				   break;
 			   case roundEnd:
 				   if(aGame.isContractWon())
 				   {
-					   incrementNumber(aGame.getContractor(), aContractsMade, 1);
+					   incrementNumber(aGame.getContractor(), Stats.contractsMade, 1);
 				   }
 				   break;
 			   case gameOver:
 				   Team lWinningTeam = aGame.getWinningTeam();
 				   for(APlayer p: lWinningTeam.getPlayers())
 				   {
-					   incrementNumber(p, aGamesWon, 1);
-					   incrementNumber(p, aAccumulatedScore, lWinningTeam.getScore());
+					   incrementNumber(p, Stats.gamesWon, 1);
+					   incrementNumber(p, Stats.accumulatedScore, lWinningTeam.getScore());
 				   }
 				   Team lLosingTeam = aGame.getLosingTeam();
 				   for(APlayer p: lLosingTeam.getPlayers())
 				   {
-					   incrementNumber(p, aAccumulatedScore, lLosingTeam.getScore());
+					   incrementNumber(p, Stats.accumulatedScore, lLosingTeam.getScore());
 				   }
 				   break;
 			   default:
@@ -71,9 +67,39 @@ public class GameStatistics implements Observer
 			}
 		}
 	}
+	
+	public void printStatistics()
+	{
+		Set<APlayer> lPlayers = aNumbers.keySet();
+		logger.info(String.format("%-10s Trick\t Cont\t Made\t Game\t Score", ""));
+		for(APlayer p: lPlayers)
+		{
+			if(!aRatios.containsKey(p))
+			{
+				aRatios.put(p, new EnumMap<Stats, Double>(Stats.class));
+			}
+			
+			// update fields
+			updateRatio(p, Stats.tricksWon);
+			updateRatio(p, Stats.contractsWon);
+			updateRatio(p, Stats.contractsMade);
+			updateRatio(p, Stats.gamesWon);	
+			double lAccScore = (double) aNumbers.get(p).get(Stats.accumulatedScore)/(getSum(Stats.gamesWon) * 500);
+			aRatios.get(p).put(Stats.accumulatedScore, lAccScore);
+			
+			logger.info(String.format("%-10s %2.1f%%\t %2.1f%%\t %2.1f%%\t %2.1f%%\t %1.2f" , p.getName()
+					, aRatios.get(p).get(Stats.tricksWon)
+					, aRatios.get(p).get(Stats.contractsWon)
+					, aRatios.get(p).get(Stats.contractsMade)
+					, aRatios.get(p).get(Stats.gamesWon) 
+					, aRatios.get(p).get(Stats.accumulatedScore)));
+		}
+		
+	}
+	
 	// ---------------------- Helper Methods ----------------------------------
 	
-	private void incrementNumber(APlayer pPlayer, String pStatField, int pValue)
+	private void incrementNumber(APlayer pPlayer, Stats pStatField, int pValue)
 	{
 		int lOldValue = 0;
 		if(aNumbers.get(pPlayer).containsKey(pStatField))
@@ -89,18 +115,18 @@ public class GameStatistics implements Observer
 		{
 			if(!aNumbers.containsKey(p))
 			{
-				HashMap<String, Integer> lStatFields = new HashMap<String, Integer>();
-				lStatFields.put(aTricksWon, 0);
-				lStatFields.put(aContractsWon, 0);
-				lStatFields.put(aContractsMade, 0);
-				lStatFields.put(aGamesWon, 0);
-				lStatFields.put(aAccumulatedScore, 0);
+				EnumMap<Stats, Integer> lStatFields = new EnumMap<Stats, Integer>(Stats.class);
+				lStatFields.put(Stats.tricksWon, 0);
+				lStatFields.put(Stats.contractsWon, 0);
+				lStatFields.put(Stats.contractsMade, 0);
+				lStatFields.put(Stats.gamesWon, 0);
+				lStatFields.put(Stats.accumulatedScore, 0);
 				aNumbers.put(p, lStatFields);
 			}
 		}
 	}
 	
-	private void updateRatio(APlayer pPlayer, String pStatField)
+	private void updateRatio(APlayer pPlayer, Stats pStatField)
 	{
 		int lSum = getSum(pStatField);
 		double lRatio = 0;
@@ -111,7 +137,7 @@ public class GameStatistics implements Observer
 		aRatios.get(pPlayer).put(pStatField, lRatio);
 	}
 	
-	private int getSum(String pStatField)
+	private int getSum(Stats pStatField)
 	{
 		Set<APlayer> lPlayers = aNumbers.keySet();
 		int lSum = 0;
@@ -122,33 +148,17 @@ public class GameStatistics implements Observer
 		return lSum;
 	}
 	
-	public void printStatistics()
+	/**
+	 * Describes the statistics fields to populate during many game runs.
+	 * @author Eleyine
+	 */
+	private enum Stats 
 	{
-		Set<APlayer> lPlayers = aNumbers.keySet();
-		logger.info(String.format("%-10s Trick\t Cont\t Made\t Game\t Score", ""));
-		for(APlayer p: lPlayers)
-		{
-			if(!aRatios.containsKey(p))
-			{
-				aRatios.put(p, new HashMap<String, Double>());
-			}
-			
-			// update fields
-			updateRatio(p, aTricksWon);
-			updateRatio(p, aContractsWon);
-			updateRatio(p, aContractsMade);
-			updateRatio(p, aGamesWon);	
-			double lAccScore = (double) aNumbers.get(p).get(aAccumulatedScore)/(getSum(aGamesWon) * 500);
-			aRatios.get(p).put(aAccumulatedScore, lAccScore);
-			
-			logger.info(String.format("%-10s %2.1f\t %2.1f\t %2.1f\t %2.1f\t %2.1f" , p.getName()
-					, aRatios.get(p).get(aTricksWon)
-					, aRatios.get(p).get(aContractsWon)
-					, aRatios.get(p).get(aContractsMade)
-					, aRatios.get(p).get(aGamesWon) 
-					, aRatios.get(p).get(aAccumulatedScore)));
-		}
-		
+		contractsWon,
+		tricksWon,
+		contractsMade,
+		gamesWon,
+		accumulatedScore
 	}
 
 }
