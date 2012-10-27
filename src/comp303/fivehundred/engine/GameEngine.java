@@ -194,14 +194,7 @@ public class GameEngine extends Observable
     public void exchange()
     {    	
     	// get contractor index (I don't even understand why this is necessary in the strategy)
-    	int lContractorIndex;
-    	for(lContractorIndex = 0; lContractorIndex < aPlayers.length ; lContractorIndex++)
-    	{
-    		if(aContractor == aPlayers[lContractorIndex]) 
-    		{
-    			break;
-    		}
-    	}
+    	int lContractorIndex = Arrays.asList(aPlayers).indexOf(aContractor);
     	
         CardList lDiscarded = aContractor.exchange(aBids, lContractorIndex, aWidow);
         aWidow = new Hand();
@@ -244,7 +237,7 @@ public class GameEngine extends Observable
         	Hand temp = p.getHand();
         	temp.remove(aCardPlayed);
         	p.setHand(temp); 
-        	System.out.println(p.getHand().size());
+        	//System.out.println(p.getHand().size());
         	//
             lTrick.add(aCardPlayed);
             notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "cardPlayed"));
