@@ -15,13 +15,13 @@ import org.slf4j.LoggerFactory;
 import comp303.fivehundred.mvc.Observer;
 
 /**
- * 
- * @author Eleyine
+ * Observer statistics class that keeps track of the performance of the players during many game runs.
+ * @author Eleyine Zarour
  *
  */
 public class GameStatistics implements Observer
 {
-	final Logger logger = LoggerFactory.getLogger("GameStatistics");
+	private final Logger aLogger = LoggerFactory.getLogger("GameStatistics");
 	
 	private HashMap<APlayer, EnumMap<Stats, Integer>> aNumbers = new HashMap<APlayer, EnumMap<Stats, Integer>>();
 	private HashMap<APlayer, EnumMap<Stats, Double>> aRatios = new HashMap<APlayer, EnumMap<Stats, Double>>();
@@ -68,10 +68,16 @@ public class GameStatistics implements Observer
 		}
 	}
 	
+	/**
+	 * Print statistical summary of the game runs for each player namely the ratio of tricks 
+	 * won, the ratio of contacts won, the ratio of contracts made, the ratio of won games
+	 * and a score index.
+	 */
 	public void printStatistics()
 	{
 		Set<APlayer> lPlayers = aNumbers.keySet();
-		logger.info(String.format("%-10s Trick\t Cont\t Made\t Game\t Score", ""));
+		aLogger.info("==================== STATISTICS =====================");
+		aLogger.info(String.format("%-10s Trick\t Cont\t Made\t Game\t Score", ""));
 		for(APlayer p: lPlayers)
 		{
 			if(!aRatios.containsKey(p))
@@ -87,7 +93,7 @@ public class GameStatistics implements Observer
 			double lAccScore = (double) aNumbers.get(p).get(Stats.accumulatedScore)/(getSum(Stats.gamesWon) * 500);
 			aRatios.get(p).put(Stats.accumulatedScore, lAccScore);
 			
-			logger.info(String.format("%-10s %2.1f%%\t %2.1f%%\t %2.1f%%\t %2.1f%%\t %1.2f" , p.getName()
+			aLogger.info(String.format("%-10s %2.1f%%\t %2.1f%%\t %2.1f%%\t %2.1f%%\t %1.2f" , p.getName()
 					, aRatios.get(p).get(Stats.tricksWon)
 					, aRatios.get(p).get(Stats.contractsWon)
 					, aRatios.get(p).get(Stats.contractsMade)
