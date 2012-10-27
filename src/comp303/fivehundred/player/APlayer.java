@@ -55,8 +55,8 @@ public abstract class APlayer
     
     @Override
     /**
-     * Returns true if pPlayer have equal names and equal hands (same card content in the same order).
-     * @return true if both players share the same name and the same hands
+     * Returns true if pPlayer have equal names and the same reference.
+     * @return true if both players share the same name and reference.
      */
     public boolean equals(Object pPlayer)
     {
@@ -64,7 +64,7 @@ public abstract class APlayer
     	if (pPlayer != null && pPlayer instanceof APlayer)
     	{
     		APlayer lPlayer = (APlayer) pPlayer;
-    		lReturn = aName.equals(lPlayer.getName()) && aHand.equals(lPlayer.getHand());
+    		lReturn = aName.equals(lPlayer.getName()) && this == pPlayer;
     	}
     	return lReturn;
     }
@@ -72,7 +72,7 @@ public abstract class APlayer
     @Override
     public int hashCode()
     {
-    	return toString().hashCode();
+    	return getName().hashCode();
     }
     
     @Override
