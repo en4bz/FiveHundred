@@ -223,14 +223,20 @@ public class Bid implements Comparable<Bid>
 	}
 	
 	/**
-	 * Returns the highest bid in pBids. If they are all passing
-	 * bids, returns pass. 
+	 * Returns the highest bid in pBids. If they are all passing bids, returns pass. 
 	 * @param pBids The bids to compare.
 	 * @return the highest bid.
 	 */
-	public static Bid max(Bid[] pBids) throws NoSuchElementException
+	public static Bid max(Bid[] pBids)
 	{
+		try
+		{
 			return Collections.max(Arrays.asList(pBids));
+		}
+		catch(NoSuchElementException e)
+		{
+			return new Bid();
+		}
 	}
 	
 	/**
