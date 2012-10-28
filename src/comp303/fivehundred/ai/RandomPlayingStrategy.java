@@ -73,8 +73,17 @@ public class RandomPlayingStrategy implements IPlayingStrategy
 			// Leading card
 			Card leadingCard = pTrick.cardLed();
 			
-			// Leading card suit
-			Suit leadingCardSuit = leadingCard.getSuit();
+			//Leading card suit
+			//What if leading Card is a Joker?
+			Suit leadingCardSuit;
+			if(!leadingCard.isJoker())
+			{
+				leadingCardSuit = leadingCard.getSuit();
+			}
+			else
+			{
+				leadingCardSuit = trumpSuit;  //Defacto for now, what if no trump
+			}
 			
 			// Cards that are of the current suit being led
 			CardList followSuit = pHand.playableCards(leadingCardSuit, trumpSuit);
