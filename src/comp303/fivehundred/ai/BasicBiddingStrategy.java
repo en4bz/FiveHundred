@@ -1,6 +1,7 @@
 package comp303.fivehundred.ai;
 
 
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.Iterator;
 
@@ -496,7 +497,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		private final Suit aSuit;
 		
 		// A way to arrange cards in increasing order
-		private final BySuitComparator aSuitComparator;
+		private final Comparator<Card> aSuitComparator;
 		
 		// Whether or not this suit is biddable
 		private boolean aBiddable;
@@ -519,8 +520,14 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 			aBiddable = false;
 			aPoints = 0;
 			aCards = 0;
-			aSuitComparator = new BySuitComparator(pSuit);
-			
+			if(pSuit != null)
+			{
+				aSuitComparator = new BySuitComparator(pSuit);
+			}
+			else
+			{
+				aSuitComparator = new Card.BySuitNoTrumpComparator();
+			}
 		}
 		
 		/**
