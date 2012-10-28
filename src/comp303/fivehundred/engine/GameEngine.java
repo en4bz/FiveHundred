@@ -103,7 +103,7 @@ public class GameEngine extends Observable
         // choose first dealer at random
         Random lRand = new Random();
         aDealer = aPlayers[lRand.nextInt(aPlayers.length)];        
-        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newGame"));    	
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.newGame.toString()));    	
     }
     /**
      * Shuffle cards, deal 10 cards to each player and place six in the form of a widow.
@@ -133,7 +133,7 @@ public class GameEngine extends Observable
         {
             aWidow.add(lDeck.draw());
         }
-        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newDeal"));   
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.newDeal.toString()));   
     
         // update playing order so that player to dealer's left starts bidding
         aPlayers = rotate(aPlayers, aPlayers[1]);
@@ -145,6 +145,11 @@ public class GameEngine extends Observable
      * Once someone has bid, each subsequent bid must be higher than the previous one. 
      * If all players pass, no contract is made and the same dealer deals a fresh round.
      * Otherwise, the highest bid becomes the contract and the turn to deal rotates clockwise.
+     * @throws GameException if deal() is not called before bid()
+     * @throws GameException if players make an invalid bid
+     * @throws GameException if teams have a contract before calling bid()
+     * @post one team holds a contract and turn to deal rotates clockwise if !allPasses()
+     * @post same dealer if allPasses()
      */
     public void bid()
     {
@@ -184,7 +189,7 @@ public class GameEngine extends Observable
         	
             lBids[i] = lBid;
             aBids = Arrays.copyOf(lBids, i+1);
-            notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newBid"));
+            notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.newBid.toString()));
 
             // update contract if bid is not pass
             if (lBid.compareTo(aContract) > 0)
@@ -200,7 +205,7 @@ public class GameEngine extends Observable
 	        // update contractor team
 	        Team lContractorTeam = getTeamFromPlayer(aContractor);
 	        lContractorTeam.setContract(aContract);
-	        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newContract"));
+	        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.newContract.toString()));
 	        // update dealer
 	        aDealer = aPlayers[0];
         }
@@ -216,6 +221,9 @@ public class GameEngine extends Observable
     
     /** The contractor takes the widow along with his hand and discards six cards of
      *  his or her choice.
+     *  @throws GameException if the game has no contractor yet
+     *  @throws GameException if cards discarded were neither in the hand nor the widow
+     *  @post Contractor has 10 cards in hand
      */
     public void exchange()
     {    	
@@ -241,20 +249,31 @@ public class GameEngine extends Observable
         {
         	aWidow.add(c);
         }
-        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "cardsDiscarded"));
+        
+        assert aContractor.getHand().size() == CARDSINHAND;
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.cardsDiscarded.toString()));
 
     }
     
     /**
      * Play a round of ten tricks. The contractor leads the first trick. 
+     * @throws GameException if one player does not have 10 cards before playing the first trick
+     * @throws GameException if contractor or contract is not specified
+     * @throws GameException if players do not have an empty hand after playing 10 tricks
      */
     public void playRound()
     {
+    	if(aContractor == null || aContract == null)
+    	{
+    		throw new GameException("There must be a contractor and a contract before playing a round.");
+    	}
+    	
+    	// contractor leads
     	aPlayers = rotate(aPlayers, aContractor);
     	aContractorRoundScore = 0;
     	aNonContractorRoundScore = 0;
     	
-    	// Before the first trick, all players must have 10 cards
+    	// all players must have 10 cards before the first trick
     	for(APlayer p: aPlayers)
     	{
     		if (p.getHand().size() != CARDSINHAND)
@@ -282,6 +301,9 @@ public class GameEngine extends Observable
     /**
      * Play trick such that players follow suit if they can. A trick is won by the highest trump in it, 
      * or if no trump is played by the highest card of the suit led. The winner of a trick leads to the next.
+     * @throws GameException if allowed trick number is exceeded
+     * @throws GameException if player played a card that is not allowed according to the rules of the game.
+     * @post updates the player order such that the trick winner leads
     */
     public void playTrick()
     {
@@ -291,19 +313,32 @@ public class GameEngine extends Observable
     		throw new GameException("You cannot play more than 10 tricks per round since each hand contains 10 cards");
     	}
     	
-        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newTrick"));
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.newTrick.toString()));
         Trick lTrick = new Trick(aContract);
         for(APlayer p: aPlayers)
         {
         	aCurrentPlayer = p;
-        	Hand oldHand = p.getHand();
-        	aCardPlayed = p.play(lTrick);
-        	if(!oldHand.contains(aCardPlayed))
+        	
+        	// check if card is playable
+        	CardList lPlayable;
+        	if(lTrick.cardLed().isJoker())
         	{
-        		throw new GameException("Player cannot play a card that is not in hand.");
+            	lPlayable = p.getHand();      		
         	}
+        	else
+        	{
+            	lPlayable = p.getHand().playableCards(lTrick.getSuitLed(), lTrick.getTrumpSuit());
+
+        	}
+        	aCardPlayed = p.play(lTrick);
+        	if(!lPlayable.contains(aCardPlayed))
+        	{
+        		throw new GameException("Player cannot play this card according to the rules of the game.");
+        	}
+        	
+        	// card is played
             lTrick.add(aCardPlayed);
-            notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "cardPlayed"));
+            notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.cardPlayed.toString()));
         }
         
         // update tricks won
@@ -311,7 +346,7 @@ public class GameEngine extends Observable
         aTrickWinner = aPlayers[lWinnerIndex];
         Team lWinningTeam = getTeamFromPlayer(aTrickWinner);
         lWinningTeam.setTricksWon(lWinningTeam.getTricksWon()+1);
-        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "trickWon"));
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.trickWon.toString()));
         
         // winner now leads
         aPlayers = rotate(aPlayers, aTrickWinner);
@@ -323,13 +358,29 @@ public class GameEngine extends Observable
      * End the game if the contractor team has a total score greater than 500 or less than -500.
      * Note that even if the defenders exceed a total score of 500 points thanks to odd tricks, 
      * they can't win the game in this round.
+     * @throws GameException if the round score is computed before the 10 tricks are played
+     * @throws GameException if winning or losing team are already set
+     * @throws GameException if attempt to compute score while no contract has been set
+     * @post number of tricks won per team are reset to 0
+     * @post game ends if team wins or loses according to the rules of the game i.e. sets aWinningTeam, aLosingTeam
+     * 
      */
     public void computeScore()
     {
         Team lContractorTeam = getTeamFromPlayer(aContractor);
         Team lNonContractorTeam = getOpponentTeam(lContractorTeam);
         
-        // The round score cannot be computed before the 10 tricks are played
+        if(lContractorTeam == null || lNonContractorTeam == null)
+        {
+        	throw new GameException("Cannot compute score if no contract has been set.");
+        }
+        
+        if(aWinningTeam == null & aLosingTeam != null)
+        {
+        	throw new GameException("Winning or losing team are already set.");
+        }
+        
+        // round score cannot be computed before the 10 tricks are played
         if (aTrickCounter < MAXTRICKS)
         {
         	throw new GameException("The round score must be computed after the 10 tricks were played");
@@ -340,7 +391,7 @@ public class GameEngine extends Observable
         aContractWon = lContractorTeam.getTricksWon() >= lContractorTeam.getContract().getTricksBid();        
         if(aContractWon)
         {
-            // If there's a slam
+            // if there's a slam
             if(lContractorTeam.getTricksWon() == MAXTRICKS && aContractorRoundScore < SLAM)
             {
                 aContractorRoundScore = SLAM;
@@ -353,13 +404,12 @@ public class GameEngine extends Observable
 
         aNonContractorRoundScore = lNonContractorTeam.getTricksWon() * TRICKSCORE;
         
-        
         // compute total scores
         aContractorTotalScore = lContractorTeam.getScore() + aContractorRoundScore;
         lContractorTeam.setScore(aContractorTotalScore);        
         aNonContractorTotalScore = lNonContractorTeam.getScore() + aNonContractorRoundScore;
         lNonContractorTeam.setScore(aNonContractorTotalScore);
-        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "roundEnd"));
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.roundEnd.toString()));
 
         // reset number of tricks won
         for(Team t: getTeams())
@@ -367,7 +417,7 @@ public class GameEngine extends Observable
         	t.setTricksWon(0);
         }
         
-        // End game if necessary
+        // end game if necessary
         if(aContractorTotalScore >= WINSCORE)
         {
             endGame(lContractorTeam); 
@@ -385,14 +435,8 @@ public class GameEngine extends Observable
     	aWinningTeam = pWinningTeam;
     	aLosingTeam = getOpponentTeam(aWinningTeam);
     	aGameOver = true;
-    	
-        // Can't end the game if there is no winner
-        if (aGameOver && aWinningTeam == null || aLosingTeam == null)
-        {
-            throw new GameException("The game can't be over if there is no winning/losing team");
-        }
         
-        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "gameOver"));   
+        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.gameOver.toString()));   
     }
     
     // --------------------- Game state methods ------------
@@ -471,9 +515,7 @@ public class GameEngine extends Observable
     {
     	return aContractor;
     }
-    
 
-    
     
     /**
      * Returns the game contract.
@@ -579,16 +621,16 @@ public class GameEngine extends Observable
     /**
      * Returns the team to which the player belongs.
      * @param pPlayer the player who belongs to the team
-     * @return the team that contains the player
+     * @return the team that contains the player; null if player belongs to no team
      */
     private Team getTeamFromPlayer(APlayer pPlayer)
     {
-    	Team lTeam;
+    	Team lTeam = null;
     	if(aTeam1.isInTeam(pPlayer))
     	{
     		lTeam = aTeam1;
     	}
-    	else
+    	if(aTeam2.isInTeam(pPlayer))
     	{
     		lTeam = aTeam2;
     	}
@@ -600,12 +642,16 @@ public class GameEngine extends Observable
      * becomes first while conserving the playing order. 
      * @param pPlayers the current playing order
      * @param pPlayer the player who will become first
-     * @return the playing order such that the specified player is now at index 0
+     * @return the playing order such that the specified player is now at index 0; if pPlayer is not in pPlayers, return array unchanged
      */
     private APlayer[] rotate(APlayer[] pPlayers, APlayer pPlayer)
     {
     	List<APlayer> lPlayerList = Arrays.asList(aPlayers);
     	int lIndex = lPlayerList.indexOf(pPlayer);
+    	if(lIndex < 0)
+    	{
+    		return pPlayers;
+    	}
         Collections.rotate(lPlayerList, -lIndex);
         return (APlayer[]) lPlayerList.toArray();
     }
@@ -613,7 +659,7 @@ public class GameEngine extends Observable
     /**
      * Helper method to get the team opposing pTeam.
      * @param pTeam
-     * @return
+     * @return the team opposing pTeam; null if pTeam is null
      */
     private Team getOpponentTeam(Team pTeam)
     {
@@ -621,10 +667,11 @@ public class GameEngine extends Observable
     	{
     		return aTeam2;
     	}
-    	else
+    	if(pTeam == aTeam2)
     	{
     		return aTeam1;
     	}
+    	return null;
     }
     
     /**
