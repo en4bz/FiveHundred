@@ -20,6 +20,8 @@ public class BasicCardExchangeStrategy implements ICardExchangeStrategy
 	public CardList selectCardsToDiscard(Bid[] pBids, int pIndex, Hand pHand)
 	{
 		
+		Hand handClone = pHand.clone();
+		
 		// CardList maintaining the discarded cards
 		CardList discards = new CardList();
 		
@@ -30,8 +32,9 @@ public class BasicCardExchangeStrategy implements ICardExchangeStrategy
 		// Select lowest takes in to account a no trump game
 		while (discards.size() < NUMBER_CARDS)
 		{
-			
-			discards.add(pHand.selectLowest(currentTrump));
+
+			discards.add(handClone.selectLowest(currentTrump));
+			handClone.remove(handClone.selectLowest(currentTrump));
 			
 		}
 		
