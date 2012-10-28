@@ -18,7 +18,7 @@ import comp303.fivehundred.util.CardList;
  * If following, choose the lowest card that can follow suit and win. 
  * If no card can follow suit and win, picks the lowest card that can follow suit.
  * If no card can follow suit, picks the lowest trump card that can win.
- * If there are no trump card or the trump cards canï¿½t win 
+ * If there are no trump card or the trump cards can’t win 
  * (because the trick was already trumped), then picks the lowest card.
  * If a joker was led, dump the lowest card unless it can be beaten with the high joker 
  * according to the rules of the game.
@@ -267,25 +267,28 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 		}
 		
 		// CASES: SUIT LED IS NOT THE TRUMP
-
-		CardList followSuit = pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(trumpSuit)); //What if joker
-		
+	
 		// CASE 2: A CARD CAN/MUST FOLLOW SUIT
-		if (followSuit.size() > 0)
+		if (pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(trumpSuit)) != null)
 		{
 			
-			return followingTrumpGameNonTrumpLeadFollowSuit(followSuit, pWinningCard);
-			
+			if (pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(trumpSuit)).size() > 0)
+			{
+				
+				return followingTrumpGameNonTrumpLeadFollowSuit(pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(trumpSuit)), pWinningCard);
+				
+			}
+
 		}
 		
 		// CASE 3: CARDS CANNOT FOLLOW SUIT AND CAN BEAT HIGHEST CARD WITH TRUMP
 		
 		CardList tryToTrump = pHand.getTrumpCards(trumpSuit);
-		tryToTrump.sort(new BySuitComparator(trumpSuit));
+		tryToTrump = tryToTrump.sort(new BySuitComparator(trumpSuit));
 		Card highestCard = tryToTrump.getLast();
 		
-		// The hand contains cards that can beat the highest card
-		if (highestCard.compareTo(pWinningCard) > 0)
+		// The hand contains trumps
+		if (tryToTrump.size() > 0)
 		{
 			
 			// If the trick has not been trumped, play lowest trump
@@ -296,13 +299,26 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 				
 			}
 			
-			// Otherwise the trick has been trumped
-			return chooseBeatingCard(tryToTrump, pWinningCard);
+			// Otherwise the trick has been trumped and tries to find a higher trump or plays the lowest card
+			else
+			{
+			
+				CardList tryToTrumpAgain = pHand.reverse();
+				tryToTrumpAgain = tryToTrumpAgain.sort(new BySuitComparator(trumpSuit));
+				// If the method chooses the lowest trump 
+				return chooseBeatingCard(tryToTrumpAgain, pWinningCard);
+				
+			}
 			
 		}
 		
-		// CASE 4: CARDS CANNOT FOLLOW SUIT AND CANNOT BEAT HIGHEST CARD WITH TRUMP
-		return pHand.selectLowest(trumpSuit);
+		else
+		{
+			
+			// CASE 4: CARDS CANNOT FOLLOW SUIT AND CANNOT BEAT HIGHEST CARD WITH TRUMP
+			return pHand.selectLowest(trumpSuit);
+			
+		}
 		
 	}
 	
@@ -383,6 +399,30 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 		{
 
 			cardInHand = it.next();
+			
+			// If the winning card is a trump
+			if (pWinningCard.getEffectiveSuit(trumpSuit).equals(trumpSuit))
+			{
+
+				// If the card being checked is a joker
+
+				if (cardInHand.isJoker())
+				{
+
+					return cardInHand;
+
+				}
+
+
+				// If the card being checked is not a trump
+				if (!cardInHand.getEffectiveSuit(trumpSuit).equals(trumpSuit))
+				{
+
+					continue;
+
+				}
+
+			}
 
 			if (cardInHand.compareTo(pWinningCard) < 0)
 			{
