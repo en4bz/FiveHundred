@@ -3,6 +3,9 @@ package comp303.fivehundred.engine;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +14,8 @@ import comp303.fivehundred.ai.RandomRobot;
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.player.Team;
+import comp303.fivehundred.util.Card;
+import comp303.fivehundred.util.CardList;
 
 /**
  * 
@@ -19,6 +24,7 @@ import comp303.fivehundred.player.Team;
  */
 public class TestEngine
 {
+	private static final int NUMBER_OF_SIMULATIONS = 1000;
 	private APlayer[] aPlayers;
 	private GameEngine aTester;
 
@@ -43,7 +49,7 @@ public class TestEngine
 		assertNotNull(aTester.getTeams());
 	}
 	
-	@Test
+
 	public void testNewGame()
 	{
 		aTester.newGame();
@@ -75,33 +81,66 @@ public class TestEngine
 			assertEquals(10,p.getHand().size());
 		}
 		assertEquals(6,aTester.getWidow().size());
+		CardList lReconstructedDeck = new CardList();
+		for(APlayer p : aPlayers)
+		{
+			for(Card c : p.getHand())
+			{
+				lReconstructedDeck.add(c);
+			}
+		}
+		for(Card c : aTester.getWidow())
+		{
+			lReconstructedDeck.add(c);
+		}
+		while(lReconstructedDeck.size() > 0)//Ensure no duplicates
+		{
+			Card c = lReconstructedDeck.getFirst();
+			lReconstructedDeck.remove(c);
+			if(Arrays.asList(lReconstructedDeck).indexOf(c) > 0)
+			{
+				fail();
+			}
+		}
 	}
 	
-	@Test 
 	public void testBidding()
 	{
-		testNewGame();
 		do{
+			for(APlayer p : aPlayers){
+				if(p.getHand().size() > 0)
+				{
+					fail();
+				}
+			}
 			aTester.deal();
+			for(APlayer p : aPlayers){
+				if(p.getHand().size() != 10)
+				{
+					fail();
+				}
+			}
 			aTester.bid();
+			
 		}while(aTester.allPasses());
 		assertTrue(!aTester.allPasses());
+		assertTrue(!aTester.getContract().equals(new Bid()));//Contract Can't be a pass
 		assertEquals(Bid.max(aTester.getBids()), aTester.getContract());
 		assertTrue(!aTester.isGameOver());
 	}
 	
-	@Test
 	public void testExchange()
 	{
-		testBidding();
 		aTester.exchange();
 		assertEquals(6, aTester.getWidow().size());
 		assertEquals(10, aTester.getContractor().getHand().size());
 	}
 	
-	@Test 
+	@Test
 	public void testTrickPlay()
 	{
+		testNewGame();
+		testBidding();
 		testExchange();
 		for(int i = 1; i <= 10; i++)
 		{
@@ -113,22 +152,23 @@ public class TestEngine
 		}
 	} 
 	
-	@Test
 	public void testRound(){
-		testExchange();
 		aTester.playRound();
 		for(APlayer p : aPlayers)
 		{
 			assertEquals(0,p.getHand().size());
 		}
+		assertNotNull(aTester.getTrickWinner());
 	}
 	
-	@Test
 	public void testScoreComputation()
 	{
-		testRound();
+		int teamOneInitialScore  = aTester.getContractorTotalScore();
+		int teamTwoInitialScore = aTester.getNonContractorRoundScore();
 		aTester.computeScore();
-		assertTrue(aTester.getContractorRoundScore() > 0 || aTester.getNonContractorRoundScore() > 0);
+		//Assert someone gained/lost points 
+		assertTrue(teamOneInitialScore != aTester.getContractorTotalScore()
+				|| teamTwoInitialScore != aTester.getNonContractorRoundScore()); 
 		if(aTester.getContractorTotalScore() >= 500 || aTester.getContractorTotalScore() <= -500)
 		{
 			assertTrue(aTester.isGameOver());
@@ -137,5 +177,48 @@ public class TestEngine
 		{
 			assertTrue(!aTester.isGameOver());
 		}
+	}
+	
+	@Test 
+	public void simulate(){
+		for(int i = 0; i < NUMBER_OF_SIMULATIONS; i++){ //Simulate X Games
+			testNewGame();
+			while(!aTester.isGameOver())
+			{
+				testBidding();
+				testExchange();
+				testRound();
+				testScoreComputation();
+			}
+			testEndGame();
+		}
+	}
+	
+	public void testEndGame()
+	{
+		assertTrue(aTester.isGameOver());
+		assertNotNull(aTester.getWinningTeam());
+		assertNotNull(aTester.getLosingTeam());
+		assertTrue(!aTester.getWinningTeam().equals(aTester.getLosingTeam()));
+		assertTrue(aTester.getContractorTotalScore() >= 500 || aTester.getContractorTotalScore() <= -500);
+	}
+	
+	@Test//(expected=GameException.class)
+	public void letsThrowSomeExceptions()
+	{
+		testNewGame();
+		try{
+			aTester.bid();
+			fail();
+		}catch(Exception e){}
+		try{
+			aTester.exchange();
+			fail();
+		}catch(Exception e){}
+		try{
+			aTester.playRound();
+			fail();
+		}
+		catch(Exception e){}
 	}
 }

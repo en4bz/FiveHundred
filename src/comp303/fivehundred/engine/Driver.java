@@ -1,5 +1,6 @@
 package comp303.fivehundred.engine;
 
+import comp303.fivehundred.ai.BasicRobot;
 import comp303.fivehundred.ai.RandomRobot;
 import comp303.fivehundred.player.Team;
 
@@ -10,7 +11,7 @@ import comp303.fivehundred.player.Team;
  */
 public class Driver
 {	
-	private static final int MAX_GAMES = 2;
+	private static final int MAX_GAMES = 100;
 	
 	/**
 	 * Play a customizable number of games in automatic mode.
@@ -35,8 +36,9 @@ public class Driver
 					lEngine.deal();
 					lEngine.bid();
 				} while (lEngine.allPasses());
-				
+			//	System.out.println("EXCHANGE");
 				lEngine.exchange();
+			//	System.out.print("PLAY");
 				lEngine.playRound();
 				lEngine.computeScore();
 			}

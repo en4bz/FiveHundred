@@ -25,7 +25,6 @@ import comp303.fivehundred.util.Deck;
  */
 public class GameEngine extends Observable
 {
-	
     //Constants
     private static final int MAXTRICKS = 10;
     private static final int CARDSINHAND = 10;
@@ -197,6 +196,13 @@ public class GameEngine extends Observable
 	        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newContract"));
 	        // update dealer
 	        aDealer = aPlayers[0];
+        }
+        else //Reclaim Cards Here or in Deal at beginning?
+        {
+        	for(APlayer p : aPlayers)
+        	{
+        		p.resetHand();
+        	}
         }
     }
     
