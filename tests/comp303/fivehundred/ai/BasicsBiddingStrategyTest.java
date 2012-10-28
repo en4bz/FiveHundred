@@ -15,15 +15,38 @@ public class BasicsBiddingStrategyTest
 	private BasicBiddingStrategy aStrategy = new BasicBiddingStrategy();
 	
 	@Test
-	public void testBid()
+	public void testObviousBid()
 	{
 		Bid[] lBids = {new Bid(),new Bid(),new Bid(),new Bid()};
-		Hand lHand = new Hand();
-        for(Rank lRank : Rank.values())  
-        {
-        	lHand.add( new Card( lRank, Suit.HEARTS));
-        }
-		Bid lTest = aStrategy.selectBid(lBids, lHand);
-		assertTrue(lTest.getSuit().equals(Suit.HEARTS));
+		for(Suit lSuit : Suit.values()){
+			Hand lHand = new Hand();
+			for(Rank lRank : Rank.values())  
+			{
+				lHand.add( new Card( lRank, lSuit));
+			}
+			Bid lTest = aStrategy.selectBid(lBids, lHand);
+			assertTrue(lTest.getSuit().equals(lSuit));
+		}
+	}
+	
+	@Test
+	public void testPassingBid()
+	{
+		Bid[] lBids = {new Bid(10,null),new Bid(10,null),new Bid(10,null),new Bid(10,null),};
+		for(Suit lSuit : Suit.values()){
+			Hand lHand = new Hand();
+			for(Rank lRank : Rank.values())  
+			{
+				lHand.add( new Card( lRank, lSuit));
+			}
+			Bid lTest = aStrategy.selectBid(lBids, lHand);
+			assertTrue(lTest.equals(new Bid()));//Should be a pass
+		}	
+	}
+	
+	@Test
+	public void testBid()
+	{
+		
 	}
 }
