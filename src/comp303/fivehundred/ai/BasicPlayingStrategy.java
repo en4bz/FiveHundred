@@ -18,7 +18,7 @@ import comp303.fivehundred.util.CardList;
  * If following, choose the lowest card that can follow suit and win. 
  * If no card can follow suit and win, picks the lowest card that can follow suit.
  * If no card can follow suit, picks the lowest trump card that can win.
- * If there are no trump card or the trump cards can’t win 
+ * If there are no trump card or the trump cards canï¿½t win 
  * (because the trick was already trumped), then picks the lowest card.
  * If a joker was led, dump the lowest card unless it can be beaten with the high joker 
  * according to the rules of the game.
@@ -160,14 +160,16 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	private static Card leadingCardNotJokerFollowingJoker(Card pWinningCard, Hand pHand, Card pLeadingCard)
 	{
 		
-		if (pWinningCard.getJokerValue().equals(Joker.HIGH))
+		if (pWinningCard.getJokerValue().equals(Joker.HIGH) && trumpSuit != null)
 		{
-			
 			CardList playableCards = pHand.playableCards(pLeadingCard.getEffectiveSuit(trumpSuit), trumpSuit);
 			return playableCards.sort(new BySuitComparator(trumpSuit)).getFirst();
-			
 		}
-		
+		else if(pWinningCard.getJokerValue().equals(Joker.HIGH) && trumpSuit == null)
+		{
+			CardList playableCards = pHand.playableCards(pLeadingCard.getEffectiveSuit(trumpSuit), trumpSuit);
+			return playableCards.sort(new Card.BySuitNoTrumpComparator()).getFirst();
+		}
 		else if (pHand.getJokers().size() > 0)
 		{
 			
