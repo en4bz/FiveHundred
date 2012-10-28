@@ -20,7 +20,7 @@ public abstract class APlayer
      * Constructs a new player.
      * @param pName the player's name
      */
-    protected APlayer(String pName)
+    public APlayer(String pName)
     {
         aName = pName;
         aHand = new Hand();

@@ -19,7 +19,7 @@ public abstract class ARobotPlayer extends APlayer implements IRobotPlayer
 	 * Constructs new robot player object.
 	 * @param pName the robot's name
 	 */
-	protected ARobotPlayer(String pName)
+	public ARobotPlayer(String pName)
 	{
 		super(pName);
 	}
