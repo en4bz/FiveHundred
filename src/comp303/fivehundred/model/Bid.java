@@ -2,6 +2,8 @@ package comp303.fivehundred.model;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.NoSuchElementException;
+
 import comp303.fivehundred.util.Card.Suit;
 
 /**
@@ -226,9 +228,9 @@ public class Bid implements Comparable<Bid>
 	 * @param pBids The bids to compare.
 	 * @return the highest bid.
 	 */
-	public static Bid max(Bid[] pBids)
+	public static Bid max(Bid[] pBids) throws NoSuchElementException
 	{
-		return Collections.max(Arrays.asList(pBids));
+			return Collections.max(Arrays.asList(pBids));
 	}
 	
 	/**
