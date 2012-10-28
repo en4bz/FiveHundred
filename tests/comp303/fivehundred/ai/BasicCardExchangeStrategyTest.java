@@ -21,19 +21,15 @@ import static org.junit.Assert.*;
  */
 public class BasicCardExchangeStrategyTest
 {
-	
-	ArrayList<Bid[]> aBidArray = new ArrayList<Bid[]>();
-	ArrayList<Hand> aHandArray = new ArrayList<Hand>();
-	ArrayList<CardList> aCorrectArray = new ArrayList<CardList>();
-	ArrayList<Integer> aPIndex = new ArrayList<Integer>();
-	
+
+	BasicCardExchangeStrategy newStrategy = new BasicCardExchangeStrategy();
+
 	@Test
-	public void testBasicCardExchangeStrategy()
+	/**
+	 * Trump Spades no Jokers
+	 */
+	public void test0TrumpSpadesNoJokers()
 	{
-		
-		BasicCardExchangeStrategy newStrategy = new BasicCardExchangeStrategy();
-		
-		// Trump Spades no Jokers
 		createTest(
 				new Bid(), 
 				new Bid(6, Suit.CLUBS), 
@@ -43,8 +39,14 @@ public class BasicCardExchangeStrategyTest
 				new Card[] {a4C, a4H, a7C, a7D, a8H, aTH},
 				2
 				);
-		
-		// Trump Clubs with High Joker
+	}
+	
+	@Test
+	/**
+	 * Trump Clubs with High Joker
+	 */
+	public void test1TrumpClubsHighJoker()
+	{
 		createTest(
 				new Bid(6, null), 
 				new Bid(8, Suit.CLUBS), 
@@ -54,8 +56,14 @@ public class BasicCardExchangeStrategyTest
 				new Card[] {a4H, a7S, a7D, a7H, aTD, aKH},
 				3
 				);
-		
-		// No trump with Both Jokers
+
+	}
+	@Test
+	/**
+	 * No trump with Both Jokers
+	 */
+	public void test2NoTrumpBothJokers()
+	{
 		createTest(
 				new Bid(7, null), 
 				new Bid(), 
@@ -65,20 +73,29 @@ public class BasicCardExchangeStrategyTest
 				new Card[] {a4S, a4C, a5D, a6S, a8S, a8H},
 				0
 				);
-		
-		for (int i = 0; i < aPIndex.size(); i++)
-		{
-			
-			assertEquals(aCorrectArray.get(i), newStrategy.selectCardsToDiscard(aBidArray.get(i), aPIndex.get(i), aHandArray.get(i)));
-			
-			
-		}
-		
+
 	}
 	
+	@Test
+	/**
+	 * Trump with converse jacks and jokers
+	 */
+	public void test3TrumpMustKeepConverseJack()
+	{
+		createTest(
+				new Bid(7, null), 
+				new Bid(), 
+				new Bid(), 
+				new Bid(9, Suit.SPADES),
+				new Card[] {aHJo, aJS, aJC, aAS, aKS, aTS, a9S, a7S, a4S, aAH, aKH, aAC, a5C, aAD, aKD, aTD},
+				new Card[] {a5C, aTD, aKD, aKH, aAC, aAD},
+				3
+				);
+	}
+
 	public void createTest(Bid pFirst, Bid pSecond, Bid pThird, Bid pFourth, Card[] pAllCards, Card[] pCorrectCards, int pIndex)
 	{
-		
+
 		// New bids
 		Bid[] bidArray = new Bid[4];
 		bidArray[0] = pFirst;
@@ -89,15 +106,12 @@ public class BasicCardExchangeStrategyTest
 		// 16 cards
 		Hand cList = new Hand();
 		cList.addCardArray(pAllCards);
-		
+
 		// 6 correct cards
 		CardList correctCardList = new CardList();
 		correctCardList.addCardArray(pCorrectCards);
-		
-		aBidArray.add(bidArray);
-		aHandArray.add(cList);
-		aCorrectArray.add(correctCardList);
-		aPIndex.add(pIndex);
+
+		assertEquals(correctCardList, newStrategy.selectCardsToDiscard(bidArray, pIndex, cList));
 
 	}
 

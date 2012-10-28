@@ -16,9 +16,8 @@ import comp303.fivehundred.util.Card.Suit;
 import static org.junit.Assert.*;
 
 /**
- * 
  * @author Rayyan Khoury
- *
+ * Test class for BasicPlayingStrategy
  */
 public class BasicPlayingStrategyTest
 {
