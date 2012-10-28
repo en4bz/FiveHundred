@@ -149,7 +149,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		Bid toBid = getBid(bestBid);
 		
 		// If the best bid is higher than the maximum bid, returns this bid
-		if (toBid.compareTo(Bid.max(pPreviousBids)) > 0)
+		if (toBid.compareTo(Bid.max(pPreviousBids)) > 0)//This is empty
 		{
 			
 			return toBid;
