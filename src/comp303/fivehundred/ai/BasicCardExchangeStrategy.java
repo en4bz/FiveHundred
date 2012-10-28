@@ -19,6 +19,7 @@ public class BasicCardExchangeStrategy implements ICardExchangeStrategy
 	@Override
 	public CardList selectCardsToDiscard(Bid[] pBids, int pIndex, Hand pHand)
 	{
+		
 		// CardList maintaining the discarded cards
 		CardList discards = new CardList();
 		
@@ -26,13 +27,17 @@ public class BasicCardExchangeStrategy implements ICardExchangeStrategy
 		Bid winningBid = Bid.max(pBids);
 		Suit currentTrump = winningBid.getSuit();
 
-		// Select lowest takes into account a no trump game
+		// Select lowest takes in to account a no trump game
 		while (discards.size() < NUMBER_CARDS)
 		{
-			discards.add(pHand.selectLowest(currentTrump));	
+			
+			discards.add(pHand.selectLowest(currentTrump));
+			
 		}
 		
 		// Returns the discards
 		return discards;
+		
 	}
+
 }
