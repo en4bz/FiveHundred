@@ -209,6 +209,13 @@ public class GameEngine extends Observable
 	        // update dealer
 	        aDealer = aPlayers[0];
         }
+        else
+        {
+        	for(APlayer p : aPlayers)
+        	{
+        		p.resetHand();
+        	}
+        }
     }
     
     /**
@@ -314,29 +321,13 @@ public class GameEngine extends Observable
     	}
     	
         notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.newTrick.toString()));
+       
         Trick lTrick = new Trick(aContract);
         for(APlayer p: aPlayers)
         {
         	aCurrentPlayer = p;
-        	
-        	// check if card is playable
-        	CardList lPlayable;
-        	if(lTrick.cardLed().isJoker())
-        	{
-            	lPlayable = p.getHand();      		
-        	}
-        	else
-        	{
-            	lPlayable = p.getHand().playableCards(lTrick.getSuitLed(), lTrick.getTrumpSuit());
-
-        	}
         	aCardPlayed = p.play(lTrick);
-        	if(!lPlayable.contains(aCardPlayed))
-        	{
-        		throw new GameException("Player cannot play this card according to the rules of the game.");
-        	}
-        	
-        	// card is played
+        
             lTrick.add(aCardPlayed);
             notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.cardPlayed.toString()));
         }
