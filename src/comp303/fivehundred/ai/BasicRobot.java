@@ -19,11 +19,19 @@ public class BasicRobot extends ARobotPlayer
 	
 	// TODO ask TA if it is okay to add this constructor
 	// Fall gracefully back if no parameter specified
+	
+	/**
+	 * Creates a BasicRobot with default name "BasicRObot".
+	 */
 	public BasicRobot()
 	{
-		super("RandomRobot");
+		super("BasicRobot");
 	}
 	
+	/**
+	 * Creates a BasicRobot with name pName.
+	 * @param pName : Robot's name
+	 */
 	public BasicRobot(String pName)
 	{
 		super(pName);
