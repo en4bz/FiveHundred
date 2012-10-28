@@ -20,8 +20,8 @@ import comp303.fivehundred.util.Deck;
 /**
  * A class that can store the entire state of the game, and provides 
  * methods to modify the state according to the rules of the game five hundred.
- * @author Eleyine Zarour and Ian Forbes
- *
+ * @author Eleyine Zarour and Ian Forbes (Design)
+ * @author Gabrielle Germain (Exception handling)
  */
 public class GameEngine extends Observable
 {
@@ -115,6 +115,7 @@ public class GameEngine extends Observable
     	aPlayers = rotate(aPlayers, aDealer);
     	
     	Deck lDeck = new Deck();
+    	lDeck.shuffle();
         for(APlayer p: aPlayers)
         {
             for(int i = 0; i < CARDSINHAND; i++)
