@@ -2,6 +2,7 @@ package comp303.fivehundred.ai;
 
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import comp303.fivehundred.model.Bid;
@@ -12,7 +13,13 @@ import comp303.fivehundred.util.Card.Suit;
 
 public class BasicsBiddingStrategyTest
 {
-	private BasicBiddingStrategy aStrategy = new BasicBiddingStrategy();
+	private BasicBiddingStrategy aStrategy;
+	
+	@Before
+	public void setup()
+	{
+		 aStrategy = new BasicBiddingStrategy();
+	}
 	
 	@Test
 	public void testObviousBid()
