@@ -139,7 +139,7 @@ public class Hand extends CardList
 		
 		for(Card c: this)
 		{
-			if(c.getSuit().equals(pSuit))
+			if(!c.isJoker() && c.getSuit().equals(pSuit))
 			{
 				lReturn.add(c);
 			}
