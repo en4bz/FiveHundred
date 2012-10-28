@@ -11,7 +11,7 @@ import comp303.fivehundred.player.Team;
  */
 public class Driver
 {	
-	private static final int MAX_GAMES = 100;
+	private static final int MAX_GAMES = 10000;
 	
 	/**
 	 * Play a customizable number of games in automatic mode.
@@ -20,7 +20,7 @@ public class Driver
 	public static void main(String[] pArguments)
 	{
 		Team lTeam1 = new Team(new RandomRobot("RandomA"), new RandomRobot("RandomB"));
-		Team lTeam2 = new Team(new RandomRobot("Random1"), new RandomRobot("Random2"));
+		Team lTeam2 = new Team(new BasicRobot("BasicA"), new BasicRobot("BasicB"));
 		GameEngine lEngine = new GameEngine(lTeam1, lTeam2);
 		GameStatistics lGameStats = new GameStatistics();
 		lEngine.addObserver(lGameStats);
