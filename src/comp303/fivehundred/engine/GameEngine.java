@@ -327,6 +327,17 @@ public class GameEngine extends Observable
         {
         	aCurrentPlayer = p;
         	aCardPlayed = p.play(lTrick);
+        	if(aCardPlayed.isJoker() && lTrick.size() == 0 && aContract.isNoTrump() && p.getHand().size() > 2)
+        	{
+        		//Problem
+        	}
+        	//If Player is playing a non playable card but can play another
+        	if( lTrick.size() != 0 && !lTrick.jokerLed() &&
+        		!p.getHand().playableCards(lTrick.getSuitLed(), aContract.getSuit()).contains(aCardPlayed) && 
+        		p.getHand().playableCards(lTrick.getSuitLed(), aContract.getSuit()).size() != 0)
+        	{
+        		//Problem
+        	}
         
             lTrick.add(aCardPlayed);
             notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.cardPlayed.toString()));
