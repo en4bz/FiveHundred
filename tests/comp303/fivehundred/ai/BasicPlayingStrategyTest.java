@@ -504,7 +504,7 @@ public class BasicPlayingStrategyTest
 		correctCards.addCardArray(pCorrect);
 
 		// runs the test thirty two times
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < 32; j++)
 		{
 			assertTrue(correctCards.contains(newStrategy.play(pTrick, theHand)));
 
