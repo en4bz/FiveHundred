@@ -9,7 +9,6 @@ import comp303.fivehundred.util.CardList;
 /**
  * Collects the common behavior necessary for all players (both human and robot).
  * @author Eleyine
- *
  */
 public abstract class APlayer
 { 
@@ -37,7 +36,7 @@ public abstract class APlayer
     
     /**
      * Adds pCard to players hand.
-     * @param pCard
+     * @param pCard : Card to add.
      */
     public void addCardToHand(Card pCard)
     {
@@ -45,14 +44,17 @@ public abstract class APlayer
     }
     
     /**
-     * Removes pCard card from the players hand
-     * @param pCard
+     * Removes pCard card from the players hand.
+     * @param pCard : Card to remove.
      */
     public void removeCardFromHand(Card pCard)
     {
     	aHand.remove(pCard);
     }
     
+    /**
+     * Reset the players hand to an empty hand.
+     */
     public void resetHand()
     {
     	aHand = new Hand();
