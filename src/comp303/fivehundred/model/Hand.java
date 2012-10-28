@@ -125,6 +125,30 @@ public class Hand extends CardList
 		return lReturn;
 	}
 	
+	/**
+	 * Returns all the cards of a given NON trump suit without jokers
+	 * or trumps.
+	 * @param pSuit The suit to check for. Cannot be null.
+	 * @return All the cards in the hand of a particular NON TRUMP suit.
+	 */
+	public CardList getCardsOfNonTrumpSuit(Suit pSuit)
+	{
+		
+		assert pSuit != null;
+		CardList lReturn = new CardList();
+		
+		for(Card c: this)
+		{
+			if(c.getSuit().equals(pSuit))
+			{
+				lReturn.add(c);
+			}
+		}
+		
+		return lReturn;
+		
+	}
+	
 	
 	/**
 	 * Selects the least valuable card in the hand, if pTrump is the trump.
