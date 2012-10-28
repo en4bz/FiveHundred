@@ -24,14 +24,18 @@ import comp303.fivehundred.util.Card.BySuitNoTrumpComparator;
 public class BasicBiddingStrategy implements IBiddingStrategy
 {
 	
+	// Enum Map of biddable suits
+	private static EnumMap<Suit, BiddableSuit> allBiddableSuits = new EnumMap<Suit, BiddableSuit>(Suit.class);
+	
+	// Enum array
+	private static Suit[] allSuits = {Suit.HEARTS, Suit.CLUBS, Suit.DIAMONDS, Suit.SPADES};
+	
 	// Declarations for points and number of cards in threshold checking
-	private static BiddableSuit clubsBiddable;
-	private static BiddableSuit spadesBiddable;
-	private static BiddableSuit heartsBiddable;
-	private static BiddableSuit diamondsBiddable;
 	private static BiddableSuit noTrumpBiddable;
 	
 	// Points for the card order
+	private static final int HIGH_JOKER = 6;
+	private static final int LOW_JOKER = 5;
 	private static final int FIRST_POINTS = 4;
 	private static final int SECOND_POINTS = 3;
 	private static final int THIRD_POINTS = 2;
@@ -46,7 +50,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	
 	// Partner bid the same suit
 	private static final int PARTNER_BID = 5;
-	private static final int OPPONENT_BID = 4;
+	private static final int OPPONENT_BID = -4;
 	
 	// Updates the points based on previous bids
 	private static Suit rightBidSuit = null;
@@ -65,10 +69,13 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	public BasicBiddingStrategy()
 	{
 		
-		clubsBiddable = new BiddableSuit(Suit.CLUBS);
-		spadesBiddable = new BiddableSuit(Suit.SPADES);
-		heartsBiddable = new BiddableSuit(Suit.HEARTS);
-		diamondsBiddable = new BiddableSuit(Suit.DIAMONDS);
+		for (int i = 0; i < allSuits.length; i++)
+		{
+			
+			allBiddableSuits.put(allSuits[i], new BiddableSuit(allSuits[i]));
+			
+		}
+
 		noTrumpBiddable = new BiddableSuit(null);
 		
 	}
@@ -90,11 +97,85 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		updatePreviousBids(pPreviousBids);
 		
 		// Updates the points based on previous bids
-		updateSuitsBiddablePreviousBids();
+		if (rightBid)
+		{
+		
+			updateSuitsBiddablePreviousBids(rightBidSuit, OPPONENT_BID);
+			
+		}
+		
+		if (leftBid)
+		{
+			
+			updateSuitsBiddablePreviousBids(leftBidSuit, OPPONENT_BID);
+			
+		}
+			
+		if (partnerBid)
+		{
+			
+			updateSuitsBiddablePreviousBids(partnerBidSuit, PARTNER_BID);
+			
+		}
+		
+		BiddableSuit bestBid = chooseBestBiddableSuit();
+		
+		if (bestBid == null)
+		{
+			
+			return new Bid();
+			
+		}
+		
+		accountForJokers(bestBid, pHand);
+
 		
 		return null;
 		
 	}
+	
+	private static void accountForJokers(BiddableSuit bestBid, Hand pHand)
+	{
+		
+		CardList jokersInHand = pHand.getJokers();
+		
+		if (jokersInHand.size() == 2)
+		{
+			
+			bestBid.addPoints(HIGH_JOKER + LOW_JOKER);
+			
+		}
+		
+		if (jokersInHand.size() == 1)
+		{
+			
+			if (jokersInHand.getFirst().getJokerValue().equals(Joker.HIGH))
+			{
+				
+				bestBid.addPoints(HIGH_JOKER);
+				
+			}
+			
+			else 
+			{
+				
+				bestBid.addPoints(LOW_JOKER);
+				
+			}
+			
+		}
+		
+	}
+	
+	private static BiddableSuit chooseBestBiddableSuit()
+	{
+		
+		
+		
+		
+	}
+	
+
 	
 	private static void updatePreviousBids(Bid[] pPreviousBids)
 	{
@@ -165,130 +246,40 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		}
 		
 	}
-	
-	private static void updateSuitsBiddablePreviousBids()
+
+	private static void updateSuitsBiddablePreviousBids(Suit pSuit , int pBidVariance)
 	{
-		
-		if (rightBid)
+
+		BiddableSuit temp = null;
+
+		if (pSuit == null)
 		{
-			
-			if (rightBidSuit == null)
-			{
 
-				noTrumpBiddable.setPoints(noTrumpBiddable.getPoints() - OPPONENT_BID);
+			noTrumpBiddable.setPoints(noTrumpBiddable.getPoints() + pBidVariance);
 
-			}
-
-			else
-			{
-
-				switch(rightBidSuit)
-				{
-
-				case CLUBS : 
-					clubsBiddable.setPoints(clubsBiddable.getPoints() - OPPONENT_BID);
-					break;
-				case SPADES : 
-					spadesBiddable.setPoints(spadesBiddable.getPoints() - OPPONENT_BID);
-					break;
-				case HEARTS : 
-					heartsBiddable.setPoints(heartsBiddable.getPoints() - OPPONENT_BID);
-					break;
-				case DIAMONDS : 
-					diamondsBiddable.setPoints(diamondsBiddable.getPoints() - OPPONENT_BID);
-					break;
-				default :
-					break;
-
-				}
-				
-			}
-			
 		}
-		
-		if (partnerBid)
+
+		else
 		{
-			
-			if (partnerBidSuit == null)
-			{
 
-				noTrumpBiddable.setPoints(noTrumpBiddable.getPoints() + PARTNER_BID);
+			temp = allBiddableSuits.get(pSuit);
+			temp.setPoints(temp.getPoints() + pBidVariance);
 
-			}
-
-			else
-			{
-
-				switch(partnerBidSuit)
-				{
-
-				case CLUBS : 
-					clubsBiddable.setPoints(clubsBiddable.getPoints() + PARTNER_BID);
-					break;
-				case SPADES : 
-					spadesBiddable.setPoints(spadesBiddable.getPoints() + PARTNER_BID);
-					break;
-				case HEARTS : 
-					heartsBiddable.setPoints(heartsBiddable.getPoints() + PARTNER_BID);
-					break;
-				case DIAMONDS : 
-					diamondsBiddable.setPoints(diamondsBiddable.getPoints() + PARTNER_BID);
-					break;
-				default :
-					break;
-
-				}
-				
-			}
-			
 		}
-		
-		if (leftBid)
-		{
-			
-			if (leftBidSuit == null)
-			{
 
-				noTrumpBiddable.setPoints(noTrumpBiddable.getPoints() - OPPONENT_BID);
-
-			}
-
-			else
-			{
-
-				switch(leftBidSuit)
-				{
-
-				case CLUBS : 
-					clubsBiddable.setPoints(clubsBiddable.getPoints() - OPPONENT_BID);
-					break;
-				case SPADES : 
-					spadesBiddable.setPoints(spadesBiddable.getPoints() - OPPONENT_BID);
-					break;
-				case HEARTS : 
-					heartsBiddable.setPoints(heartsBiddable.getPoints() - OPPONENT_BID);
-					break;
-				case DIAMONDS : 
-					diamondsBiddable.setPoints(diamondsBiddable.getPoints() - OPPONENT_BID);
-					break;
-				default :
-					break;
-
-				}
-				
-			}
-			
-		}
-		
 	}
-	
+
+
 	private static void updateSuitsBiddable(Hand pHand)
 	{
 		
-		clubsBiddable.update(pHand);
-		spadesBiddable.update(pHand);
-		heartsBiddable.update(pHand);
-		diamondsBiddable.update(pHand);	
+		for (int i = 0; i < allSuits.length; i++)
+		{
+			
+			allBiddableSuits.get(allSuits[i]).update(pHand);
+			
+		}
+		
 		noTrumpBiddable.update(pHand);
 		
 	}
@@ -299,10 +290,13 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private static void resetAllBiddables()
 	{
 		
-		clubsBiddable.reset();
-		spadesBiddable.reset();
-		heartsBiddable.reset();
-		diamondsBiddable.reset();
+		for (int i = 0; i < allSuits.length; i++)
+		{
+			
+			allBiddableSuits.get(allSuits[i]).reset();
+			
+		}
+		
 		noTrumpBiddable.reset();
 		
 	}
@@ -561,6 +555,13 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		{
 			
 			aPoints = pPoints;
+			
+		}
+		
+		private void addPoints(int pPoints)
+		{
+			
+			aPoints = aPoints + pPoints;
 			
 		}
 		
