@@ -13,7 +13,10 @@ public class Observable
 	
 	public void addObserver(Observer pObserver)
 	{
-		aObservers.add(pObserver);
+		if(!aObservers.contains(pObserver))
+		{
+			aObservers.add(pObserver);
+		}
 	}
 	
 	protected void notifyObservers(Notification pNotification)
