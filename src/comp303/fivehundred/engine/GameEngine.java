@@ -171,6 +171,14 @@ public class GameEngine extends Observable
 	    {
         	aCurrentPlayer = aPlayers[i];
         	lBid = aPlayers[i].selectBid(aBids);
+        	
+        	// validate bid
+        	if(aBids.length > 0 && !lBid.isPass() && lBid.compareTo(Bid.max(aBids)) <= 0)
+        	{
+    			throw new GameException("Player must make a higher bid or pass." + lBid +" <= " + Bid.max(aBids));
+        	}
+        	
+        	
             lBids[i] = lBid;
             aBids = Arrays.copyOf(lBids, i+1);
             notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newBid"));
@@ -207,16 +215,23 @@ public class GameEngine extends Observable
      */
     public void exchange()
     {    	
-    	//We cannot make an exchange if there is no contractor
     	if (aContractor == null)
     	{
     		throw new GameException("Every game needs a contractor");
     	}
     	
-    	// get contractor index (I don't even understand why this is necessary in the strategy)
-    	int lContractorIndex = Arrays.asList(aPlayers).indexOf(aContractor);
-
+    	int lContractorIndex = Arrays.asList(aPlayers).indexOf(aContractor);    	
+    	Hand oldHand = aContractor.getHand();
         CardList lDiscarded = aContractor.exchange(aBids, lContractorIndex, aWidow);
+        
+        for(Card c: lDiscarded)
+        {
+        	if (!oldHand.contains(c) && !aWidow.contains(c))
+        	{
+        		throw new GameException("Player discarded cards that were neither in hand nor widow.");
+        	}
+        }
+        
         aWidow = new Hand();
         for(Card c: lDiscarded)
         {
@@ -235,7 +250,7 @@ public class GameEngine extends Observable
     	aContractorRoundScore = 0;
     	aNonContractorRoundScore = 0;
     	
-    	/*Before the first trick, all players must have 10 cards*/
+    	// Before the first trick, all players must have 10 cards
     	for(APlayer p: aPlayers)
     	{
     		if (p.getHand().size() != aCARDSINHAND)
@@ -249,7 +264,7 @@ public class GameEngine extends Observable
     		playTrick();
     	}
     	
-    	//When all the tricks were played, the hand of the players must be empty since they played 1 card per trick
+    	// When all the tricks were played, the hand of the players must be empty since they played 1 card per trick
     	for(APlayer p: aPlayers)
     	{
     		if (aTrickCounter == aMAXTRICKS+1 && p.getHand().size() != 0)
@@ -277,7 +292,12 @@ public class GameEngine extends Observable
         for(APlayer p: aPlayers)
         {
         	aCurrentPlayer = p;
+        	Hand oldHand = p.getHand();
         	aCardPlayed = p.play(lTrick);
+        	if(!oldHand.contains(aCardPlayed))
+        	{
+        		throw new GameException("Player cannot play a card that is not in hand.");
+        	}
             lTrick.add(aCardPlayed);
             notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "cardPlayed"));
         }
@@ -305,7 +325,7 @@ public class GameEngine extends Observable
         Team lContractorTeam = getTeamFromPlayer(aContractor);
         Team lNonContractorTeam = getOpponentTeam(lContractorTeam);
         
-        /*The round score cannot be computed before the 10 tricks are played*/
+        // The round score cannot be computed before the 10 tricks are played
         if (aTrickCounter < aMAXTRICKS)
         {
         	throw new GameException("The round score must be computed after the 10 tricks were played");
@@ -362,7 +382,7 @@ public class GameEngine extends Observable
     	aLosingTeam = getOpponentTeam(aWinningTeam);
     	aGameOver = true;
     	
-        /*Can't end the game if there is no winner*/
+        // Can't end the game if there is no winner
         if (aGameOver && aWinningTeam == null || aLosingTeam == null)
         {
             throw new GameException("The game can't be over if there is no winning/losing team");
