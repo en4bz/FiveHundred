@@ -25,6 +25,15 @@ import comp303.fivehundred.util.Deck;
  */
 public class GameEngine extends Observable
 {
+	
+    //Constants
+    private static final int MAXTRICKS = 10;
+    private static final int CARDSINHAND = 10;
+    private static final int WINSCORE = 500;
+    private static final int LOSESCORE = -500;
+    private static final int SLAM = 250;
+    private static final int TRICKSCORE = 10;
+    
 	// State fields
     private APlayer[] aPlayers; // keeps the current playing order
     private APlayer aCurrentPlayer; // player who is currently executing a game action
@@ -47,15 +56,7 @@ public class GameEngine extends Observable
     private int aNonContractorTotalScore;
     private Team aWinningTeam;
     private Team aLosingTeam;
-    
-    // constants
-    private final int aMAXTRICKS = 10;
-    private final int aCARDSINHAND = 10;
-    private final int aWINSCORE = 500;
-    private final int aLOSESCORE = -500;
-    private final int aSLAM = 250;
-    private final int aTRICKSCORE = 10;
-    
+
     /**
      * Constructs a new game engine for two teams of two players. The
      * players cannot change teams. Methods in the game engine will
@@ -117,14 +118,11 @@ public class GameEngine extends Observable
     	Deck lDeck = new Deck();
         for(APlayer p: aPlayers)
         {
-            Hand lHand = new Hand();
-            for(int i = 0; i < aCARDSINHAND; i++)
+            for(int i = 0; i < CARDSINHAND; i++)
             {
-               lHand.add(lDeck.draw());
+               p.addCardToHand(lDeck.draw());
             }
-            p.setHand(lHand);
         }
-        
         aWidow = new Hand();
         while(lDeck.size() > 0)
         {
@@ -148,7 +146,7 @@ public class GameEngine extends Observable
     {
     	for(APlayer p: aPlayers)
     	{
-    		if (p.getHand().size() != aCARDSINHAND)
+    		if (p.getHand().size() != CARDSINHAND)
     			{
     				throw new GameException("Cards must be dealt before the player deals");
     			}
@@ -253,13 +251,13 @@ public class GameEngine extends Observable
     	// Before the first trick, all players must have 10 cards
     	for(APlayer p: aPlayers)
     	{
-    		if (p.getHand().size() != aCARDSINHAND)
+    		if (p.getHand().size() != CARDSINHAND)
     			{
     				throw new GameException("Each player must start with 10 cards before they play the first trick of the game");
     			}
     	}
     	
-    	for(aTrickCounter = 1; aTrickCounter <= aMAXTRICKS; aTrickCounter++)
+    	for(aTrickCounter = 1; aTrickCounter <= MAXTRICKS; aTrickCounter++)
     	{
     		playTrick();
     	}
@@ -267,7 +265,7 @@ public class GameEngine extends Observable
     	// When all the tricks were played, the hand of the players must be empty since they played 1 card per trick
     	for(APlayer p: aPlayers)
     	{
-    		if (aTrickCounter == aMAXTRICKS+1 && p.getHand().size() != 0)
+    		if (aTrickCounter == MAXTRICKS+1 && p.getHand().size() != 0)
             {
                 throw new GameException("At this point in the game, all the players must have an empty hand");
             }	
@@ -282,7 +280,7 @@ public class GameEngine extends Observable
     public void playTrick()
     {
     	
-    	if (aTrickCounter > aMAXTRICKS)
+    	if (aTrickCounter > MAXTRICKS)
     	{
     		throw new GameException("You cannot play more than 10 tricks per round since each hand contains 10 cards");
     	}
@@ -326,7 +324,7 @@ public class GameEngine extends Observable
         Team lNonContractorTeam = getOpponentTeam(lContractorTeam);
         
         // The round score cannot be computed before the 10 tricks are played
-        if (aTrickCounter < aMAXTRICKS)
+        if (aTrickCounter < MAXTRICKS)
         {
         	throw new GameException("The round score must be computed after the 10 tricks were played");
         }
@@ -337,9 +335,9 @@ public class GameEngine extends Observable
         if(aContractWon)
         {
             // If there's a slam
-            if(lContractorTeam.getTricksWon() == aMAXTRICKS && aContractorRoundScore < aSLAM)
+            if(lContractorTeam.getTricksWon() == MAXTRICKS && aContractorRoundScore < SLAM)
             {
-                aContractorRoundScore = aSLAM;
+                aContractorRoundScore = SLAM;
             }
         } 
         else
@@ -347,7 +345,7 @@ public class GameEngine extends Observable
             aContractorRoundScore = -aContractorRoundScore;
         }
 
-        aNonContractorRoundScore = lNonContractorTeam.getTricksWon() * aTRICKSCORE;
+        aNonContractorRoundScore = lNonContractorTeam.getTricksWon() * TRICKSCORE;
         
         
         // compute total scores
@@ -364,12 +362,12 @@ public class GameEngine extends Observable
         }
         
         // End game if necessary
-        if(aContractorTotalScore >= aWINSCORE)
+        if(aContractorTotalScore >= WINSCORE)
         {
             endGame(lContractorTeam); 
         } 
         
-        if(aContractorTotalScore <= aLOSESCORE)
+        if(aContractorTotalScore <= LOSESCORE)
         {
             endGame(lNonContractorTeam);
         }
