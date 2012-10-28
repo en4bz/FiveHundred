@@ -31,7 +31,7 @@ import comp303.fivehundred.util.TestDeck;
 	RandomPlayingStrategyTest.class,
 	BasicPlayingStrategyTest.class,
 	BasicCardExchangeStrategyTest.class,
-	BasicPlayingStrategyTest.class,
+	BasicCardExchangeStrategyTest.class,
 	TestEngine.class,
 	})
 public class AllTests
