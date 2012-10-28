@@ -114,8 +114,11 @@ public class GameEngine extends Observable
     	// rotate current player order such that dealer is first
     	aPlayers = rotate(aPlayers, aDealer);
     	
+    	// initialize deck
     	Deck lDeck = new Deck();
     	lDeck.shuffle();
+    	
+    	// distribute the cards
         for(APlayer p: aPlayers)
         {
             for(int i = 0; i < CARDSINHAND; i++)
@@ -123,6 +126,8 @@ public class GameEngine extends Observable
                p.addCardToHand(lDeck.draw());
             }
         }
+        
+        // make the widow with remaining cards
         aWidow = new Hand();
         while(lDeck.size() > 0)
         {
@@ -131,8 +136,7 @@ public class GameEngine extends Observable
         notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newDeal"));   
     
         // update playing order so that player to dealer's left starts bidding
-        APlayer lFirstBidder = aPlayers[1];
-        aPlayers = rotate(aPlayers, lFirstBidder);
+        aPlayers = rotate(aPlayers, aPlayers[1]);
     }
     
     /**
@@ -144,6 +148,7 @@ public class GameEngine extends Observable
      */
     public void bid()
     {
+    	// check that each player has 10 cards in hand
     	for(APlayer p: aPlayers)
     	{
     		if (p.getHand().size() != CARDSINHAND)
@@ -163,6 +168,7 @@ public class GameEngine extends Observable
     		t.setContract(new Bid());
         }
         
+        // construct previousBids array to pass on to APlayer.selectBid
         aBids = new Bid[0];
         
         for(int i = 0; i < aPlayers.length; i++)
@@ -176,11 +182,11 @@ public class GameEngine extends Observable
     			throw new GameException("Player must make a higher bid or pass." + lBid +" <= " + Bid.max(aBids));
         	}
         	
-        	
             lBids[i] = lBid;
             aBids = Arrays.copyOf(lBids, i+1);
             notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newBid"));
 
+            // update contract if bid is not pass
             if (lBid.compareTo(aContract) > 0)
             {
                 aContractor = aPlayers[i];
@@ -197,13 +203,6 @@ public class GameEngine extends Observable
 	        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), "newContract"));
 	        // update dealer
 	        aDealer = aPlayers[0];
-        }
-        else //Reclaim Cards Here or in Deal at beginning?
-        {
-        	for(APlayer p : aPlayers)
-        	{
-        		p.resetHand();
-        	}
         }
     }
     
