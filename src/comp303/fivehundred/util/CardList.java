@@ -6,8 +6,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
 
-import comp303.fivehundred.player.APlayer;
-
 /**
  * @author Rayyan Khoury
  * A mutable list of cards. Does not support duplicates.

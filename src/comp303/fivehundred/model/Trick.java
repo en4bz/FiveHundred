@@ -1,7 +1,7 @@
 package comp303.fivehundred.model;
 
-import java.util.Arrays;
 import java.util.Comparator;
+
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
