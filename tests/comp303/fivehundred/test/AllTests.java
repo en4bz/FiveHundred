@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 
 import comp303.fivehundred.ai.BasicCardExchangeStrategyTest;
 import comp303.fivehundred.ai.BasicPlayingStrategyTest;
+import comp303.fivehundred.ai.BasicsBiddingStrategyTest;
 import comp303.fivehundred.ai.RandomBiddingStrategyTest;
 import comp303.fivehundred.ai.RandomCardExchangeStrategyTest;
 import comp303.fivehundred.ai.RandomPlayingStrategyTest;
@@ -26,12 +27,15 @@ import comp303.fivehundred.util.TestDeck;
 	TestHand.class,
 	TestTrick.class,
 	TestCardList.class,
+	
 	RandomBiddingStrategyTest.class,
 	RandomCardExchangeStrategyTest.class,
 	RandomPlayingStrategyTest.class,
+	
+	BasicsBiddingStrategyTest.class,
+	BasicCardExchangeStrategyTest.class,
 	BasicPlayingStrategyTest.class,
-	BasicCardExchangeStrategyTest.class,
-	BasicCardExchangeStrategyTest.class,
+	
 	TestEngine.class,
 	})
 public class AllTests
