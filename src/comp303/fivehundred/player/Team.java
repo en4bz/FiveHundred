@@ -40,8 +40,8 @@ public class Team
         aContract = new Bid();
         aScore = 0;
         aTricksWon = 0;
-        aPlayer1.setHand(new Hand());
-        aPlayer2.setHand(new Hand());
+        aPlayer1.resetHand();
+        aPlayer2.resetHand();
     }
     
     /**

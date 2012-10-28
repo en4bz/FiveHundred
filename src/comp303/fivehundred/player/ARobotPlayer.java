@@ -31,19 +31,16 @@ public abstract class ARobotPlayer extends APlayer implements IRobotPlayer
     {
 		// the rest of the assertion checks are passed on to selectCardsToDiscard
 		assert pWidow.size() == 6; 
-		
-		// merge widow and hand together
-        Hand lHand = getHand();
+
         for(Card c: pWidow)
         {
-            lHand.add(c);
+            this.addCardToHand(c);
         }
-        CardList lDiscarded = selectCardsToDiscard(pBids, pIndex, lHand.clone());
+        CardList lDiscarded = selectCardsToDiscard(pBids, pIndex, this.getHand());
         for(Card c: lDiscarded)
         {
-            lHand.remove(c);   
+            this.removeCardFromHand(c);   
         }
-        setHand(lHand);
         return lDiscarded;
     }
     
@@ -65,9 +62,7 @@ public abstract class ARobotPlayer extends APlayer implements IRobotPlayer
     	assert pTrick != null;
     	
 		Card lPlayed = play(pTrick, getHand());
-		Hand lHand = getHand();
-		lHand.remove(lPlayed);
-		setHand(lHand);
+		this.removeCardFromHand(lPlayed);
 		return lPlayed;
     }    
 }

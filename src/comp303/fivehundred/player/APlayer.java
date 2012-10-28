@@ -34,16 +34,29 @@ public abstract class APlayer
     {
         return aHand.clone();
     }
-
+    
     /**
-     * Sets the player's hand to a copy of pHand. 
-     * @param pHand the player's new hand
+     * Adds pCard to players hand.
+     * @param pCard
      */
-    public void setHand(Hand pHand)
+    public void addCardToHand(Card pCard)
     {
-        aHand = pHand.clone();
+    	aHand.add(pCard);
     }
     
+    /**
+     * Removes pCard card from the players hand
+     * @param pCard
+     */
+    public void removeCardFromHand(Card pCard)
+    {
+    	aHand.remove(pCard);
+    }
+    
+    public void resetHand()
+    {
+    	aHand = new Hand();
+    }
     /**
      * Gets the player's name.
      * @return the player's name

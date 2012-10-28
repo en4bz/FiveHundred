@@ -38,11 +38,9 @@ public class HumanPlayer extends APlayer
 	 */
 	public Card play(Trick pTrick)
 	{
-		Card playedCard = aInterface.play(pTrick);
-		Hand lHand = getHand();
-		lHand.remove(playedCard);
-		setHand(lHand);
-		return playedCard;
+		Card lPlayed = aInterface.play(pTrick);
+		this.removeCardFromHand(lPlayed);
+		return lPlayed;
 	}
 
 	/**
@@ -50,8 +48,7 @@ public class HumanPlayer extends APlayer
 	 */
 	public Bid selectBid(Bid[] pPreviousBids)
 	{
-		Bid b = aInterface.selectBid(pPreviousBids);
-		return b;
+		return aInterface.selectBid(pPreviousBids);
 	}
 
 	/**
@@ -59,17 +56,15 @@ public class HumanPlayer extends APlayer
 	 */
 	public CardList exchange(Bid[] pBids, int pIndex, Hand pWidow)
 	{
-		Hand lMerged = getHand();
 		for(Card c: pWidow)
 		{
-			lMerged.add(c);
+			this.addCardToHand(c);
 		}
 		CardList lDiscarded = aInterface.exchange(pBids, pIndex, pWidow);
 		for(Card c: lDiscarded)
 		{
-			lMerged.remove(c);
+			this.removeCardFromHand(c);
 		}
-		setHand(lMerged);
 		return lDiscarded;
 	}
 
