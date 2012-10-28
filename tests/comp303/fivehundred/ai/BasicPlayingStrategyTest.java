@@ -30,7 +30,7 @@ public class BasicPlayingStrategyTest
 	 * Test 0: Leading, trump Spades, has joker
 	 * Can return any card
 	 */
-	public void testTrumpLeadingHasJoker()
+	public void test0TrumpLeadingHasJoker()
 	{
 		createTest(
 				(new Trick(new Bid(7,Suit.SPADES))),
@@ -44,7 +44,7 @@ public class BasicPlayingStrategyTest
 	 * Test 1: Leading, no trump, no joker
 	 * Can return any card
 	 */
-	public void testNoTrumpLeadingHasNoJoker()
+	public void test1NoTrumpLeadingHasNoJoker()
 	{
 		createTest(
 				(new Trick(new Bid(8,null))),
@@ -58,9 +58,9 @@ public class BasicPlayingStrategyTest
 	 * Test 2: Leading, no trump, has both jokers
 	 * Must NOT return any jokers
 	 */
-	public void testNoTrumpLeadingHasBothJokers()
+	public void test2NoTrumpLeadingHasBothJokers()
 	{
-		
+
 		createTest(
 				(new Trick(new Bid(6,null))),
 				new Card[] {aLJo, a7S, a4S, aHJo},
@@ -73,7 +73,7 @@ public class BasicPlayingStrategyTest
 	 * Test 3: Leading, no trump, has high joker
 	 * Must NOT return the joker
 	 */
-	public void testNoTrumpLeadingHasHighJoker()
+	public void test3NoTrumpLeadingHasHighJoker()
 	{
 		createTest(
 				(new Trick(new Bid(6,null))),
@@ -87,7 +87,7 @@ public class BasicPlayingStrategyTest
 	 * Test 4: Leading, no trump, has low joker
 	 * Must NOT return the joker
 	 */
-	public void testNoTrumpLeadingHasLowJoker()
+	public void test4NoTrumpLeadingHasLowJoker()
 	{
 		createTest(
 				(new Trick(new Bid(6,null))),
@@ -101,7 +101,7 @@ public class BasicPlayingStrategyTest
 	 * Test 5: Leading, no trump only both jokers
 	 * Can return either joker
 	 */
-	public void testNoTrumpLeadingHasOnlyJokers()
+	public void test5NoTrumpLeadingHasOnlyJokers()
 	{
 		createTest(
 				(new Trick(new Bid(6,null))),
@@ -115,7 +115,7 @@ public class BasicPlayingStrategyTest
 	 * Test 6: Leading, no trump, high joker
 	 * Must return high joker
 	 */
-	public void testNoTrumpLeadingHasOnlyHighJoker()
+	public void test6NoTrumpLeadingHasOnlyHighJoker()
 	{
 		createTest(
 				(new Trick(new Bid(6,null))),
@@ -130,7 +130,7 @@ public class BasicPlayingStrategyTest
 	 * Six no trump
 	 * Must return lowest card
 	 */
-	public void testTrumpFollowingLedHighJokerHasLowJoker()
+	public void test7TrumpFollowingLedHighJokerHasLowJoker()
 	{
 		Trick theTrick = new Trick(new Bid(6,null));
 		theTrick.add(aHJo);
@@ -147,7 +147,7 @@ public class BasicPlayingStrategyTest
 	 * Seven spades
 	 * Must return high joker
 	 */
-	public void testTrumpFollowingLedLowJokerHasHighJoker()
+	public void test8TrumpFollowingLedLowJokerHasHighJoker()
 	{
 		Trick theTrick = new Trick(new Bid(7,Suit.SPADES));
 		theTrick.add(aLJo);
@@ -164,7 +164,7 @@ public class BasicPlayingStrategyTest
 	 * Ten no trump
 	 * Must return lowest card
 	 */
-	public void testNoTrumpFollowingLedLowJokerHasNoJokers()
+	public void test9NoTrumpFollowingLedLowJokerHasNoJokers()
 	{
 		Trick theTrick = new Trick(new Bid(10,null));
 		theTrick.add(aLJo);
@@ -181,7 +181,7 @@ public class BasicPlayingStrategyTest
 	 * Six no trump
 	 * Must return lowest card
 	 */
-	public void testNoTrumpFollowingLedSuitHighJokerPlayedHasLowJokerAndSuit()
+	public void test10NoTrumpFollowingLedSuitHighJokerPlayedHasLowJokerAndSuit()
 	{
 		Trick theTrick = new Trick(new Bid(6,null));
 		theTrick.add(a7S);
@@ -199,7 +199,7 @@ public class BasicPlayingStrategyTest
 	 * Seven spades
 	 * Must return high joker
 	 */
-	public void testTrumpFollowingTrumpSuitLowJokerPlayedHasHighJokerAndTrump()
+	public void test11TrumpFollowingTrumpSuitLowJokerPlayedHasHighJokerAndTrump()
 	{
 		Trick theTrick = new Trick(new Bid(7,Suit.SPADES));
 		theTrick.add(a7S);
@@ -217,7 +217,7 @@ public class BasicPlayingStrategyTest
 	 * Ten Hearts
 	 * Must return lowest card that follows suit
 	 */
-	public void testTrumpFollowingTrumpSuitLowJokerPlayedHasTrumpButNoJoker()
+	public void test12TrumpFollowingTrumpSuitLowJokerPlayedHasTrumpButNoJoker()
 	{
 		Trick theTrick = new Trick(new Bid(10,Suit.HEARTS));
 		theTrick.add(a7H);
@@ -235,7 +235,7 @@ public class BasicPlayingStrategyTest
 	 * Ten No Trump
 	 * Must return lowest card
 	 */
-	public void testNoTrumpFollowingSuitLowJokerPlayedHasNoHighJokerCannotFollowSuit()
+	public void test13NoTrumpFollowingSuitLowJokerPlayedHasNoHighJokerCannotFollowSuit()
 	{
 		Trick theTrick = new Trick(new Bid(10,null));
 		theTrick.add(a7D);
@@ -253,7 +253,7 @@ public class BasicPlayingStrategyTest
 	 * Ten No Trump
 	 * Must return lowest card of suit
 	 */
-	public void testNoTrumpFollowingSuitHasSuitButCannotWin()
+	public void test14NoTrumpFollowingSuitHasSuitButCannotWin()
 	{
 		Trick theTrick = new Trick(new Bid(10,null));
 		theTrick.add(a7D);
@@ -271,7 +271,7 @@ public class BasicPlayingStrategyTest
 	 * Ten No Trump
 	 * Must return first highest card of suit
 	 */
-	public void testNoTrumpFollowingSuitCanBeat()
+	public void test15NoTrumpFollowingSuitCanBeat()
 	{
 		Trick theTrick = new Trick(new Bid(10,null));
 		theTrick.add(a7D);
@@ -289,7 +289,7 @@ public class BasicPlayingStrategyTest
 	 * Ten No Trump
 	 * Must return lowest card in hand
 	 */
-	public void testNoTrumpCannotFollowSuitCannotWin()
+	public void test16NoTrumpCannotFollowSuitCannotWin()
 	{
 		Trick theTrick = new Trick(new Bid(10,null));
 		theTrick.add(a7D);
@@ -307,7 +307,7 @@ public class BasicPlayingStrategyTest
 	 * Ten Diamonds
 	 * Must return lowest card that can beat the trumps
 	 */
-	public void testTrumpFollowingTrumpCanBeatWithTrump()
+	public void test17TrumpFollowingTrumpCanBeatWithTrump()
 	{
 		Trick theTrick = new Trick(new Bid(10,Suit.DIAMONDS));
 		theTrick.add(a7D);
@@ -325,7 +325,7 @@ public class BasicPlayingStrategyTest
 	 * Ten Spades
 	 * Must return lowest joker
 	 */
-	public void testTrumpFollowingTrumpHasTrumpCanOnlyBeatWithJokers()
+	public void test18TrumpFollowingTrumpHasTrumpCanOnlyBeatWithJokers()
 	{
 		Trick theTrick = new Trick(new Bid(10,Suit.SPADES));
 		theTrick.add(a7S);
@@ -343,7 +343,7 @@ public class BasicPlayingStrategyTest
 	 * Ten Hearts
 	 * Must return lowest card in hand that beats non trump suit
 	 */
-	public void testTrumpFollowingNonTrumpHasNonTrumpCanWinWithoutTrumping()
+	public void test19TrumpFollowingNonTrumpHasNonTrumpCanWinWithoutTrumping()
 	{
 		Trick theTrick = new Trick(new Bid(10,Suit.HEARTS));
 		theTrick.add(a7D);
@@ -361,7 +361,7 @@ public class BasicPlayingStrategyTest
 	 * Ten Diamonds
 	 * Must return lowest card in hand in non trump suit
 	 */
-	public void testTrumpFollowingNonTrumpHasNonTrumpCannotWin()
+	public void test20TrumpFollowingNonTrumpHasNonTrumpCannotWin()
 	{
 		Trick theTrick = new Trick(new Bid(10,Suit.DIAMONDS));
 		theTrick.add(a7H);
@@ -373,13 +373,14 @@ public class BasicPlayingStrategyTest
 				);
 	}
 
+
 	@Test
 	/**
 	 * Test 21: Playing trump, following non trump, doesn't have non trump suit, can beat with low trump, has jokers
 	 * Ten Clubs
 	 * Must return lowest trump and not the joker
 	 */
-	public void testTrumpFollowingNonTrumpDoesNotHaveNonTrumpSuitCanBeatWithTrumpHasJokers()
+	public void test21TrumpFollowingNonTrumpDoesNotHaveNonTrumpSuitCanBeatWithTrumpHasJokers()
 	{
 		Trick theTrick = new Trick(new Bid(10,Suit.CLUBS));
 		theTrick.add(a7D);
@@ -397,7 +398,7 @@ public class BasicPlayingStrategyTest
 	 * Ten Spades
 	 * Must return lowest trump and not the joker
 	 */
-	public void testTrumpFollowingNonTrumpDoesNotHaveNonTrumpSuitCanBeatWithTrumpHasNoJokers()
+	public void test22TrumpFollowingNonTrumpDoesNotHaveNonTrumpSuitCanBeatWithTrumpHasNoJokers()
 	{
 		Trick theTrick = new Trick(new Bid(10,Suit.SPADES));
 		theTrick.add(a7D);
@@ -405,7 +406,7 @@ public class BasicPlayingStrategyTest
 		createTest(
 				(theTrick),
 				new Card[] {a7S, a4S, a7C, a6H, a9H, a8C},
-				new Card[] {a7C}
+				new Card[] {a4S}
 				);
 	}
 
@@ -413,9 +414,9 @@ public class BasicPlayingStrategyTest
 	/**
 	 * Test 23: Playing trump, following non trump, doesn't have non trump suit, does not have trump, can beat with joker
 	 * Ten Hearts
-	 * Must return lowest card in hand
+	 * Must return lowest joker
 	 */
-	public void testTrumpFollowingNonTrumpDoesNotHaveNonTrumpSuitHasJokers()
+	public void test23TrumpFollowingNonTrumpDoesNotHaveNonTrumpSuitHasJokers()
 	{
 		Trick theTrick = new Trick(new Bid(10,Suit.HEARTS));
 		theTrick.add(a7D);
@@ -431,9 +432,9 @@ public class BasicPlayingStrategyTest
 	/**
 	 * Test 24: Playing trump, following non trump, already trumped, no non trump cards, can beat with higher trump, has jokers
 	 * Ten Clubs
-	 * Must return lowest card in hand
+	 * Must return lowest trump that can win
 	 */
-	public void testTrumpFollowingNonTrumpAlreadyTrumpedHasNoNonTrumpCanBeatWithTrumpHasJokers()
+	public void test24TrumpFollowingNonTrumpAlreadyTrumpedHasNoNonTrumpCanBeatWithTrumpHasJokers()
 	{
 		Trick theTrick = new Trick(new Bid(10,Suit.CLUBS));
 		theTrick.add(a7D);
@@ -445,13 +446,15 @@ public class BasicPlayingStrategyTest
 				);
 	}
 
+
 	@Test
 	/**
 	 * Test 25: Playing trump, following non trump, already trumped, no non trump cards, no trump, has jokers
 	 * Ten Hearts
 	 * Must return lowest card in hand
 	 */
-	public void testTrumpFollowingNonTrumpAlreadyTrumpedHasNoNonTrumpAndNoTrumpButHasJokers()
+
+	public void test25TrumpFollowingNonTrumpAlreadyTrumpedHasNoNonTrumpAndNoTrumpButHasJokers()
 	{
 		Trick theTrick = new Trick(new Bid(10,Suit.DIAMONDS));
 		theTrick.add(a7C);
@@ -463,13 +466,14 @@ public class BasicPlayingStrategyTest
 				);
 	}
 
+
 	@Test
 	/**
 	 * Test 26: Playing trump, following non trump, already trumped, no non trump cards, cannot beat with trumps nor jokers
 	 * Ten Hearts
 	 * Must return lowest card in hand
 	 */
-	public void testTrumpFollowingNonTrumpAlreadyTrumpedHasNoTrumpsNonTrumpsOrJokers()
+	public void test26TrumpFollowingNonTrumpAlreadyTrumpedHasNoTrumpsNonTrumpsOrJokers()
 	{
 		Trick theTrick = new Trick(new Bid(10,Suit.HEARTS));
 		theTrick.add(a7D);
@@ -479,6 +483,8 @@ public class BasicPlayingStrategyTest
 				new Card[] {a7S, a4S, a7C, a6H},
 				new Card[] {a4S}
 				);
+
+
 	}
 
 	/**
@@ -493,12 +499,12 @@ public class BasicPlayingStrategyTest
 		// Creates the original hand
 		Hand theHand = new Hand();
 		theHand.addCardArray(pOriginal);
-		
+
 		CardList correctCards = new CardList();
 		correctCards.addCardArray(pCorrect);
-		
+
 		// runs the test thirty two times
-		for (int j = 0; j < 32; j++)
+		for (int j = 0; j < 4; j++)
 		{
 			assertTrue(correctCards.contains(newStrategy.play(pTrick, theHand)));
 
