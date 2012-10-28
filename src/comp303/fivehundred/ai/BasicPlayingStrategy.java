@@ -59,7 +59,7 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 		if (winningCard.isJoker())
 		{
 
-			return followingLedJoker(winningCard, pHand);
+			return followingWinningJoker(winningCard, pHand, leadingCard);
 
 		}
 		
@@ -113,15 +113,26 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	/**
 	 * Returns a high joker if the hand contains it and the leading card 
 	 * was a low joker. Otherwise returns the lowest card.
-	 * @param pLeadingCard Joker (high or low)
+	 * If the leading card was not a joker but it was played, calls
+	 * leadingCardNotJokerFollowingJoker.
+	 * @param pWinningCard Joker (high or low)
 	 * @param pHand Hand of the robot
-	 * @return The card to play following a lead of a joker
+	 * @param pLeadingCard The leading card (not necessarily a joker)
+	 * @return The card to play following a winning joker
 	 */
-	private static Card followingLedJoker(Card pJoker, Hand pHand)
+	private static Card followingWinningJoker(Card pWinningCard, Hand pHand, Card pLeadingCard)
 	{
 		
+		// If the leading card is not a joker
+		if (!pLeadingCard.isJoker())
+		{
+			
+			return leadingCardNotJokerFollowingJoker(pWinningCard, pHand, pLeadingCard);
+			
+		}
+		
 		// If the leading card is a LOW joker and the hand contains the HIGH joker
-		if (pJoker.getJokerValue().equals(Joker.LOW) &&
+		if (pWinningCard.getJokerValue().equals(Joker.LOW) &&
 				pHand.getJokers().size() == 1)
 		{
 
@@ -138,6 +149,58 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 		}
 
 	}
+	
+	/**
+	 * Returns the card that can legally follow a winning joker which was not led.
+	 * @param pWinningCard Current winning card
+	 * @param pHand Hand of the robot
+	 * @param pLeadingCard Leading card
+	 * @return The card that can legally follow a winning joker which was not led
+	 */
+	private static Card leadingCardNotJokerFollowingJoker(Card pWinningCard, Hand pHand, Card pLeadingCard)
+	{
+		
+		if (pWinningCard.getJokerValue().equals(Joker.HIGH))
+		{
+			
+			CardList playableCards = pHand.playableCards(pLeadingCard.getEffectiveSuit(trumpSuit), trumpSuit);
+			return playableCards.sort(new BySuitComparator(trumpSuit)).getFirst();
+			
+		}
+		
+		else if (pHand.getJokers().size() > 0)
+		{
+			
+			CardList joker = pHand.getJokers();
+			return joker.getFirst();
+			
+		}
+		
+		else
+		{
+			
+			CardList playableCards = pHand.playableCards(pLeadingCard.getEffectiveSuit(trumpSuit), trumpSuit);
+			
+			// There are no valid playable cards
+			if (playableCards.size() == 0)
+			{
+				
+				CardList nonJokers = pHand.getNonJokers();
+				return nonJokers.sort(new BySuitComparator(trumpSuit)).getFirst();
+				
+			}
+			
+			else
+			{
+				playableCards.sort(new BySuitComparator(trumpSuit));
+				return playableCards.getFirst();
+				
+			}
+			
+		}
+		
+	}
+	
 	
 	/**
 	 * If the hand can follow suit, returns the card that can beat the highest 
@@ -170,10 +233,9 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 		{
 			
 			// Otherwise just chooses a card of the suit that can beat the card played
-			noTrumpPlayableCards.sort(COMPARE_BY_RANK);
 			
 			// Returns the card that can beat the current winning trick or the lowest card
-			return chooseBeatingCard(noTrumpPlayableCards, pWinningCard);
+			return chooseBeatingCard(noTrumpPlayableCards.sort(COMPARE_BY_RANK), pWinningCard);
 			
 		}
 		
