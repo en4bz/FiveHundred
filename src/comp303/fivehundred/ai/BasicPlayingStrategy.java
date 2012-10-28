@@ -188,7 +188,14 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 			{
 				
 				CardList nonJokers = pHand.getNonJokers();
-				return nonJokers.sort(new BySuitComparator(trumpSuit)).getFirst();
+				if(trumpSuit != null)
+				{
+					return nonJokers.sort(new BySuitComparator(trumpSuit)).getFirst();
+				}
+				else
+				{
+					return nonJokers.sort(new Card.BySuitNoTrumpComparator()).getFirst();
+				}
 				
 			}
 			
