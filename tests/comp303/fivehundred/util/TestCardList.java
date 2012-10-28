@@ -1,12 +1,29 @@
 package comp303.fivehundred.util;
 
-import static comp303.fivehundred.util.AllCards.*;
-import static org.junit.Assert.*;
+import static comp303.fivehundred.util.AllCards.a4C;
+import static comp303.fivehundred.util.AllCards.a4S;
+import static comp303.fivehundred.util.AllCards.a5C;
+import static comp303.fivehundred.util.AllCards.a5D;
+import static comp303.fivehundred.util.AllCards.a5H;
+import static comp303.fivehundred.util.AllCards.a6C;
+import static comp303.fivehundred.util.AllCards.a7H;
+import static comp303.fivehundred.util.AllCards.a7S;
+import static comp303.fivehundred.util.AllCards.a8S;
+import static comp303.fivehundred.util.AllCards.a9C;
+import static comp303.fivehundred.util.AllCards.aAD;
+import static comp303.fivehundred.util.AllCards.aAH;
+import static comp303.fivehundred.util.AllCards.aAS;
+import static comp303.fivehundred.util.AllCards.aJD;
+import static comp303.fivehundred.util.AllCards.aKH;
+import static comp303.fivehundred.util.AllCards.aTC;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import comp303.fivehundred.model.ModelException;
-import comp303.fivehundred.util.Card.*;
+import comp303.fivehundred.util.Card.Suit;
 
 /**
  * @author Gabrielle Germain

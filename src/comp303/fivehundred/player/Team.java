@@ -1,7 +1,6 @@
 package comp303.fivehundred.player;
 
 import comp303.fivehundred.model.Bid;
-import comp303.fivehundred.model.Hand;
 
 /**
  * A collection of methods to keep track of a team's state in a game of five hundred.

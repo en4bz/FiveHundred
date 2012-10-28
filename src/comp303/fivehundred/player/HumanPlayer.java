@@ -1,7 +1,6 @@
 package comp303.fivehundred.player;
 
 
-import comp303.fivehundred.engine.GameException;
 import comp303.fivehundred.gui.ConsoleInterface;
 import comp303.fivehundred.gui.UserInterface;
 import comp303.fivehundred.model.Bid;
@@ -19,11 +18,11 @@ import comp303.fivehundred.util.CardList;
 public class HumanPlayer extends APlayer
 {
 		
-	UserInterface aInterface;
+	private UserInterface aInterface;
 	
 	/**
 	 * Constructs a new human player.
-	 * @param pName
+	 * @param pName : Player name
 	 */
 	public HumanPlayer(String pName)
 	{

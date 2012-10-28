@@ -2,7 +2,6 @@ package comp303.fivehundred.engine;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -89,7 +88,6 @@ public class TestEngine
 		assertTrue(!aTester.allPasses());
 		assertEquals(Bid.max(aTester.getBids()), aTester.getContract());
 		assertTrue(!aTester.isGameOver());
-		
 	}
 	
 	@Test
@@ -110,7 +108,7 @@ public class TestEngine
 			aTester.playTrick();
 			for(APlayer p : aPlayers)
 			{
-				//assertEquals(10-i,p.getHand().size());
+				assertEquals(10-i,p.getHand().size());
 			}
 		}
 	} 
@@ -131,5 +129,13 @@ public class TestEngine
 		testRound();
 		aTester.computeScore();
 		assertTrue(aTester.getContractorRoundScore() > 0 || aTester.getNonContractorRoundScore() > 0);
+		if(aTester.getContractorTotalScore() >= 500 || aTester.getContractorTotalScore() <= -500)
+		{
+			assertTrue(aTester.isGameOver());
+		}
+		else
+		{
+			assertTrue(!aTester.isGameOver());
+		}
 	}
 }
