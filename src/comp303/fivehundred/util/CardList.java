@@ -45,6 +45,32 @@ public class CardList implements Iterable<Card>, Cloneable
 	}
 	
 	/**
+	 * Adds cards if they are not
+	 * already in the list. Has no effect if they
+	 * are already in the list.
+	 * @param pCardArray The card to add.
+	 * @pre pCardArray != null
+	 */
+	public void addCardArray(Card[] pCardArray)
+	{
+		assert pCardArray != null;
+		
+		Card toAdd = null;
+		
+		for (int i = 0; i < pCardArray.length; i++)
+		{
+			
+			toAdd = pCardArray[i];
+			// If the card is already contained don't do anything
+			if (!aCards.contains(toAdd))
+			{
+				aCards.add(toAdd);
+			}
+			
+		}
+	}
+	
+	/**
 	 * @return The number of cards in the list.
 	 */
 	public int size()
