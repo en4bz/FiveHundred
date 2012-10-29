@@ -3,7 +3,7 @@ Design decisions:
 	1) A Team object composed of two Player objects
 	2) An abstract class called APlayer which abstracts over both human and robot players
 	3) Different thresholds for trump and no trump bids
-	3) Players should only be able to add or remove cards from their hand one at a time. I.E no setHand() method
+	4) Players should only be able to add or remove cards from their hand one at a time. I.E no setHand() method
 	
 Testing decisions:
 
