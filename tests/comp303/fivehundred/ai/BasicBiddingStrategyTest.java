@@ -148,7 +148,7 @@ public class BasicBiddingStrategyTest
 		createTest(
 				(bidArray),
 				new Card[] {aAS, aKS, a4S, aAC, aQC, a4C, aKD, a5D, aAH, aQH},
-				new Bid(10, null)
+				new Bid(9, null)
 				);
 	}
 

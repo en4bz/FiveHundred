@@ -68,10 +68,10 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private static final int MIN_TEN_TRUMP = 16;
 	
 	private static final int MIN_SIX_NT = 9;
-	private static final int MIN_SEVEN_NT = 12;
-	private static final int MIN_EIGHT_NT = 15;
-	private static final int MIN_NINE_NT = 18;
-	private static final int MIN_TEN_NT = 21;
+	private static final int MIN_SEVEN_NT = 13;
+	private static final int MIN_EIGHT_NT = 17;
+	private static final int MIN_NINE_NT = 21;
+	private static final int MIN_TEN_NT = 25;
 	
 	// BIDS
 	private static final int SIX = 6;
