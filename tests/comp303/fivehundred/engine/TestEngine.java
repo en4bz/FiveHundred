@@ -2,6 +2,7 @@ package comp303.fivehundred.engine;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -53,22 +54,14 @@ public class TestEngine
 	public void testNewGame()
 	{
 		aTester.newGame();
-		/*
-	     assertNotNull(aTester.getBids());
-	     assertNull(aTester.getContract());
-	     assertNull(aTester.getContractor());
-	     assertNotNull(aTester.getWidow());
-	     assertTrue(!aTester.isGameOver());
-	     assertEquals(0,aTester.getTrickCounter());
-	     assertNull(aTester.getTrickWinner());
-	     assertNull(aTester.getCardPlayed());
-	     assertEquals(0,aTester.getContractorRoundScore());
-	     assertEquals(0,aTester.getNonContractorTotalScore());
-	     assertEquals(0, aTester.getContractorTotalScore());
-	     assertEquals(0, aTester.getNonContractorTotalScore());
-	     assertNull(aTester.getWinningTeam());
-	     assertNull(aTester.getLosingTeam());
-	     */
+		assertNull(aTester.getBids());
+	    assertNull(aTester.getContract());
+	    assertNull(aTester.getContractor());
+	    assertTrue(!aTester.isGameOver());
+	    assertEquals(0,aTester.getNonContractorTotalScore());
+	    assertEquals(0, aTester.getContractorTotalScore());
+	    assertNull(aTester.getWinningTeam());
+	    assertNull(aTester.getLosingTeam());
 	}
 	
 	@Test
@@ -203,7 +196,7 @@ public class TestEngine
 		assertTrue(aTester.getContractorTotalScore() >= 500 || aTester.getContractorTotalScore() <= -500);
 	}
 	
-	@Test//(expected=GameException.class)
+	@Test
 	public void letsThrowSomeExceptions()
 	{
 		testNewGame();

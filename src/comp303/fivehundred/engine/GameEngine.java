@@ -88,8 +88,8 @@ public class GameEngine extends Observable
         aTeam1.reset();
         aTeam2.reset();
         aAllPasses = true;
-        aBids = new Bid[4];
-        aContract = new Bid();
+        aBids = null;
+        aContract = null;
         aContractor = null;
         aWidow = new Hand();
         aTrickWinner = null;
