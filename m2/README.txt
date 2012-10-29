@@ -11,4 +11,5 @@ Testing decisions:
 	2) When testing bidding, bids follow a specific algorithm and thus although it may have been difficult to determine the strength of the
 	bid, it was usually possible to determine the correct suit.
 	3) As far as playing was concerned, even though the algorithm returns a single card, given the same situation multiple times, the algorithm
-	has the possibility of returning different cards, and thus each test was run 32 times to prevent any standard deviation from interrupting
+	has the possibility of returning different cards, and thus each test was run 32 times with a subset of possible cards that the algorithm
+	could return.
