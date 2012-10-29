@@ -10,7 +10,6 @@ import comp303.fivehundred.util.CardList;
  * Discards the six lowest non-trump cards. 
  */
 
-// hello
 public class BasicCardExchangeStrategy implements ICardExchangeStrategy
 {
 	
