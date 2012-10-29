@@ -183,7 +183,7 @@ public class Hand extends CardList
 		CardList lReturn = new CardList();
 		for(Card c: this)
 		{
-			if(c.isJoker() || c.getSuit().equals(pLed) || c.getEffectiveSuit(pTrump).equals(pTrump))
+			if(c.isJoker() || c.getEffectiveSuit(pTrump).equals(pLed) || c.getEffectiveSuit(pTrump).equals(pTrump))
 			{
 				lReturn.add(c);
 			}
