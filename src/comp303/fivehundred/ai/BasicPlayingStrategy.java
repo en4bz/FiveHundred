@@ -294,7 +294,6 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 		
 		CardList tryToTrump = pHand.getTrumpCards(trumpSuit);
 		tryToTrump = tryToTrump.sort(new BySuitComparator(trumpSuit));
-		Card highestCard = tryToTrump.getLast();
 		
 		// The hand contains trumps
 		if (tryToTrump.size() > 0)
