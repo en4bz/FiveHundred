@@ -85,7 +85,7 @@ public class BasicsBiddingStrategyTest
 	@Test 
 	public void testGreaterOrPass()
 	{
-		for(int i = 1; i <= 10; i++)
+		for(int i = 6; i <= 10; i++)
 		{
 			for(Suit s : Suit.values())
 			{
