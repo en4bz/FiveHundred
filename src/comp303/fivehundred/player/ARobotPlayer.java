@@ -29,9 +29,8 @@ public abstract class ARobotPlayer extends APlayer implements IRobotPlayer
 	 */
 	public CardList exchange(Bid[] pBids, int pIndex, Hand pWidow)
     {
-		// the rest of the assertion checks are passed on to selectCardsToDiscard
-		assert pWidow.size() == 6; 
-
+		assert pWidow.size() == 6;
+		
         for(Card c: pWidow)
         {
             this.addCardToHand(c);
@@ -50,7 +49,7 @@ public abstract class ARobotPlayer extends APlayer implements IRobotPlayer
 	 */ 
     public Bid selectBid(Bid[] pPreviousBids)
     {
-    	assert pPreviousBids.length <=4;
+    	assert pPreviousBids.length <= 4;
         return selectBid(pPreviousBids, getHand());  
     }
 
