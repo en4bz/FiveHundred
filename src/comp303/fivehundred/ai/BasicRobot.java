@@ -8,7 +8,7 @@ import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardList;
 
 /**
- * Plays correctly but randomly, i.e., very badly.
+ * Plays correctly but basically
  */
 
 public class BasicRobot extends ARobotPlayer

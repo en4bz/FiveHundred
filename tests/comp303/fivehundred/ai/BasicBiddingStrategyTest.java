@@ -13,6 +13,12 @@ import comp303.fivehundred.util.Card.Rank;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.Deck;
 
+
+/**
+ * 
+ * @author Rayyan Khoury and Ian Forbes
+ *
+ */
 public class BasicBiddingStrategyTest
 {
 
