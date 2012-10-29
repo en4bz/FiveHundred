@@ -160,16 +160,16 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	private static Card leadingCardNotJokerFollowingJoker(Card pWinningCard, Hand pHand, Card pLeadingCard)
 	{
 		
-		if (pWinningCard.getJokerValue().equals(Joker.HIGH) && trumpSuit != null)
+		Suit leadingCardSuit = pLeadingCard.getEffectiveSuit(trumpSuit);
+		
+		if (pWinningCard.getJokerValue().equals(Joker.HIGH))
 		{
-			CardList playableCards = pHand.playableCards(pLeadingCard.getEffectiveSuit(trumpSuit), trumpSuit);
-			return playableCards.sort(new BySuitComparator(trumpSuit)).getFirst();
+			
+			return winningCardHighJoker(pWinningCard, pHand, pLeadingCard);
+			
 		}
-		else if(pWinningCard.getJokerValue().equals(Joker.HIGH) && trumpSuit == null)
-		{
-			CardList playableCards = pHand.playableCards(pLeadingCard.getEffectiveSuit(trumpSuit), trumpSuit);
-			return playableCards.sort(new Card.BySuitNoTrumpComparator()).getFirst();
-		}
+		
+
 		else if (pHand.getJokers().size() > 0)
 		{
 			
@@ -210,7 +210,41 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 		
 	}
 	
+	/**
+	 * Returns the card that can legally follow a winning joker which was not led.
+	 * @param pWinningCard Current winning card
+	 * @param pHand Hand of the robot
+	 * @param pLeadingCard Leading card
+	 * @return The card that can legally follow a winning joker which was not led
+	 */
+	private static Card winningCardHighJoker(Card pWinningCard, Hand pHand, Card pLeadingCard)
+	{
+		
+		CardList nonJokers = pHand.getNonJokers();
+		
+		// There is only the low joker
+		if (nonJokers.size() == 0)
+		{
+			
+			return pHand.getJokers().getFirst();
+			
+		}
 	
+		if (trumpSuit != null)
+		{
+			
+			return nonJokers.sort(new BySuitComparator(trumpSuit)).getFirst();
+			
+		}
+		
+		else
+		{
+			
+			return nonJokers.sort(new Card.BySuitNoTrumpComparator()).getFirst();
+			
+		}
+		
+	}
 	/**
 	 * If the hand can follow suit, returns the card that can beat the highest 
 	 * card played, or if the hand cannot beat it, returns the lowest card in the suit.
