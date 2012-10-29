@@ -8,7 +8,8 @@ import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardList;
 
 /**
- * Plays correctly but basically
+ * Plays correctly but basically.
+ * @author Rayyan Khoury
  */
 
 public class BasicRobot extends ARobotPlayer
@@ -16,17 +17,6 @@ public class BasicRobot extends ARobotPlayer
 	private IBiddingStrategy aBiddingStrategy = new BasicBiddingStrategy();
 	private ICardExchangeStrategy aCardExchangeStrategy = new BasicCardExchangeStrategy();
 	private IPlayingStrategy aPlayingStrategy = new BasicPlayingStrategy();
-	
-	// TODO ask TA if it is okay to add this constructor
-	// Fall gracefully back if no parameter specified
-	
-	/**
-	 * Creates a BasicRobot with default name "BasicRObot".
-	 */
-	public BasicRobot()
-	{
-		super("BasicRobot");
-	}
 	
 	/**
 	 * Creates a BasicRobot with name pName.
