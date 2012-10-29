@@ -15,7 +15,7 @@ public class BasicRobot extends ARobotPlayer
 {
 	private IBiddingStrategy aBiddingStrategy = new BasicBiddingStrategy();
 	private ICardExchangeStrategy aCardExchangeStrategy = new BasicCardExchangeStrategy();
-	private IPlayingStrategy aPlayingStrategy = new RandomPlayingStrategy();
+	private IPlayingStrategy aPlayingStrategy = new BasicPlayingStrategy();
 	
 	// TODO ask TA if it is okay to add this constructor
 	// Fall gracefully back if no parameter specified
