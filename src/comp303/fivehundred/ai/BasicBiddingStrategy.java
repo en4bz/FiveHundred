@@ -53,6 +53,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private static final int MIN_POINTS_THRESHOLD_TRUMP = 7;
 	private static final int MIN_CARDS_THRESHOLD_TRUMP = 4;
 	private static final int MIN_POINTS_THRESHOLD_NOTRUMP = 9;
+	private static final int NT_SUIT_MIN = 2;
 	private static final int LONG_SUIT = 5;
 	
 	// Partner bid the same suit
@@ -562,6 +563,11 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 			int totalPoints = 0;
 			int currentCardPoint = 0;
 			
+			int spadesPoints = 0;
+			int clubsPoints = 0;
+			int heartsPoints = 0;
+			int diamondsPoints = 0;
+			
 			// While loop to check the value of this card
 			while(it.hasNext())
 			{
@@ -569,6 +575,34 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 				
 				// Counts the raw point value
 				currentCardPoint = pointsNoTrump(currentCard);
+				
+				if (currentCard.getSuit().equals(Suit.CLUBS))
+				{
+					
+					clubsPoints = clubsPoints + currentCardPoint;
+					
+				}
+				
+				else if (currentCard.getSuit().equals(Suit.SPADES))
+				{
+					
+					spadesPoints = spadesPoints + currentCardPoint;
+					
+				}
+				
+				else if (currentCard.getSuit().equals(Suit.DIAMONDS))
+				{
+					
+					diamondsPoints = diamondsPoints + currentCardPoint;
+					
+				}
+				
+				else
+				{
+					
+					heartsPoints = heartsPoints + currentCardPoint;
+					
+				}
 
 				totalPoints = totalPoints + currentCardPoint;
 				
@@ -579,12 +613,16 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 			
 			aPoints = totalPoints;
 			
-			if(aPoints >= MIN_POINTS_THRESHOLD_NOTRUMP)
+			if(clubsPoints >= NT_SUIT_MIN && heartsPoints >= NT_SUIT_MIN && diamondsPoints >= NT_SUIT_MIN && spadesPoints >= NT_SUIT_MIN)
 			{
 				
-				aBiddable = true;
-				
-				
+				if (aPoints >= MIN_POINTS_THRESHOLD_NOTRUMP)
+				{
+
+					aBiddable = true;
+					
+				}
+
 			}
 			
 		}
@@ -638,7 +676,8 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 			aCards = cardCount;
 			
 			// Adds points for a long suit
-			aPoints = aPoints + aCards - LONG_SUIT + 1;
+			// 2 points per card above five cards inclusive
+			aPoints = aPoints + ((aCards - LONG_SUIT + 1) * 2);
 			
 			if(aPoints >= MIN_POINTS_THRESHOLD_TRUMP && aCards >= MIN_CARDS_THRESHOLD_TRUMP)
 			{

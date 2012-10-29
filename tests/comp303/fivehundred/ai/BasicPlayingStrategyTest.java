@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
 public class BasicPlayingStrategyTest
 {
 
-	BasicPlayingStrategy newStrategy = new BasicPlayingStrategy();
+	BasicPlayingStrategy aStrategy = new BasicPlayingStrategy();
 
 	@Test
 	/**
@@ -505,7 +505,7 @@ public class BasicPlayingStrategyTest
 		// runs the test thirty two times
 		for (int j = 0; j < 32; j++)
 		{
-			assertTrue(correctCards.contains(newStrategy.play(pTrick, theHand)));
+			assertTrue(correctCards.contains(aStrategy.play(pTrick, theHand)));
 
 		}
 

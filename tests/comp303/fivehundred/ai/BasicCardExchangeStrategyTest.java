@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
 public class BasicCardExchangeStrategyTest
 {
 
-	BasicCardExchangeStrategy newStrategy = new BasicCardExchangeStrategy();
+	BasicCardExchangeStrategy aStrategy = new BasicCardExchangeStrategy();
 
 	@Test
 	/**
@@ -111,7 +111,7 @@ public class BasicCardExchangeStrategyTest
 		CardList correctCardList = new CardList();
 		correctCardList.addCardArray(pCorrectCards);
 
-		assertEquals(correctCardList, newStrategy.selectCardsToDiscard(bidArray, pIndex, cList));
+		assertEquals(correctCardList, aStrategy.selectCardsToDiscard(bidArray, pIndex, cList));
 
 	}
 
