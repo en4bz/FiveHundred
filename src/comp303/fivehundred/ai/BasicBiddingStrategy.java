@@ -1,6 +1,5 @@
 package comp303.fivehundred.ai;
 
-
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.Iterator;
@@ -17,7 +16,6 @@ import comp303.fivehundred.util.Card.BySuitComparator;
  * @author Rayyan Khoury
  * Supports a point-based bidding strategy
  */
-
 
 public class BasicBiddingStrategy implements IBiddingStrategy
 {
@@ -61,7 +59,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private static final int NINE = 9;
 	private static final int TEN = 10;
 	
-	
 	// Enum Map of biddable suits
 	private EnumMap<Suit, BiddableSuit> aAllBiddableSuits = new EnumMap<Suit, BiddableSuit>(Suit.class);
 	// No trump biddable suit
@@ -91,36 +88,27 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	@Override
 	public Bid selectBid(Bid[] pPreviousBids, Hand pHand)
 	{
-		
 		// Reset all the biddables to default values
 		resetAllBiddables();
 		
 		// Checks whether suits are biddable not based on opponent/partner bids
 		updateSuitsBiddable(pHand);
-		
+
 		// Updates the suits of the previous bids
 		updatePreviousBids(pPreviousBids);
-		
+
 		// Updates the points based on previous bids
 		if (aRightBid)
 		{
-		
 			updateSuitsBiddablePreviousBids(aRightBidSuit, OPPONENT_BID);
-			
 		}
-		
 		if (aLeftBid)
 		{
-			
 			updateSuitsBiddablePreviousBids(aLeftBidSuit, OPPONENT_BID);
-			
 		}
-			
 		if (aPartnerBid)
 		{
-			
 			updateSuitsBiddablePreviousBids(aPartnerBidSuit, PARTNER_BID);
-			
 		}
 		
 		BiddableSuit bestBid = bestBiddable();
@@ -128,36 +116,26 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		// If there is no biddable suit, return a pass
 		if (bestBid == null)
 		{
-			
 			return new Bid();
-			
 		}
-		
 		// Takes in to account the jokers in calculating the points
 		accountForJokers(bestBid, pHand);
 		
 		// If the bid cannot meet the threshold
 		if (bestBid.getPoints() < MIN_SIX_TRUMP)
 		{
-			
 			return new Bid();
-			
 		}
-		
 		// Gets the best bid
 		Bid toBid = getBid(bestBid);
 		
 		// If the best bid is higher than the maximum bid, returns this bid
 		if (toBid.compareTo(Bid.max(pPreviousBids)) > 0)//This is empty
 		{
-			
 			return toBid;
-			
 		}
-		
 		// Otherwise passes
 		return new Bid();
-		
 	}
 	
 	/**
@@ -196,7 +174,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 */
 	private void updatePreviousBids(Bid[] pPreviousBids)
 	{
-		
 		aRightBid = false;
 		aLeftBid = false;
 		aPartnerBid = false;
@@ -207,61 +184,47 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		
 		switch(pPreviousBids.length)
 		{
-		
-		case 0 : 
-			break;
-			
-		case 1 : 
-			if (!pPreviousBids[0].isPass())
-			{
-				aRightBidSuit = pPreviousBids[0].getSuit();
-				aRightBid = true;
-			}
-			
-			break;
-			
-		case 2 : 
-			
-			if (!pPreviousBids[0].isPass())
-			{
-				aPartnerBidSuit = pPreviousBids[0].getSuit();
-				aPartnerBid = true;
-			}
-			
-			if (!pPreviousBids[1].isPass())
-			{
-				aRightBidSuit = pPreviousBids[1].getSuit();
-				aRightBid = true;
-			}
-			
-			break;
-			
-		case 3 : 
-			if (!pPreviousBids[2].isPass())
-			{
-				aRightBidSuit = pPreviousBids[2].getSuit();
-				aRightBid = true;
-			}
-			
-			if (!pPreviousBids[1].isPass())
-			{
-				aPartnerBidSuit = pPreviousBids[1].getSuit();
-				aPartnerBid = true;
-			}
-			
-			if (!pPreviousBids[0].isPass())
-			{
-				aLeftBidSuit = pPreviousBids[0].getSuit();
-				aLeftBid = true;
-			}
-			
-			break;
-			
-		default :
-			break;
-		
+			case 0 : 
+				break;
+			case 1 : 
+				if (!pPreviousBids[0].isPass())
+				{
+					aRightBidSuit = pPreviousBids[0].getSuit();
+					aRightBid = true;
+				}
+				break;
+			case 2 : 
+				if (!pPreviousBids[0].isPass())
+				{
+					aPartnerBidSuit = pPreviousBids[0].getSuit();
+					aPartnerBid = true;
+				}
+				if (!pPreviousBids[1].isPass())
+				{
+					aRightBidSuit = pPreviousBids[1].getSuit();
+					aRightBid = true;
+				}
+				break;
+			case 3 : 
+				if (!pPreviousBids[2].isPass())
+				{
+					aRightBidSuit = pPreviousBids[2].getSuit();
+					aRightBid = true;
+				}
+				if (!pPreviousBids[1].isPass())
+				{
+					aPartnerBidSuit = pPreviousBids[1].getSuit();
+					aPartnerBid = true;
+				}
+				if (!pPreviousBids[0].isPass())
+				{
+					aLeftBidSuit = pPreviousBids[0].getSuit();
+					aLeftBid = true;
+				}
+				break;
+			default :
+				break;
 		}
-		
 	}
 	
 	
@@ -273,24 +236,17 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 */
 	private void updateSuitsBiddablePreviousBids(Suit pSuit, int pBidVariance)
 	{
-
 		BiddableSuit temp = null;
 
 		if (pSuit == null)
 		{
-
 			aNoTrumpBiddable.setPoints(aNoTrumpBiddable.getPoints() + pBidVariance);
-
 		}
-
 		else
 		{
-
 			temp = aAllBiddableSuits.get(pSuit);
 			temp.setPoints(temp.getPoints() + pBidVariance);
-
 		}
-
 	}
 
 	/**
@@ -299,7 +255,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 */
 	private BiddableSuit bestBiddable()
 	{
-		
 		BiddableSuit temp = null;
 		BiddableSuit highest = null;
 		int highestPoints = 0;
@@ -317,15 +272,11 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		
 		if (aNoTrumpBiddable.getBiddable() && (aNoTrumpBiddable.getPoints() > highestPoints))
 		{
-			
 			highest = aNoTrumpBiddable;
 			highestPoints = highest.getPoints();
-			
 		}
-		
 		// No biddable to return
 		return highest;
-		
 	}
 	
 	private void accountForJokers(BiddableSuit pBestBid, Hand pHand)
@@ -348,7 +299,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 			}
 		}
 	}
-	
 	
 	/**
 	 * Point association for cards in the no trump bid.
@@ -374,50 +324,34 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 */
 	private static int pointsTrump(Card pCard, Suit pTrump)
 	{
-		
 		switch (pCard.getRank())
 		{
-		
 			case JACK : 
-				
 				// If the jack is of this suit
 				if (pCard.getSuit().equals(pTrump))
 				{
-
 					return FIRST_POINTS;
-					
 				}
-				
 				// The jack is of the converse suit
 				else
 				{
-					
 					return SECOND_POINTS;
-					
 				}
-				
 			case ACE : return THIRD_POINTS;
 			case KING : return FOURTH_POINTS;
 			default : return NO_POINTS;
-		
 		}	
-		
 	}
 	
 	private static Bid getBid(BiddableSuit pBiddable)
 	{
-		
 		Suit suit = pBiddable.getSuit();
 		
 		if (suit == null)
 		{
-			
 			return getBidNoTrump(pBiddable);
-			
 		}
-		
 		return getBidTrump(pBiddable);
-		
 	}
 	
 	/**
@@ -427,45 +361,29 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 */
 	private static Bid getBidTrump(BiddableSuit pBiddable)
 	{
-		
 		int points = Math.abs(pBiddable.getPoints());
 		Suit suit = pBiddable.getSuit();
-		
+
 		if (points >= MIN_SIX_TRUMP && points < MIN_SEVEN_TRUMP)
 		{
-			
 			return new Bid(SIX, suit);
-			
 		}
-		
 		else if (points >= MIN_SEVEN_TRUMP && points < MIN_EIGHT_TRUMP)
 		{
-			
 			return new Bid(SEVEN, suit);
-			
 		}
-		
 		else if (points >= MIN_EIGHT_TRUMP && points < MIN_NINE_TRUMP)
 		{
-			
 			return new Bid(EIGHT, suit);
-			
 		}
-			
 		else if (points >= MIN_NINE_TRUMP && points < MIN_TEN_TRUMP)
 		{
-			
 			return new Bid(NINE, suit);
-
 		}
-
 		else 
 		{
-
 			return new Bid(TEN, suit);
-			
 		}
-
 	}
 	
 	/**
@@ -475,48 +393,30 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 */
 	private static Bid getBidNoTrump(BiddableSuit pBiddable)
 	{
-		
 		int points = Math.abs(pBiddable.getPoints());
 		Suit suit = pBiddable.getSuit();
 		
 		if (points >= MIN_SIX_NT && points < MIN_SEVEN_NT)
 		{
-			
 			return new Bid(SIX, suit);
-			
 		}
-		
 		else if (points >= MIN_SEVEN_NT && points < MIN_EIGHT_NT)
 		{
-			
 			return new Bid(SEVEN, suit);
-			
 		}
-		
 		else if (points >= MIN_EIGHT_NT && points < MIN_NINE_NT)
 		{
-			
 			return new Bid(EIGHT, suit);
-			
 		}
-			
 		else if (points >= MIN_NINE_NT && points < MIN_TEN_NT)
 		{
-			
 			return new Bid(NINE, suit);
-
 		}
-
 		else 
 		{
-
 			return new Bid(TEN, suit);
-			
 		}
-
 	}
-	
-
 	
 	/**
 	 * Creates a new BiddableSuit object, used to store the number of points per suit,
@@ -526,7 +426,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 */
 	private final class BiddableSuit 
 	{
-		
 		// Suit of this biddable object ; can be null for a no trump
 		private final Suit aSuit;
 		
@@ -549,7 +448,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		 */
 		private BiddableSuit(Suit pSuit)
 		{
-			
 			aSuit = pSuit;
 			aBiddable = false;
 			aPoints = 0;
@@ -570,11 +468,9 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		 */
 		private void reset()
 		{
-			
 			aBiddable = false;
 			aPoints = 0;
 			aCards = 0;
-			
 		}
 
 		/**
@@ -584,7 +480,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		 */
 		private void updateNoTrump(Hand pHand)
 		{
-			
 			// All the suit cards in this hand
 			CardList noJokers = pHand.getNonJokers();
 			Card currentCard = null;
@@ -611,53 +506,36 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 				
 				if (currentCard.getSuit().equals(Suit.CLUBS))
 				{
-					
 					clubsPoints = clubsPoints + currentCardPoint;
-					
 				}
-				
 				else if (currentCard.getSuit().equals(Suit.SPADES))
 				{
-					
 					spadesPoints = spadesPoints + currentCardPoint;
-					
 				}
-				
 				else if (currentCard.getSuit().equals(Suit.DIAMONDS))
 				{
-					
 					diamondsPoints = diamondsPoints + currentCardPoint;
-					
 				}
-				
 				else
 				{
-					
 					heartsPoints = heartsPoints + currentCardPoint;
-					
 				}
 
 				totalPoints = totalPoints + currentCardPoint;
 				
 				// Resets the current card point
 				currentCardPoint = 0;
-				
 			}
 			
 			aPoints = totalPoints;
 			
 			if(clubsPoints >= NT_SUIT_MIN && heartsPoints >= NT_SUIT_MIN && diamondsPoints >= NT_SUIT_MIN && spadesPoints >= NT_SUIT_MIN)
 			{
-				
 				if (aPoints >= MIN_POINTS_THRESHOLD_NOTRUMP)
 				{
-
 					aBiddable = true;
-					
 				}
-
 			}
-			
 		}
 		
 		/**
@@ -666,7 +544,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		 */
 		private void updateTrump(Hand pHand)
 		{
-
 			// All the trump cards of this suit in this hand
 			CardList trumpCards = pHand.getTrumpCards(aSuit);
 			trumpCards.sort(aSuitComparator);
@@ -688,11 +565,8 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 				// If we have reached the jokers, we break as we do not count jokers
 				if (currentCard.isJoker())
 				{
-					
 					break;
-					
 				}
-				
 				cardCount++;
 				
 				// Otherwise card is not a joker and we will count the points
@@ -702,7 +576,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 				
 				// Resets the current card point
 				currentCardPoint = 0;
-				
 			}
 			
 			aPoints = totalPoints;
@@ -714,12 +587,8 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 			
 			if(aPoints >= MIN_POINTS_THRESHOLD_TRUMP && aCards >= MIN_CARDS_THRESHOLD_TRUMP)
 			{
-				
 				aBiddable = true;
-				
-				
 			}
-			
 		}
 		
 		/**
@@ -728,9 +597,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		 */
 		private boolean getBiddable()
 		{
-			
 			return aBiddable;
-			
 		}
 
 		/**
@@ -739,33 +606,22 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		 */
 		private int getPoints()
 		{
-			
 			return aPoints;
-			
 		}
 		
 		private void setPoints(int pPoints)
 		{
-			
 			aPoints = pPoints;
-			
 		}
 		
 		private void addPoints(int pPoints)
 		{
-			
 			aPoints = aPoints + pPoints;
-			
 		}
 		
 		private Suit getSuit()
 		{
-			
 			return aSuit;
-			
 		}
-		
 	}
-	
-	
 }
