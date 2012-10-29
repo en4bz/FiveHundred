@@ -9,9 +9,14 @@ import comp303.fivehundred.player.Team;
  * @author Ian Forbes and Eleyine Zarour 
  *
  */
-public class Driver
+final class Driver
 {	
 	private static final int MAX_GAMES = 10000;
+	
+    private Driver() 
+    {
+        throw new AssertionError("Cannot Create Instance of Driver");
+    }
 	
 	/**
 	 * Play a customizable number of games in automatic mode.
@@ -24,9 +29,8 @@ public class Driver
 		GameEngine lEngine = new GameEngine(lTeam1, lTeam2);
 		GameStatistics lGameStats = new GameStatistics();
 		lEngine.addObserver(lGameStats);
-		
-		// TO TURN LOGGING OFF UNCOMMENT THIS LINE
-		//lEngine.addObserver(new GameLogger());
+		// TO TURN LOGGING ON UNCOMMENT THIS LINE
+		// lEngine.addObserver(new GameLogger());
 		
 		for(int i = 0; i < MAX_GAMES; i++)
 		{
@@ -38,9 +42,7 @@ public class Driver
 					lEngine.deal();
 					lEngine.bid();
 				} while (lEngine.allPasses());
-			//	System.out.println("EXCHANGE");
 				lEngine.exchange();
-			//	System.out.print("PLAY");
 				lEngine.playRound();
 				lEngine.computeScore();
 			}
