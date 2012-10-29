@@ -179,7 +179,7 @@ public class TestCardList
 		
 		lList.add(aKH);
 		lList.add(a5C);
-		assertEquals("KING of HEARTS, FIVE of CLUBS",lList.toString());
+		assertEquals("KH, 5C",lList.toString());
 		//\n is the "line separator"	
 	}
 
