@@ -24,7 +24,9 @@ public class Driver
 		GameEngine lEngine = new GameEngine(lTeam1, lTeam2);
 		GameStatistics lGameStats = new GameStatistics();
 		lEngine.addObserver(lGameStats);
-		lEngine.addObserver(new GameLogger());
+		
+		// TO TURN LOGGING OFF UNCOMMENT THIS LINE
+		//lEngine.addObserver(new GameLogger());
 		
 		for(int i = 0; i < MAX_GAMES; i++)
 		{
