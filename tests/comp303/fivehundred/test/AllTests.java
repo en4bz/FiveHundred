@@ -3,6 +3,7 @@ package comp303.fivehundred.test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import comp303.fivehundred.ai.BasicBiddingStrategyTest;
 import comp303.fivehundred.ai.BasicCardExchangeStrategyTest;
 import comp303.fivehundred.ai.BasicPlayingStrategyTest;
 import comp303.fivehundred.ai.BasicsBiddingStrategyTest;
@@ -32,7 +33,7 @@ import comp303.fivehundred.util.TestDeck;
 	RandomCardExchangeStrategyTest.class,
 	RandomPlayingStrategyTest.class,
 	
-	BasicsBiddingStrategyTest.class,
+	BasicBiddingStrategyTest.class,
 	BasicCardExchangeStrategyTest.class,
 	BasicPlayingStrategyTest.class,
 	
