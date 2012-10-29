@@ -61,11 +61,11 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private static final int OPPONENT_BID = -4;
 	
 	// Thresholds
-	private static final int MIN_SIX = 8;
-	private static final int MIN_SEVEN = 10;
-	private static final int MIN_EIGHT = 13;
-	private static final int MIN_NINE = 17;
-	private static final int MIN_TEN = 20;
+	private static final int MIN_SIX = 7;
+	private static final int MIN_SEVEN = 9;
+	private static final int MIN_EIGHT = 11;
+	private static final int MIN_NINE = 14;
+	private static final int MIN_TEN = 17;
 	
 	// BIDS
 	private static final int SIX = 6;
