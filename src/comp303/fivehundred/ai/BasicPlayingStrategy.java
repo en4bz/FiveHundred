@@ -1,7 +1,5 @@
 package comp303.fivehundred.ai;
 
-import java.util.Iterator;
-
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.model.Trick;
 import comp303.fivehundred.util.Card;
@@ -10,7 +8,6 @@ import comp303.fivehundred.util.Card.BySuitComparator;
 import comp303.fivehundred.util.Card.Joker;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
-
 
 /**
  * @author Rayyan Khoury
@@ -24,30 +21,23 @@ import comp303.fivehundred.util.CardList;
  * according to the rules of the game.
  */
 public class BasicPlayingStrategy implements IPlayingStrategy
-
 {
-
-	// Trump suit of this game
-	private static Suit trumpSuit;
-	
 	private static final ByRankComparator COMPARE_BY_RANK = new ByRankComparator();
+	
+	// Trump suit of this game
+	private Suit aTrumpSuit;
 	
 	@Override
 	public Card play(Trick pTrick, Hand pHand)
 	{
-
 		// Suit of the current hand
-		trumpSuit = pTrick.getTrumpSuit();
-		
+		aTrumpSuit = pTrick.getTrumpSuit();
 		// CASE 1)
 		// ROBOT IS LEADING
 		if (pTrick.size() == 0) 
 		{
-			
 			return isLeading(pHand);
-			
 		}
-		
 		// Leading card
 		Card leadingCard = pTrick.cardLed();
 		
@@ -58,27 +48,20 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 		// ROBOT IS FOLLOWING A WINNING JOKER
 		if (winningCard.isJoker())
 		{
-
 			return followingWinningJoker(winningCard, pHand, leadingCard);
-
 		}
 		
 		// CASE 3)
 		// ROBOT IS FOLLOWING IN A NO TRUMP GAME
-		if (trumpSuit == null)
+		if (aTrumpSuit == null)
 		{
-			
 			return followingNoTrumpGame(pHand, winningCard, leadingCard);
-			
 		}
 		
 		// CASE 4)
 		// ROBOT IS FOLLOWING IN A TRUMP GAME
 		return followingTrumpGame(pHand, winningCard, leadingCard);
-		
 	}
-	
-
 	
 	/**
 	 * Chooses a card to lead; if the game is a trump game it leads a random card.
@@ -87,27 +70,18 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	 * @param pHand Hand of the robot
 	 * @return Card to lead
 	 */
-	private static Card isLeading(Hand pHand) 
+	private Card isLeading(Hand pHand) 
 	{
-		
-		
 		// If the game is in no trump
-		if (trumpSuit == null)
+		if (aTrumpSuit == null)
 		{
-			
 			return pHand.canLead(true).random();
-			
-			
 		}
-		
 		// Otherwise the game is a trump game
 		else
 		{
-
 			return pHand.canLead(false).random();
-			
 		}
-		
 	}
 	
 	/**
@@ -120,34 +94,24 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	 * @param pLeadingCard The leading card (not necessarily a joker)
 	 * @return The card to play following a winning joker
 	 */
-	private static Card followingWinningJoker(Card pWinningCard, Hand pHand, Card pLeadingCard)
+	private Card followingWinningJoker(Card pWinningCard, Hand pHand, Card pLeadingCard)
 	{
-		
 		// If the leading card is not a joker
 		if (!pLeadingCard.isJoker())
 		{
-			
 			return leadingCardNotJokerFollowingJoker(pWinningCard, pHand, pLeadingCard);
-			
 		}
-		
 		// If the leading card is a LOW joker and the hand contains the HIGH joker
 		if (pWinningCard.getJokerValue().equals(Joker.LOW) &&
 				pHand.getJokers().size() == 1)
 		{
-
 			return pHand.getJokers().getFirst();
-
 		}
-		
 		// Otherwise, returns the most worthless card in response to either joker
 		else
 		{
-
-			return pHand.selectLowest(trumpSuit);
-
+			return pHand.selectLowest(aTrumpSuit);
 		}
-
 	}
 	
 	/**
@@ -157,40 +121,28 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	 * @param pLeadingCard Leading card
 	 * @return The card that can legally follow a winning joker which was not led
 	 */
-	private static Card leadingCardNotJokerFollowingJoker(Card pWinningCard, Hand pHand, Card pLeadingCard)
+	private Card leadingCardNotJokerFollowingJoker(Card pWinningCard, Hand pHand, Card pLeadingCard)
 	{
-		
-		Suit leadingCardSuit = pLeadingCard.getEffectiveSuit(trumpSuit);
-		
+		//Suit leadingCardSuit = pLeadingCard.getEffectiveSuit(aTrumpSuit);
 		if (pWinningCard.getJokerValue().equals(Joker.HIGH))
 		{
-			
 			return winningCardHighJoker(pWinningCard, pHand, pLeadingCard);
-			
 		}
-		
-
 		else if (pHand.getJokers().size() > 0)
 		{
-			
 			CardList joker = pHand.getJokers();
 			return joker.getFirst();
-			
 		}
-		
 		else
 		{
-			
-			CardList playableCards = pHand.playableCards(pLeadingCard.getEffectiveSuit(trumpSuit), trumpSuit);
-			
+			CardList playableCards = pHand.playableCards(pLeadingCard.getEffectiveSuit(aTrumpSuit), aTrumpSuit);
 			// There are no valid playable cards
 			if (playableCards.size() == 0)
 			{
-				
 				CardList nonJokers = pHand.getNonJokers();
-				if(trumpSuit != null)
+				if(aTrumpSuit != null)
 				{
-					return nonJokers.sort(new BySuitComparator(trumpSuit)).getFirst();
+					return nonJokers.sort(new BySuitComparator(aTrumpSuit)).getFirst();
 				}
 				else
 				{
@@ -198,16 +150,12 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 				}
 				
 			}
-			
 			else
 			{
-				playableCards.sort(new BySuitComparator(trumpSuit));
+				playableCards.sort(new BySuitComparator(aTrumpSuit));
 				return playableCards.getFirst();
-				
 			}
-			
 		}
-		
 	}
 	
 	/**
@@ -217,31 +165,22 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	 * @param pLeadingCard Leading card
 	 * @return The card that can legally follow a winning joker which was not led
 	 */
-	private static Card winningCardHighJoker(Card pWinningCard, Hand pHand, Card pLeadingCard)
+	private Card winningCardHighJoker(Card pWinningCard, Hand pHand, Card pLeadingCard)
 	{
-		
 		CardList nonJokers = pHand.getNonJokers();
 		
 		// There is only the low joker
 		if (nonJokers.size() == 0)
 		{
-			
 			return pHand.getJokers().getFirst();
-			
 		}
-	
-		if (trumpSuit != null)
+		if (aTrumpSuit != null)
 		{
-			
-			return nonJokers.sort(new BySuitComparator(trumpSuit)).getFirst();
-			
+			return nonJokers.sort(new BySuitComparator(aTrumpSuit)).getFirst();
 		}
-		
 		else
 		{
-			
 			return nonJokers.sort(new Card.BySuitNoTrumpComparator()).getFirst();
-			
 		}
 		
 	}
@@ -255,33 +194,25 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	 * @param pLeadingCard
 	 * @return
 	 */
-	private static Card followingNoTrumpGame(Hand pHand, Card pWinningCard, Card pLeadingCard)
+	private Card followingNoTrumpGame(Hand pHand, Card pWinningCard, Card pLeadingCard)
 	{
-		
 		assert !pWinningCard.isJoker();
-		
 		// Looks at the cards that are playable given the suit
-		CardList noTrumpPlayableCards = pHand.playableCards(pLeadingCard.getSuit(), trumpSuit);
+		CardList noTrumpPlayableCards = pHand.playableCards(pLeadingCard.getSuit(), aTrumpSuit);
 		
 		// If there are no cards that can follow suit returns the lowest card from the hand
 		if (noTrumpPlayableCards.size() == 0)
 		{
-			
-			return pHand.selectLowest(trumpSuit);
-			
+			return pHand.selectLowest(aTrumpSuit);
 		}
 		
 		// Otherwise the robot chooses a higher card to play
 		else
 		{
-			
 			// Otherwise just chooses a card of the suit that can beat the card played
-			
 			// Returns the card that can beat the current winning trick or the lowest card
 			return chooseBeatingCard(noTrumpPlayableCards.sort(COMPARE_BY_RANK), pWinningCard);
-			
 		}
-		
 	}
 	
 	/**
@@ -296,72 +227,50 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	 * @param pLeadingCard Leading card
 	 * @return Card to play
 	 */
-	private static Card followingTrumpGame(Hand pHand, Card pWinningCard, Card pLeadingCard)
+	private Card followingTrumpGame(Hand pHand, Card pWinningCard, Card pLeadingCard)
 	{
-		
 		assert !pWinningCard.isJoker();
-		
 		// CASE 1: SUIT BEING PLAYED IS TRUMP
-		if (pLeadingCard.getEffectiveSuit(trumpSuit).equals(trumpSuit))
+		if (pLeadingCard.getEffectiveSuit(aTrumpSuit).equals(aTrumpSuit))
 		{
-			
 			return followingTrumpGameTrumpLead(pHand, pWinningCard);
-			
 		}
-		
 		// CASES: SUIT LED IS NOT THE TRUMP
 	
 		// CASE 2: A CARD CAN/MUST FOLLOW SUIT
-		if (pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(trumpSuit)) != null)
+		if (pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(aTrumpSuit)) != null)
 		{
-			
-			if (pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(trumpSuit)).size() > 0)
+			if (pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(aTrumpSuit)).size() > 0)
 			{
-				
-				return followingTrumpGameNonTrumpLeadFollowSuit(pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(trumpSuit)), pWinningCard);
-				
+				return followingTrumpGameNonTrumpLeadFollowSuit(pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(aTrumpSuit)), pWinningCard);
 			}
-
 		}
-		
 		// CASE 3: CARDS CANNOT FOLLOW SUIT AND CAN BEAT HIGHEST CARD WITH TRUMP
-		
-		CardList tryToTrump = pHand.getTrumpCards(trumpSuit);
-		tryToTrump = tryToTrump.sort(new BySuitComparator(trumpSuit));
+		CardList tryToTrump = pHand.getTrumpCards(aTrumpSuit);
+		tryToTrump = tryToTrump.sort(new BySuitComparator(aTrumpSuit));
 		
 		// The hand contains trumps
 		if (tryToTrump.size() > 0)
 		{
-			
 			// If the trick has not been trumped, play lowest trump
-			if (!pWinningCard.getEffectiveSuit(trumpSuit).equals(trumpSuit))
+			if (!pWinningCard.getEffectiveSuit(aTrumpSuit).equals(aTrumpSuit))
 			{
-				
 				return tryToTrump.getFirst();
-				
 			}
-			
 			// Otherwise the trick has been trumped and tries to find a higher trump or plays the lowest card
 			else
 			{
-			
 				CardList tryToTrumpAgain = pHand.reverse();
-				tryToTrumpAgain = tryToTrumpAgain.sort(new BySuitComparator(trumpSuit));
+				tryToTrumpAgain = tryToTrumpAgain.sort(new BySuitComparator(aTrumpSuit));
 				// If the method chooses the lowest trump 
 				return chooseBeatingCard(tryToTrumpAgain, pWinningCard);
-				
 			}
-			
 		}
-		
 		else
 		{
-			
 			// CASE 4: CARDS CANNOT FOLLOW SUIT AND CANNOT BEAT HIGHEST CARD WITH TRUMP
-			return pHand.selectLowest(trumpSuit);
-			
+			return pHand.selectLowest(aTrumpSuit);
 		}
-		
 	}
 	
 	/**
@@ -371,23 +280,18 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	 * @param pWinningCard Current winning card
 	 * @return Either lowest card that can beat winning card or lowest card
 	 */
-	private static Card followingTrumpGameNonTrumpLeadFollowSuit(CardList pFollowSuit, Card pWinningCard)
+	private Card followingTrumpGameNonTrumpLeadFollowSuit(CardList pFollowSuit, Card pWinningCard)
 	{
-		
 		pFollowSuit.sort(COMPARE_BY_RANK);
-		
 		// If the trick has been trumped, return the lowest card in this cardlist
-		if (pWinningCard.getEffectiveSuit(trumpSuit).equals(trumpSuit))
+		if (pWinningCard.getEffectiveSuit(aTrumpSuit).equals(aTrumpSuit))
 		{
-			
 			return pFollowSuit.getFirst();
-			
 		}
 		
 		// If the trick has not been trumped, return the lowest possible winning card
 		// Or the lowest card
 		return chooseBeatingCard(pFollowSuit, pWinningCard);
-		
 	}
 	
 	
@@ -398,25 +302,18 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	 * @param pWinningCard Current winning card
 	 * @return Card played
 	 */
-	private static Card followingTrumpGameTrumpLead(Hand pHand, Card pWinningCard)
+	private Card followingTrumpGameTrumpLead(Hand pHand, Card pWinningCard)
 	{
-		
 		// The hand contains trumps or jokers
-		if (pHand.getTrumpCards(trumpSuit).size() > 0)
+		if (pHand.getTrumpCards(aTrumpSuit).size() > 0)
 		{
-
-			return chooseBeatingCard(pHand.getTrumpCards(trumpSuit).sort(new BySuitComparator(trumpSuit)), pWinningCard);
-
+			return chooseBeatingCard(pHand.getTrumpCards(aTrumpSuit).sort(new BySuitComparator(aTrumpSuit)), pWinningCard);
 		}
-
 		// Otherwise discard least valuable card
 		else
 		{
-
-			return pHand.selectLowest(trumpSuit);
-
+			return pHand.selectLowest(aTrumpSuit);
 		}
-		
 	}
 	
 	/**
@@ -426,59 +323,35 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 	 * @param pWinningCard The card that is currently winning the trick
 	 * @return A card just higher than the winning card OR lowest card in list if not found
 	 */
-	private static Card chooseBeatingCard(CardList pCardList, Card pWinningCard)
+	private Card chooseBeatingCard(CardList pCardList, Card pWinningCard)
 	{
-
-		// Creates the iterator for this card list
-		Iterator<Card> it = pCardList.iterator();
-
-		Card cardInHand = null;
-
 		// If there is a card just higher than the card currently winning, then returns
 		// This card, otherwise it returns the lowest card
 		// NOTE: ASSUME CARDS ARE SORTED IN ASCENDING ORDER
-		while (it.hasNext())
+		for(Card c : pCardList)
 		{
-
-			cardInHand = it.next();
-			
 			// If the winning card is a trump
-			if (pWinningCard.getEffectiveSuit(trumpSuit).equals(trumpSuit))
+			if (pWinningCard.getEffectiveSuit(aTrumpSuit).equals(aTrumpSuit))
 			{
-
 				// If the card being checked is a joker
-
-				if (cardInHand.isJoker())
+				if (c.isJoker())
 				{
-
-					return cardInHand;
-
+					return c;
 				}
-
-
 				// If the card being checked is not a trump
-				if (!cardInHand.getEffectiveSuit(trumpSuit).equals(trumpSuit))
+				if (!c.getEffectiveSuit(aTrumpSuit).equals(aTrumpSuit))
 				{
-
 					continue;
-
 				}
-
 			}
-
-			if (cardInHand.compareTo(pWinningCard) < 0)
+			if (c.compareTo(pWinningCard) < 0)
 			{
 				continue;
 			}
-
-			return cardInHand;
-
+			return c;
 		}
-
 		// If there was no card found that could beat the winning card, then plays
 		// The lowest card which should be in position one
 		return pCardList.getFirst();
-
 	}
-	
 }
