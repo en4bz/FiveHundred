@@ -138,7 +138,9 @@ public class GameStatistics implements Observer
 		double lRatio = 0;
 		if (lSum != 0)
 		{
-			lRatio = (double) aNumbers.get(pPlayer).get(pStatField) / getSum(pStatField) * 100;
+
+				lRatio = (double) aNumbers.get(pPlayer).get(pStatField) / getSum(pStatField) * 100;
+
 		}
 		aRatios.get(pPlayer).put(pStatField, lRatio);
 	}
@@ -150,6 +152,10 @@ public class GameStatistics implements Observer
 		for(APlayer p: lPlayers)
 		{
 			lSum += aNumbers.get(p).get(pStatField);
+		}
+		if(pStatField == Stats.gamesWon)
+		{
+			lSum = lSum /2;
 		}
 		return lSum;
 	}
