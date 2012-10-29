@@ -329,14 +329,7 @@ public class GameEngine extends Observable
         	aCardPlayed = p.play(lTrick);
         	if(aCardPlayed.isJoker() && lTrick.size() == 0 && aContract.isNoTrump() && p.getHand().size() > 2)
         	{
-        		//Problem
-        	}
-        	//If Player is playing a non playable card but can play another
-        	if( lTrick.size() != 0 && !lTrick.jokerLed() &&
-        		!p.getHand().playableCards(lTrick.getSuitLed(), aContract.getSuit()).contains(aCardPlayed) && 
-        		p.getHand().playableCards(lTrick.getSuitLed(), aContract.getSuit()).size() != 0)
-        	{
-        		//Problem
+        		throw new GameException("Can't play this Card");
         	}
         
             lTrick.add(aCardPlayed);
