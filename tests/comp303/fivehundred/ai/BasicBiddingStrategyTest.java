@@ -79,7 +79,7 @@ public class BasicBiddingStrategyTest
 		createTest(
 				(bidArray),
 				new Card[] {aKS, aQS, aJS, aTS, a9S, a8S, a7S, a6S, a5S, a4S},
-				new Bid(9, Suit.SPADES)
+				new Bid(10, Suit.SPADES)
 				);
 	}
 
@@ -156,7 +156,7 @@ public class BasicBiddingStrategyTest
 		createTest(
 				(bidArray),
 				new Card[] {aKS, aQS, aJS, aTS, aAS, a8C, aJC, a6C, a5C, a4C},
-				new Bid(8, Suit.SPADES)
+				new Bid(9, Suit.SPADES)
 				);
 	}
 
