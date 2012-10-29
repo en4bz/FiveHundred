@@ -21,15 +21,15 @@ public class RandomBiddingStrategyTest
 	public void testRandomBiddingStrategy()
 	{
 		RandomBiddingStrategy strategyTest = new RandomBiddingStrategy();
-		
+		assertNotNull(strategyTest);	
 	}
 
 	@Test
 	public void testRandomBiddingStrategyInt()
 	{
 		int passFrequency = 20;
-		
 		RandomBiddingStrategy strategyTest = new RandomBiddingStrategy(passFrequency);
+		assertNotNull(strategyTest);
 	}
 
 	@Test

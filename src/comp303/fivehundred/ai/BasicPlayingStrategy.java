@@ -242,7 +242,8 @@ public class BasicPlayingStrategy implements IPlayingStrategy
 		{
 			if (pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(aTrumpSuit)).size() > 0)
 			{
-				return followingTrumpGameNonTrumpLeadFollowSuit(pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(aTrumpSuit)), pWinningCard);
+				CardList lNonTrump = pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(aTrumpSuit));
+				return followingTrumpGameNonTrumpLeadFollowSuit(lNonTrump, pWinningCard);
 			}
 		}
 		// CASE 3: CARDS CANNOT FOLLOW SUIT AND CAN BEAT HIGHEST CARD WITH TRUMP

@@ -2,8 +2,6 @@ package comp303.fivehundred.ai;
 
 import static comp303.fivehundred.util.AllCards.*;
 
-import java.util.ArrayList;
-
 import org.junit.Test;
 
 import comp303.fivehundred.model.Bid;

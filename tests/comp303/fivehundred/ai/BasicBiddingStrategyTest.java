@@ -261,14 +261,4 @@ public class BasicBiddingStrategyTest
 			}
 		}
 	}
-
-	@Test 
-	public void testFirstBidder()
-	{
-		for(int i = 0; i < 100; i++)
-		{
-			Bid selected = aStrategy.selectBid(new Bid[0], generateHand());
-			//assertTrue(!selected.equals(new Bid()));
-		}
-	}
 }

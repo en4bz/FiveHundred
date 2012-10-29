@@ -2,8 +2,6 @@ package comp303.fivehundred.ai;
 
 import static comp303.fivehundred.util.AllCards.*;
 
-import java.util.ArrayList;
-
 import org.junit.Test;
 
 import comp303.fivehundred.model.Bid;
@@ -21,7 +19,6 @@ import static org.junit.Assert.*;
  */
 public class BasicCardExchangeStrategyTest
 {
-
 	BasicCardExchangeStrategy aStrategy = new BasicCardExchangeStrategy();
 
 	@Test
@@ -112,7 +109,5 @@ public class BasicCardExchangeStrategyTest
 		correctCardList.addCardArray(pCorrectCards);
 
 		assertEquals(correctCardList, aStrategy.selectCardsToDiscard(bidArray, pIndex, cList));
-
 	}
-
 }
