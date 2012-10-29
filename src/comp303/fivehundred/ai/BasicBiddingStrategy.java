@@ -85,16 +85,11 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 */
 	public BasicBiddingStrategy()
 	{
-		
-		for (int i = 0; i < allSuits.length; i++)
+		for(Suit s : Suit.values())
 		{
-			
-			allBiddableSuits.put(allSuits[i], new BiddableSuit(allSuits[i]));
-			
+			allBiddableSuits.put(s, new BiddableSuit(s));
 		}
-
 		noTrumpBiddable = new BiddableSuit(null);
-		
 	}
 	
 	@Override
@@ -174,16 +169,11 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 */
 	private static void resetAllBiddables()
 	{
-		
-		for (int i = 0; i < allSuits.length; i++)
+		for(Suit s : Suit.values())
 		{
-			
-			allBiddableSuits.get(allSuits[i]).reset();
-			
+			allBiddableSuits.get(s).reset();
 		}
-		
 		noTrumpBiddable.reset();
-		
 	}
 	
 	
@@ -194,16 +184,11 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 */
 	private static void updateSuitsBiddable(Hand pHand)
 	{
-		
-		for (int i = 0; i < allSuits.length; i++)
+		for(Suit s : Suit.values())
 		{
-			
-			allBiddableSuits.get(allSuits[i]).updateTrump(pHand);
-			
+			allBiddableSuits.get(s).updateTrump(pHand);
 		}
-		
 		noTrumpBiddable.updateNoTrump(pHand);
-		
 	}
 	
 	
