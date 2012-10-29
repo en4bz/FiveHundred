@@ -1,34 +1,6 @@
 package comp303.fivehundred.ai;
 
-import static comp303.fivehundred.util.AllCards.a4C;
-import static comp303.fivehundred.util.AllCards.a4H;
-import static comp303.fivehundred.util.AllCards.a4S;
-import static comp303.fivehundred.util.AllCards.a5C;
-import static comp303.fivehundred.util.AllCards.a5D;
-import static comp303.fivehundred.util.AllCards.a5H;
-import static comp303.fivehundred.util.AllCards.a5S;
-import static comp303.fivehundred.util.AllCards.a6C;
-import static comp303.fivehundred.util.AllCards.a6H;
-import static comp303.fivehundred.util.AllCards.a6S;
-import static comp303.fivehundred.util.AllCards.a7S;
-import static comp303.fivehundred.util.AllCards.a8C;
-import static comp303.fivehundred.util.AllCards.a8D;
-import static comp303.fivehundred.util.AllCards.a8S;
-import static comp303.fivehundred.util.AllCards.a9D;
-import static comp303.fivehundred.util.AllCards.a9S;
-import static comp303.fivehundred.util.AllCards.aAC;
-import static comp303.fivehundred.util.AllCards.aAH;
-import static comp303.fivehundred.util.AllCards.aAS;
-import static comp303.fivehundred.util.AllCards.aJC;
-import static comp303.fivehundred.util.AllCards.aJS;
-import static comp303.fivehundred.util.AllCards.aKD;
-import static comp303.fivehundred.util.AllCards.aKS;
-import static comp303.fivehundred.util.AllCards.aQC;
-import static comp303.fivehundred.util.AllCards.aQH;
-import static comp303.fivehundred.util.AllCards.aQS;
-import static comp303.fivehundred.util.AllCards.aTC;
-import static comp303.fivehundred.util.AllCards.aTH;
-import static comp303.fivehundred.util.AllCards.aTS;
+import static comp303.fivehundred.util.AllCards.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
