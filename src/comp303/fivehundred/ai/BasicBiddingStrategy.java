@@ -61,11 +61,17 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private static final int OPPONENT_BID = -4;
 	
 	// Thresholds
-	private static final int MIN_SIX = 7;
-	private static final int MIN_SEVEN = 9;
-	private static final int MIN_EIGHT = 11;
-	private static final int MIN_NINE = 14;
-	private static final int MIN_TEN = 17;
+	private static final int MIN_SIX_TRUMP = 6;
+	private static final int MIN_SEVEN_TRUMP = 9;
+	private static final int MIN_EIGHT_TRUMP = 11;
+	private static final int MIN_NINE_TRUMP = 14;
+	private static final int MIN_TEN_TRUMP = 16;
+	
+	private static final int MIN_SIX_NT = 9;
+	private static final int MIN_SEVEN_NT = 12;
+	private static final int MIN_EIGHT_NT = 15;
+	private static final int MIN_NINE_NT = 18;
+	private static final int MIN_TEN_NT = 21;
 	
 	// BIDS
 	private static final int SIX = 6;
@@ -140,7 +146,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		accountForJokers(bestBid, pHand);
 		
 		// If the bid cannot meet the threshold
-		if (bestBid.getPoints() < MIN_SIX)
+		if (bestBid.getPoints() < MIN_SIX_TRUMP)
 		{
 			
 			return new Bid();
@@ -435,39 +441,103 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		
 	}
 	
+	private static Bid getBid(BiddableSuit pBiddable)
+	{
+		
+		Suit suit = pBiddable.getSuit();
+		
+		if (suit == null)
+		{
+			
+			return getBidNoTrump(pBiddable);
+			
+		}
+		
+		return getBidTrump(pBiddable);
+		
+	}
+	
 	/**
 	 * Gets the best bid using the biddable object and working with external thresholds.
 	 * @param pBiddable The biddable suit object of the highest points
 	 * @return The bid which most represents this robot's cards
 	 */
-	private static Bid getBid(BiddableSuit pBiddable)
+	private static Bid getBidTrump(BiddableSuit pBiddable)
 	{
 		
 		int points = Math.abs(pBiddable.getPoints());
 		Suit suit = pBiddable.getSuit();
 		
-		if (points >= MIN_SIX && points < MIN_SEVEN)
+		if (points >= MIN_SIX_TRUMP && points < MIN_SEVEN_TRUMP)
 		{
 			
 			return new Bid(SIX, suit);
 			
 		}
 		
-		else if (points >= MIN_SEVEN && points < MIN_EIGHT)
+		else if (points >= MIN_SEVEN_TRUMP && points < MIN_EIGHT_TRUMP)
 		{
 			
 			return new Bid(SEVEN, suit);
 			
 		}
 		
-		else if (points >= MIN_EIGHT && points < MIN_NINE)
+		else if (points >= MIN_EIGHT_TRUMP && points < MIN_NINE_TRUMP)
 		{
 			
 			return new Bid(EIGHT, suit);
 			
 		}
 			
-		else if (points >= MIN_NINE && points < MIN_TEN)
+		else if (points >= MIN_NINE_TRUMP && points < MIN_TEN_TRUMP)
+		{
+			
+			return new Bid(NINE, suit);
+
+		}
+
+		else 
+		{
+
+			return new Bid(TEN, suit);
+			
+		}
+
+	}
+	
+	/**
+	 * Gets the best bid using the biddable object and working with external thresholds.
+	 * @param pBiddable The biddable suit object of the highest points
+	 * @return The bid which most represents this robot's cards
+	 */
+	private static Bid getBidNoTrump(BiddableSuit pBiddable)
+	{
+		
+		int points = Math.abs(pBiddable.getPoints());
+		Suit suit = pBiddable.getSuit();
+		
+		if (points >= MIN_SIX_NT && points < MIN_SEVEN_NT)
+		{
+			
+			return new Bid(SIX, suit);
+			
+		}
+		
+		else if (points >= MIN_SEVEN_NT && points < MIN_EIGHT_NT)
+		{
+			
+			return new Bid(SEVEN, suit);
+			
+		}
+		
+		else if (points >= MIN_EIGHT_NT && points < MIN_NINE_NT)
+		{
+			
+			return new Bid(EIGHT, suit);
+			
+		}
+			
+		else if (points >= MIN_NINE_NT && points < MIN_TEN_NT)
 		{
 			
 			return new Bid(NINE, suit);
