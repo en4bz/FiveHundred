@@ -6,7 +6,6 @@ import org.junit.runners.Suite;
 import comp303.fivehundred.ai.BasicBiddingStrategyTest;
 import comp303.fivehundred.ai.BasicCardExchangeStrategyTest;
 import comp303.fivehundred.ai.BasicPlayingStrategyTest;
-import comp303.fivehundred.ai.BasicsBiddingStrategyTest;
 import comp303.fivehundred.ai.RandomBiddingStrategyTest;
 import comp303.fivehundred.ai.RandomCardExchangeStrategyTest;
 import comp303.fivehundred.ai.RandomPlayingStrategyTest;
