@@ -21,25 +21,6 @@ import comp303.fivehundred.util.Card.BySuitComparator;
 
 public class BasicBiddingStrategy implements IBiddingStrategy
 {
-	
-	// Enum Map of biddable suits
-	private static EnumMap<Suit, BiddableSuit> allBiddableSuits = new EnumMap<Suit, BiddableSuit>(Suit.class);
-	
-	// Enum array
-	private static Suit[] allSuits = {Suit.HEARTS, Suit.CLUBS, Suit.DIAMONDS, Suit.SPADES};
-	
-	// No trump biddable suit
-	private static BiddableSuit noTrumpBiddable;
-	
-	// Updates the points based on previous bids
-	private static Suit rightBidSuit = null;
-	private static Suit leftBidSuit = null;
-	private static Suit partnerBidSuit = null;
-	
-	private static boolean rightBid = false;
-	private static boolean leftBid = false;
-	private static boolean partnerBid = false;
-	
 	// Points for the card order
 	private static final int HIGH_JOKER = 6;
 	private static final int LOW_JOKER = 5;
@@ -80,6 +61,21 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	private static final int NINE = 9;
 	private static final int TEN = 10;
 	
+	
+	// Enum Map of biddable suits
+	private EnumMap<Suit, BiddableSuit> aAllBiddableSuits = new EnumMap<Suit, BiddableSuit>(Suit.class);
+	// No trump biddable suit
+	private BiddableSuit aNoTrumpBiddable;
+	
+	// Updates the points based on previous bids
+	private Suit aRightBidSuit = null;
+	private Suit aLeftBidSuit = null;
+	private Suit aPartnerBidSuit = null;
+		
+	private boolean aRightBid = false;
+	private boolean aLeftBid = false;
+	private boolean aPartnerBid = false;
+	
 	/**
 	 * Creates a point based bidding strategy.
 	 */
@@ -87,9 +83,9 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	{
 		for(Suit s : Suit.values())
 		{
-			allBiddableSuits.put(s, new BiddableSuit(s));
+			aAllBiddableSuits.put(s, new BiddableSuit(s));
 		}
-		noTrumpBiddable = new BiddableSuit(null);
+		aNoTrumpBiddable = new BiddableSuit(null);
 	}
 	
 	@Override
@@ -106,24 +102,24 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		updatePreviousBids(pPreviousBids);
 		
 		// Updates the points based on previous bids
-		if (rightBid)
+		if (aRightBid)
 		{
 		
-			updateSuitsBiddablePreviousBids(rightBidSuit, OPPONENT_BID);
+			updateSuitsBiddablePreviousBids(aRightBidSuit, OPPONENT_BID);
 			
 		}
 		
-		if (leftBid)
+		if (aLeftBid)
 		{
 			
-			updateSuitsBiddablePreviousBids(leftBidSuit, OPPONENT_BID);
+			updateSuitsBiddablePreviousBids(aLeftBidSuit, OPPONENT_BID);
 			
 		}
 			
-		if (partnerBid)
+		if (aPartnerBid)
 		{
 			
-			updateSuitsBiddablePreviousBids(partnerBidSuit, PARTNER_BID);
+			updateSuitsBiddablePreviousBids(aPartnerBidSuit, PARTNER_BID);
 			
 		}
 		
@@ -167,13 +163,13 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	/**
 	 * Resets all the biddable objects.
 	 */
-	private static void resetAllBiddables()
+	private void resetAllBiddables()
 	{
 		for(Suit s : Suit.values())
 		{
-			allBiddableSuits.get(s).reset();
+			aAllBiddableSuits.get(s).reset();
 		}
-		noTrumpBiddable.reset();
+		aNoTrumpBiddable.reset();
 	}
 	
 	
@@ -182,13 +178,13 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 * Updates whether this suit is biddable or not.
 	 * @param pHand
 	 */
-	private static void updateSuitsBiddable(Hand pHand)
+	private void updateSuitsBiddable(Hand pHand)
 	{
 		for(Suit s : Suit.values())
 		{
-			allBiddableSuits.get(s).updateTrump(pHand);
+			aAllBiddableSuits.get(s).updateTrump(pHand);
 		}
-		noTrumpBiddable.updateNoTrump(pHand);
+		aNoTrumpBiddable.updateNoTrump(pHand);
 	}
 	
 	
@@ -198,16 +194,16 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 * and sets the global SUITS to the suit of that bid.
 	 * @param pPreviousBids
 	 */
-	private static void updatePreviousBids(Bid[] pPreviousBids)
+	private void updatePreviousBids(Bid[] pPreviousBids)
 	{
 		
-		rightBid = false;
-		leftBid = false;
-		partnerBid = false;
+		aRightBid = false;
+		aLeftBid = false;
+		aPartnerBid = false;
 		
-		rightBidSuit = null;
-		leftBidSuit = null;
-		partnerBidSuit = null;
+		aRightBidSuit = null;
+		aLeftBidSuit = null;
+		aPartnerBidSuit = null;
 		
 		switch(pPreviousBids.length)
 		{
@@ -218,8 +214,8 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		case 1 : 
 			if (!pPreviousBids[0].isPass())
 			{
-				rightBidSuit = pPreviousBids[0].getSuit();
-				rightBid = true;
+				aRightBidSuit = pPreviousBids[0].getSuit();
+				aRightBid = true;
 			}
 			
 			break;
@@ -228,14 +224,14 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 			
 			if (!pPreviousBids[0].isPass())
 			{
-				partnerBidSuit = pPreviousBids[0].getSuit();
-				partnerBid = true;
+				aPartnerBidSuit = pPreviousBids[0].getSuit();
+				aPartnerBid = true;
 			}
 			
 			if (!pPreviousBids[1].isPass())
 			{
-				rightBidSuit = pPreviousBids[1].getSuit();
-				rightBid = true;
+				aRightBidSuit = pPreviousBids[1].getSuit();
+				aRightBid = true;
 			}
 			
 			break;
@@ -243,20 +239,20 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		case 3 : 
 			if (!pPreviousBids[2].isPass())
 			{
-				rightBidSuit = pPreviousBids[2].getSuit();
-				rightBid = true;
+				aRightBidSuit = pPreviousBids[2].getSuit();
+				aRightBid = true;
 			}
 			
 			if (!pPreviousBids[1].isPass())
 			{
-				partnerBidSuit = pPreviousBids[1].getSuit();
-				partnerBid = true;
+				aPartnerBidSuit = pPreviousBids[1].getSuit();
+				aPartnerBid = true;
 			}
 			
 			if (!pPreviousBids[0].isPass())
 			{
-				leftBidSuit = pPreviousBids[0].getSuit();
-				leftBid = true;
+				aLeftBidSuit = pPreviousBids[0].getSuit();
+				aLeftBid = true;
 			}
 			
 			break;
@@ -275,7 +271,7 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 * @param pSuit The suit of the biddable object
 	 * @param pBidVariance The variance +- of points to add to the current points in the object
 	 */
-	private static void updateSuitsBiddablePreviousBids(Suit pSuit, int pBidVariance)
+	private void updateSuitsBiddablePreviousBids(Suit pSuit, int pBidVariance)
 	{
 
 		BiddableSuit temp = null;
@@ -283,14 +279,14 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		if (pSuit == null)
 		{
 
-			noTrumpBiddable.setPoints(noTrumpBiddable.getPoints() + pBidVariance);
+			aNoTrumpBiddable.setPoints(aNoTrumpBiddable.getPoints() + pBidVariance);
 
 		}
 
 		else
 		{
 
-			temp = allBiddableSuits.get(pSuit);
+			temp = aAllBiddableSuits.get(pSuit);
 			temp.setPoints(temp.getPoints() + pBidVariance);
 
 		}
@@ -301,32 +297,28 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 * Returns the best biddable object, or null if there are no possible bids.
 	 * @return temp Best biddable suit CAN RETURN NULL
 	 */
-	private static BiddableSuit bestBiddable()
+	private BiddableSuit bestBiddable()
 	{
 		
 		BiddableSuit temp = null;
 		BiddableSuit highest = null;
 		int highestPoints = 0;
 		
-		for (int i = 0; i < allSuits.length; i++)
+		for (Suit s : Suit.values())
 		{
-			
-			temp = allBiddableSuits.get(allSuits[i]);
+			temp = aAllBiddableSuits.get(s);
 			
 			if (temp.getBiddable() && (temp.getPoints() > highestPoints))
 			{
-				
 				highest = temp;
 				highestPoints = highest.getPoints();
-				
 			}
-			
 		}
 		
-		if (noTrumpBiddable.getBiddable() && (noTrumpBiddable.getPoints() > highestPoints))
+		if (aNoTrumpBiddable.getBiddable() && (aNoTrumpBiddable.getPoints() > highestPoints))
 		{
 			
-			highest = noTrumpBiddable;
+			highest = aNoTrumpBiddable;
 			highestPoints = highest.getPoints();
 			
 		}
@@ -336,37 +328,25 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 		
 	}
 	
-	private static void accountForJokers(BiddableSuit pBestBid, Hand pHand)
+	private void accountForJokers(BiddableSuit pBestBid, Hand pHand)
 	{
-		
 		CardList jokersInHand = pHand.getJokers();
 		
 		if (jokersInHand.size() == 2)
 		{
-			
 			pBestBid.addPoints(HIGH_JOKER + LOW_JOKER);
-			
 		}
-		
 		if (jokersInHand.size() == 1)
 		{
-			
 			if (jokersInHand.getFirst().getJokerValue().equals(Joker.HIGH))
 			{
-				
 				pBestBid.addPoints(HIGH_JOKER);
-				
 			}
-			
 			else 
 			{
-				
 				pBestBid.addPoints(LOW_JOKER);
-				
 			}
-			
 		}
-		
 	}
 	
 	
@@ -377,7 +357,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 	 */
 	private static int pointsNoTrump(Card pCard)
 	{
-		
 		switch (pCard.getRank())
 		{
 			case ACE : return FIRST_POINTS;
@@ -386,7 +365,6 @@ public class BasicBiddingStrategy implements IBiddingStrategy
 			case JACK : return FOURTH_POINTS;
 			default : return 0;
 		}
-		
 	}
 	
 	/**
