@@ -8,7 +8,9 @@ import javax.swing.JLabel;
 import comp303.fivehundred.gui.external.RotatedIcon;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardImages;
+
 /**
+ * Class for rendering playing cards as JLabels.
  * @author Ian Forbes
  */
 @SuppressWarnings("serial")
@@ -20,8 +22,8 @@ public class CardLabel extends JLabel implements MouseListener
 	
 	/**
 	 * Create a new CardLabel
-	 * @param pCard : Card to Render
-	 * @param pRotation : Rotation enum
+	 * @param pCard : Card to render. A <code>null</code> value will draw the back of the card.
+	 * @param pRotation : Rotation <code>enum</code>
 	 * @param pVisibility : Whether the card's front is visible
 	 */
 	public CardLabel(Card pCard, Rotation pRotation, boolean pVisibility)
@@ -36,7 +38,7 @@ public class CardLabel extends JLabel implements MouseListener
 	
 	private void drawCard()
 	{
-		if(aIsVisible)
+		if(aIsVisible && aCard != null)
 		{
 			this.setIcon(new RotatedIcon(CardImages.getCard(aCard), aRotation));
 		}
@@ -44,25 +46,37 @@ public class CardLabel extends JLabel implements MouseListener
 		{
 			this.setIcon(new RotatedIcon(CardImages.getBack(), aRotation));
 		}
-	//	this.repaint();
 	}
 	
+	/**
+	 * @return Whether the card's face is visible.
+	 */
 	public boolean getVisibility()
 	{
 		return aIsVisible;
 	}
 	
+	/**
+	 * @param pVisibility : Indicates whether the card's face is visible.
+	 */
 	public void setVisibility(boolean pVisibility)
 	{
 		aIsVisible = pVisibility;
 		drawCard();
 	}
 	
+	/**
+	 * @return The current rotaion of the card.
+	 */
 	public Rotation getRotation()
 	{
 		return aRotation;
 	}
 	
+	/**
+	 * Sets the rotation of the card
+	 * @param pRotation
+	 */
 	public void setRotation(Rotation pRotation)
 	{
 		aRotation = pRotation;
@@ -102,5 +116,4 @@ public class CardLabel extends JLabel implements MouseListener
 		// TODO Auto-generated method stub
 		
 	}
-
 }
