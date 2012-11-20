@@ -38,7 +38,7 @@ public class CardListPanel extends JPanel
 		}
 		else if (aRotation == Rotation.LEFT)
 		{
-			this.setLayout(new OverlapLayout(new Point(0,30)));
+			this.setLayout(new OverlapLayout(new Point(0,30),false));
 			aCards = aCards.reverse();
 		}
 		else
