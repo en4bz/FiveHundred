@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import javax.swing.Icon;
 
+import comp303.fivehundred.gui.Rotation;
+
 /**
  *  The RotatedIcon allows you to change the orientation of an Icon by
  *  rotating the Icon before it is painted. This class supports the following
@@ -15,8 +17,8 @@ import javax.swing.Icon;
  *	From: http://tips4java.wordpress.com/2009/04/06/rotated-icon/
  *
  * <ul>
- * <li>DOWN - rotated 90 degrees
- * <li>UP (default) - rotated -90 degrees
+ * <li>LEFT - rotated 90 degrees
+ * <li>RIGHT (default) - rotated -90 degrees
  * <li>UPSIDE_DOWN - rotated 180 degrees
  * <li>ABOUT_CENTER - the icon is rotated a specific angle about its center. The
  *  angle of rotation is specified when the class is created.
@@ -24,17 +26,9 @@ import javax.swing.Icon;
  */
 public class RotatedIcon implements Icon
 {
-	public enum Rotate
-	{
-		DOWN,
-		UP,
-		UPSIDE_DOWN,
-		ABOUT_CENTER;
-	}
-
 	private Icon icon;
 
-    private Rotate rotate;
+    private Rotation rotate;
 
 	private double angle;
 
@@ -45,7 +39,7 @@ public class RotatedIcon implements Icon
 	 */
 	public RotatedIcon(Icon icon)
 	{
-		this(icon, Rotate.UP);
+		this(icon, Rotation.LEFT);
 	}
 
 	/**
@@ -54,7 +48,7 @@ public class RotatedIcon implements Icon
 	 *  @param icon    the Icon to rotate
 	 *  @param rotate  the direction of rotation
 	 */
-	public RotatedIcon(Icon icon, Rotate rotate)
+	public RotatedIcon(Icon icon, Rotation rotate)
 	{
 		this.icon = icon;
 		this.rotate = rotate;
@@ -71,7 +65,7 @@ public class RotatedIcon implements Icon
 	 */
 	public RotatedIcon(Icon icon, double angle)
 	{
-		this(icon, Rotate.ABOUT_CENTER);
+		this(icon, Rotation.ABOUT_CENTER);
 		this.angle = angle;
 	}
 
@@ -90,7 +84,7 @@ public class RotatedIcon implements Icon
 	 *
 	 *  @return the Rotate enum
 	 */
-	public Rotate getRotate()
+	public Rotation getRotate()
 	{
 		return rotate;
 	}
@@ -117,8 +111,8 @@ public class RotatedIcon implements Icon
 	@Override
     public int getIconWidth()
     {
-		if (rotate == Rotate.UPSIDE_DOWN
-		||  rotate == Rotate.ABOUT_CENTER)
+		if (rotate == Rotation.UPSIDE_DOWN
+		||  rotate == Rotation.ABOUT_CENTER)
 			return icon.getIconWidth();
 		else
 			return icon.getIconHeight();
@@ -132,8 +126,8 @@ public class RotatedIcon implements Icon
 	@Override
     public int getIconHeight()
     {
-		if (rotate == Rotate.UPSIDE_DOWN
-		||  rotate == Rotate.ABOUT_CENTER)
+		if (rotate == Rotation.UPSIDE_DOWN
+		||  rotate == Rotation.ABOUT_CENTER)
 			return icon.getIconHeight();
 		else
 			return icon.getIconWidth();
@@ -157,25 +151,25 @@ public class RotatedIcon implements Icon
 		int xAdjustment = (icon.getIconWidth() % 2) == 0 ? 0 : -1;
 		int yAdjustment = (icon.getIconHeight() % 2) == 0 ? 0 : -1;
 
-    	if (rotate == Rotate.DOWN)
+    	if (rotate == Rotation.RIGHT)
     	{
 			g2.translate(x + cHeight, y + cWidth);
 			g2.rotate( Math.toRadians( 90 ) );
 			icon.paintIcon(c, g2,  -cWidth, yAdjustment - cHeight);
     	}
-    	else if (rotate == Rotate.UP)
+    	else if (rotate == Rotation.LEFT)
     	{
 			g2.translate(x + cHeight, y + cWidth);
 			g2.rotate( Math.toRadians( -90 ) );
 			icon.paintIcon(c, g2,  xAdjustment - cWidth, -cHeight);
     	}
-    	else if (rotate == Rotate.UPSIDE_DOWN)
+    	else if (rotate == Rotation.UPSIDE_DOWN)
     	{
 			g2.translate(x + cWidth, y + cHeight);
 			g2.rotate( Math.toRadians( 180 ) );
 			icon.paintIcon(c, g2, xAdjustment - cWidth, yAdjustment - cHeight);
     	}
-    	else if (rotate == Rotate.ABOUT_CENTER)
+    	else if (rotate == Rotation.ABOUT_CENTER)
     	{
 			Rectangle r = new Rectangle(x, y, icon.getIconWidth(), icon.getIconHeight());
 			g2.setClip(r);
