@@ -10,7 +10,6 @@ import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
@@ -51,19 +50,19 @@ public class GameBoard extends JFrame
 		player1.setLayout(new BoxLayout(player1, BoxLayout.Y_AXIS)); //Tricks+Hand one over the other
 		player1.setPreferredSize(new Dimension(300,200));
 		player1.setBackground(Color.GREEN);
-		player1.setBorder(BorderFactory.createTitledBorder("player1: Tricks won+Hand")); //debug
+		player1.setBorder(BorderFactory.createTitledBorder("Player1: Tricks won+Hand")); //debug
 		
 		JPanel player2 = new JPanel();
 		player2.setLayout(new BoxLayout(player2, BoxLayout.X_AXIS)); //Tricks+Hand next to each other
 		player2.setPreferredSize(new Dimension(300,200));
 		player2.setBackground(Color.GREEN);
-		player2.setBorder(BorderFactory.createTitledBorder("player 2: Tricks won+Hand")); //debug
+		player2.setBorder(BorderFactory.createTitledBorder("Player 2: Tricks won+Hand")); //debug
 		
 		JPanel player3 = new JPanel();
 		player3.setLayout(new BoxLayout(player3, BoxLayout.Y_AXIS)); //Tricks+Hand one over the other
 		player3.setPreferredSize(new Dimension(300,200));
 		player3.setBackground(Color.GREEN);
-		player3.setBorder(BorderFactory.createTitledBorder("PLayer 3: Tricks won+Hand")); //debug
+		player3.setBorder(BorderFactory.createTitledBorder("Player 3: Tricks won+Hand")); //debug
 		
 		JPanel player4 = new JPanel();
 		player4.setLayout(new BoxLayout(player4, BoxLayout.X_AXIS)); //Tricks+Hand next to each other
