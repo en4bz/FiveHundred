@@ -118,43 +118,43 @@ public class Main extends JFrame
 		JPanel game = new JPanel();
 		game.setLayout(new GridBagLayout());
 		
-//TODO: set the position of each element on the board (using GridBagConstraint())
+		//Set position of each element in board (using coordinates)
 		
 		GridBagConstraints w = new GridBagConstraints();
 		w.gridx = 0;
 		w.gridy = 0;
 		
 		GridBagConstraints p1 = new GridBagConstraints();
-		w.gridx = 1;
-		w.gridy = 0;
+		p1.gridx = 1;
+		p1.gridy = 0;
 		
 		GridBagConstraints p2 = new GridBagConstraints();
-		w.gridx = 2;
-		w.gridy = 1;
+		p2.gridx = 2;
+		p2.gridy = 1;
 		
 		GridBagConstraints p3 = new GridBagConstraints();
-		w.gridx = 1;
-		w.gridy = 2;
+		p3.gridx = 1;
+		p3.gridy = 2;
 		
 		GridBagConstraints p4 = new GridBagConstraints();
-		w.gridx = 0;
-		w.gridy = 1;
+		p4.gridx = 0;
+		p4.gridy = 1;
 		
 		GridBagConstraints con = new GridBagConstraints();
-		w.gridx = 2;
-		w.gridy = 0;
+		con.gridx = 2;
+		con.gridy = 0;
 		
 		GridBagConstraints s_EW = new GridBagConstraints();
-		w.gridx = 0;
-		w.gridy = 2;
+		s_EW.gridx = 0;
+		s_EW.gridy = 2;
 		
 		GridBagConstraints s_NS = new GridBagConstraints();
-		w.gridx = 2;
-		w.gridy = 2;
+		s_NS.gridx = 2;
+		s_NS.gridy = 2;
 		
 		GridBagConstraints g = new GridBagConstraints();
-		w.gridx = 1;
-		w.gridy = 1;
+		g.gridx = 1;
+		g.gridy = 1;
 		
 		//add JPanels to the board
 		board.add(widow,w);
