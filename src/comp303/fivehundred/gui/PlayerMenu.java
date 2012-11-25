@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -24,9 +23,7 @@ import org.slf4j.LoggerFactory;
 
 
 import comp303.fivehundred.engine.GameEngine;
-import comp303.fivehundred.engine.GameEngine.State;
 import comp303.fivehundred.player.*;
-import comp303.fivehundred.util.Card;
 import comp303.fivehundred.ai.BasicRobot;
 import comp303.fivehundred.ai.RandomRobot;
 
@@ -46,25 +43,14 @@ public class PlayerMenu
 	private int MAX_CHAR_PLAYER = 12;
 	private int NUM_PLAYERS = 4;
 	private int NUM_TEAMS = 2;
-	private GameEngine aEngine;
 	private GameFrame aFrame;
-	private PlayerType[] aPlayerTypes = new PlayerType[NUM_PLAYERS];
-	private String[] aPlayerNames = new String[NUM_PLAYERS];
-	private boolean practiceModeOn = false;
 	
+	// Set default values
+	private PlayerType[] aPlayerTypes = {PlayerType.BasicRobot, PlayerType.BasicRobot, PlayerType.RandomRobot, PlayerType.RandomRobot};
+	private String[] aPlayerNames = {"Alice", "Alex", "John", "Jannice"};
+	private boolean practiceModeOn = true;
 	
-	private void setPlayerType(int pIndex, PlayerType pType)
-	{
-		if(pIndex >=0 && pIndex < PlayerType.values().length)
-			aPlayerTypes[pIndex] = pType;
-	}
-	
-	private void setPlayerName(int pIndex, String pName)
-	{
-		if(pIndex >=0 && pIndex < PlayerType.values().length)
-			aPlayerNames[pIndex] = pName;
-	}
-	
+		
 	/**
 	 * Displays dialog box prompting user to 
 	 * @param pFrame
@@ -94,13 +80,13 @@ public class PlayerMenu
 		// Build drop-down boxes to select player type
 		for(int i = 0; i < NUM_PLAYERS; i++)
 		{
-			buildDropDown(pane, c, i);
+			buildTypeDropDown(pane, c, i);
 		}
 		
 		// Build text fields to select player names
 		for(int i = 0; i < NUM_PLAYERS; i++)
 		{
-			buildTextField(pane, c, i);
+			buildNameTextField(pane, c, i);
 		}
 		
 		// Build practice mode checkbox.
@@ -116,6 +102,8 @@ public class PlayerMenu
 				log("practiceModeOn is now " + practiceModeOn);
 			}
 		});
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridwidth = 3;
 		c.weightx = 0.5;
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -135,6 +123,7 @@ public class PlayerMenu
 			}
 		});
 		c.fill = GridBagConstraints.SOUTH;
+		c.gridwidth = 3;
 		c.weightx = 0.5;
 		c.gridheight = 1;
 		c.gridx = 0;
@@ -147,41 +136,6 @@ public class PlayerMenu
 		aFrame.setVisible( true );
 	}
 	
-	private void buildTeamLabel(Container pPane, GridBagConstraints pConstraint, int pIndex)
-	{
-		JLabel lLabel = new JLabel(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.Team" + pIndex));
-		pConstraint.fill = GridBagConstraints.VERTICAL;
-		pConstraint.gridx = 0;
-		pConstraint.gridy = 1 + 2 * (pIndex - 1);
-		pConstraint.weightx = 0.5;
-		pConstraint.gridheight = 2;
-		pPane.add(lLabel, pConstraint);
-	}
-	
-	/**
-	 * @return
-	 */
-	private boolean validatePlayers()
-	{
-		int lHumans = 0;
-		for(int i = 0; i < 4; i++)
-		{
-			if(aPlayerTypes[i] == null || aPlayerNames[i] == null)
-			{
-				return false;
-			}
-			if(aPlayerTypes[i] == PlayerType.Human)
-			{
-				lHumans++;
-				if(lHumans > 1)
-				{
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	
 	private void startGame()
 	{
 		if(validatePlayers())
@@ -192,7 +146,7 @@ public class PlayerMenu
 		else
 		{
 			log("Error!");
-			//showErrorDialog();
+			//showErrorDialog();TODO
 		}
 	}
 	
@@ -220,7 +174,7 @@ public class PlayerMenu
 					break;
 				default:
 					// should never happen
-					throw new GUIException("Player type " + aPlayerTypes[i] + " not recognized");
+					throw new GUIException("Player type " + aPlayerTypes[i] + " not recognized.");
 				}
 			}
 			lTeams[0] = new Team(lPlayers[0], lPlayers[1]);
@@ -238,20 +192,31 @@ public class PlayerMenu
 		return practiceModeOn;
 	}
 	
-	private void buildDropDown(Container pPane, GridBagConstraints pConstraint, final int pPlayerIndex)
+	private void buildTeamLabel(Container pPane, GridBagConstraints pConstraint, int pIndex)
+	{
+		JLabel lLabel = new JLabel(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.Team" + pIndex));
+		pConstraint.fill = GridBagConstraints.VERTICAL;
+		pConstraint.gridx = 0;
+		pConstraint.gridy = 1 + 2 * (pIndex - 1);
+		pConstraint.weightx = 0.5;
+		pConstraint.gridheight = 2;
+		pPane.add(lLabel, pConstraint);
+	}
+	
+	private void buildTypeDropDown(Container pPane, GridBagConstraints pConstraint, final int pPlayerIndex)
 	{
 		Random lRand = new Random();
 		PlayerType lPlayerType = PlayerType.values()[lRand.nextInt(PlayerType.values().length)];
 		final JComboBox lDropDown = new JComboBox(PlayerType.values());
 		lDropDown.setEditable(false);
 		lDropDown.setSelectedItem(lPlayerType);
-		setPlayerType(pPlayerIndex, lPlayerType);
+		aPlayerTypes[pPlayerIndex] = lPlayerType;
 		lDropDown.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				setPlayerType(pPlayerIndex, (PlayerType) lDropDown.getSelectedItem());
+				aPlayerTypes[pPlayerIndex] = (PlayerType) lDropDown.getSelectedItem();
 				log(aPlayerTypes[pPlayerIndex]+ " was selected!");
 			}
 		});
@@ -262,21 +227,18 @@ public class PlayerMenu
 		pPane.add(lDropDown, pConstraint);
 	}
 	
-	private void buildTextField(Container pPane, GridBagConstraints pConstraint, final int pPlayerIndex)
+	private void buildNameTextField(Container pPane, GridBagConstraints pConstraint, final int pPlayerIndex)
 	{
 
-		PlayerType lPlayerType = aPlayerTypes[pPlayerIndex];
-		String lPlayerName = lPlayerType.toString() + pPlayerIndex;
 		final JTextField lTField = new JTextField(MAX_CHAR_PLAYER);
-		lTField.setText(lPlayerName);
+		lTField.setText(aPlayerNames[pPlayerIndex]);
 		lTField.setToolTipText("Enter the player's name. Up to " + MAX_CHAR_PLAYER + " characters.");
-		setPlayerName(pPlayerIndex, lPlayerName);
 		lTField.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				setPlayerName(pPlayerIndex, lTField.getText());
+				aPlayerNames[pPlayerIndex] = lTField.getText();
 				log(aPlayerTypes[pPlayerIndex]+ " has new name: " + aPlayerNames[pPlayerIndex]);
 			}
 		});
@@ -287,12 +249,34 @@ public class PlayerMenu
 		pPane.add(lTField, pConstraint);
 	}
 	
+	/**
+	 * @return
+	 */
+	private boolean validatePlayers()
+	{
+		int lHumans = 0;
+		for(int i = 0; i < 4; i++)
+		{
+			if(aPlayerTypes[i] == null || aPlayerNames[i] == null)
+			{
+				return false;
+			}
+			if(aPlayerTypes[i] == PlayerType.Human)
+			{
+				lHumans++;
+				if(lHumans > 1)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
 	public void log(String message)
 	{
 		aLogger.info(message);
 	}
-	
-
 	
 	public enum PlayerType
 	{
