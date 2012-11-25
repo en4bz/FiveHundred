@@ -10,8 +10,14 @@ import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+
+/**
+ * Board of the game (new board for every new game)
+ * @author Gabrielle Germain
+ */
 
 @SuppressWarnings("serial")
 public class GameBoard extends JFrame
@@ -176,11 +182,40 @@ public class GameBoard extends JFrame
 		
 	}
 	
+	//"BUILD" METHODS FOR EACH COMPONENT THAT WE USE MORE THAN ONCE
+	
+	public JLabel hand (/*arguments?*/)
+	{
+		JLabel aHand = new JLabel(/*icon?*/);
+		return aHand;
+	}
+	
+	public JLabel tricksWon(/*arguments?*/)
+	{
+		JLabel aTrick = new JLabel(/*icon?*/);
+		return aTrick;
+	}
+	
+	public JLabel textBubble (String aString) //get aString from an observer?
+	{
+		JLabel bubble = new JLabel(aString, JLabel.CENTER); //the "bubble" is in the middle of the label.
+		//add a background?
+		return bubble;
+	}
+	
+	//widow?
+	//discarded cards?
+	
+	//Eventually add JLabels in each JPanel
+	//ex: game.add(textBubble(/*arguments*/), location)
+	
+	
+	
 	//TEST
 	public static void main(String[] args) {
-		//JFrame frame = new GameBoard();
+		
 		JFrame Game = new GameBoard();
-		//TODO: Create the board game independently (not at the same time as menu)
+
 	}
 	
 }

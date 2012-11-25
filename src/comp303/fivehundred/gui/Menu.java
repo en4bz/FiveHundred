@@ -8,6 +8,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+/**
+ * Menu visible at the top of a GameBoard window
+ * @author Gabrielle Germain
+ */
+
 
 @SuppressWarnings("serial")
 public class Menu extends JMenuBar
