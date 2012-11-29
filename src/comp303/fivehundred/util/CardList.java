@@ -131,6 +131,11 @@ public class CardList implements Iterable<Card>, Cloneable
 		
 	}
 	
+	public void removeAll()
+	{
+		aCards.clear();
+	}
+	
 	/**
 	 * @see java.lang.Object#clone()
 	 * {@inheritDoc}
