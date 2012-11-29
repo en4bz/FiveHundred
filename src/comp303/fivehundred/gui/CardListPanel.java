@@ -1,5 +1,6 @@
 package comp303.fivehundred.gui;
 
+import java.awt.Component;
 import java.awt.Point;
 
 import javax.management.Notification;
@@ -18,7 +19,7 @@ import comp303.fivehundred.util.CardList;
 @SuppressWarnings("serial")
 public class CardListPanel extends JPanel implements Observer
 {
-	private CardList aCards;
+	private final CardList aCards;
 	private Rotation aRotation;
 	private boolean aIsVisible;
 	
@@ -41,7 +42,6 @@ public class CardListPanel extends JPanel implements Observer
 		else if (aRotation == Rotation.LEFT)
 		{
 			this.setLayout(new OverlapLayout(new Point(0,30),false));
-			aCards = aCards.reverse();
 		}
 		else
 		{
@@ -60,9 +60,9 @@ public class CardListPanel extends JPanel implements Observer
 	
 	public void setVisibility(boolean pVisibility)
 	{
-		for(int i = 0; i < this.getComponentCount(); i ++)
+		for(Component c : this.getComponents())
 		{
-			((CardLabel) this.getComponent(i)).setVisibility(pVisibility);
+			((CardLabel) c).setVisibility(pVisibility);
 		}
 	}
 

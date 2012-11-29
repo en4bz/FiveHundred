@@ -8,6 +8,10 @@ import javax.swing.JPanel;
 import comp303.fivehundred.gui.external.OverlapLayout;
 import comp303.fivehundred.util.CardList;
 
+/**
+ * A JPanel that represents a player's hand and the trick they've won.
+ * @author Ian Forbes
+ */
 @SuppressWarnings("serial")
 public class HandPanel extends JPanel
 {
@@ -16,7 +20,7 @@ public class HandPanel extends JPanel
 	private Rotation aRotation;
 	private boolean aIsVisible;
 	
-	private CardListPanel aHand;
+	private final CardListPanel aHand;
 	private JPanel aTricksWon;
 	
 	public HandPanel(CardList pHand, Rotation pRotation, boolean pVisibility){
@@ -49,6 +53,9 @@ public class HandPanel extends JPanel
 		aTricksWon.setSize(aTricksWon.getWidth()/2, aTricksWon.getHeight()/2);
 	}
 	
+	/**
+	 * Adds a trick to the trick panel.
+	 */
 	public void addTrick(){
 		CardLabel lTemp = new CardLabel(null, aRotation, false);
 		lTemp.getIcon();
