@@ -2,9 +2,11 @@ package comp303.fivehundred.gui;
 
 import java.awt.Point;
 
+import javax.management.Notification;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.gui.external.OverlapLayout;
+import comp303.fivehundred.mvc.Observer;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardList;
 
@@ -14,7 +16,7 @@ import comp303.fivehundred.util.CardList;
  */
 
 @SuppressWarnings("serial")
-public class CardListPanel extends JPanel
+public class CardListPanel extends JPanel implements Observer
 {
 	private CardList aCards;
 	private Rotation aRotation;
@@ -45,15 +47,32 @@ public class CardListPanel extends JPanel
 		{
 			this.setLayout(new OverlapLayout(new Point(30,0)));
 		}
+		this.reDraw();
+	}
+	
+	private void reDraw()
+	{
 		for(Card c : aCards)
 		{
 			this.add(new CardLabel(c,aRotation, aIsVisible));
 		}
 	}
 	
-	public void setVisibility(boolean pVisibility){
-		for(int i = 0; i < this.getComponentCount(); i ++){
+	public void setVisibility(boolean pVisibility)
+	{
+		for(int i = 0; i < this.getComponentCount(); i ++)
+		{
 			((CardLabel) this.getComponent(i)).setVisibility(pVisibility);
 		}
+	}
+
+	/**
+	 * In the case of an update redraw the card list.
+	 */
+	@Override
+	public void update(Notification pNotification)
+	{
+		this.removeAll();
+		this.reDraw();
 	}
 }
