@@ -36,8 +36,8 @@ public class GameEngine extends Observable
 	// State fields
     private APlayer[] aPlayers; // keeps the current playing order
     private APlayer aCurrentPlayer; // player who is currently executing a game action
-    private Team aTeam1;
-    private Team aTeam2;
+    final private Team aTeam1;
+    final private Team aTeam2;
     private APlayer aDealer;
     private Bid[] aBids;
     private boolean aAllPasses;
