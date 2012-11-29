@@ -52,7 +52,6 @@ public class CardListPanel extends JPanel
 	}
 	
 	public void setVisibility(boolean pVisibility){
-		System.out.print(this.getComponentCount());
 		for(int i = 0; i < this.getComponentCount(); i ++){
 			((CardLabel) this.getComponent(i)).setVisibility(pVisibility);
 		}
