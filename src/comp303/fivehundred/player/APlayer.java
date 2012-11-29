@@ -12,8 +12,8 @@ import comp303.fivehundred.util.CardList;
  */
 public abstract class APlayer
 { 
-    private Hand aHand;
-    private String aName;
+    private final Hand aHand;
+    private final String aName;
     
     /**
      * Constructs a new player.
@@ -57,7 +57,7 @@ public abstract class APlayer
      */
     public void resetHand()
     {
-    	aHand = new Hand();
+    	aHand.removeAll();
     }
     /**
      * Gets the player's name.
