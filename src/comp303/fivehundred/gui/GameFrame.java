@@ -22,7 +22,7 @@ import comp303.fivehundred.player.Team;
 public class GameFrame extends JFrame implements Observer
 {
 	public static Color BACKGROUND_COLOR = new Color(40, 160, 20);
-//	private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("comp303.fivehundred.gui.MessageBundle");
+	private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("comp303.fivehundred.gui.MessageBundle");
 	private long aNotificationSequenceNumber = 0;
 	private GameEngine aEngine;
 	private PlayerMenu aPlayerMenu;
