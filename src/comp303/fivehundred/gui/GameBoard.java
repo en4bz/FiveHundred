@@ -2,17 +2,17 @@ package comp303.fivehundred.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+
+import comp303.fivehundred.model.Bid;
+import comp303.fivehundred.util.Card.Suit;
 
 /**
  * Board of the game (new board for every new game)
@@ -20,29 +20,14 @@ import javax.swing.JPanel;
  */
 
 @SuppressWarnings("serial")
-public class GameBoard extends JFrame
+public class GameBoard extends JPanel
 {
 
 	public GameBoard()
 	{
-		setTitle("Five Hundred");	
-		
-		JMenuBar menu = new Menu();
-		setJMenuBar(menu); //add menu to the new window (new game)
-		
-		
-		//add components to the board
-		Container content = getContentPane();
-		content.addNotify();
-		
-		JPanel board = new JPanel(new GridBagLayout());
-		board.setBackground(Color.GREEN);
-		board.setPreferredSize(new Dimension(900,600));
-		board.addNotify();
-	
-		//New game board
-		add(board,BorderLayout.CENTER); //change
-		
+		super(new GridBagLayout());
+		this.setBackground(Color.GREEN);
+		this.setPreferredSize(new Dimension(900,600));
 		
 		//Sub-Panels of game board
 		
@@ -76,11 +61,11 @@ public class GameBoard extends JFrame
 		player4.setBackground(Color.GREEN);
 		player4.setBorder(BorderFactory.createTitledBorder("Player4: Tricks won+Hand")); //debug
 		
-		JPanel contract = new JPanel();
-		contract.setLayout(new BoxLayout(contract, BoxLayout.X_AXIS)); //only one element = no alignment
+		JPanel contract = new ContractPanel(new Bid(7,Suit.HEARTS));
+//		contract.setLayout(new BoxLayout(contract, BoxLayout.X_AXIS)); //only one element = no alignment
 		contract.setPreferredSize(new Dimension(300,200));
-		contract.setBackground(Color.GREEN);
-		contract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
+	//	contract.setBackground(Color.GREEN);
+	//	contract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
 		
 		JPanel score_NS = new JPanel();
 		score_NS.setBorder(BorderFactory.createTitledBorder("Score North-South Team")); //set title
@@ -160,26 +145,18 @@ public class GameBoard extends JFrame
 		g.fill = GridBagConstraints.CENTER;
 		
 		//add JPanels to the board
-		board.add(widow,w);
-		board.add(player1,p1);
-		board.add(contract,con);
+		this.add(widow,w);
+		this.add(player1,p1);
+		this.add(contract,con);
 		//new line
-		board.add(player4,p4);
-		board.add(game,g);
-		board.add(player2,p2);
+		this.add(player4,p4);
+		this.add(game,g);
+		this.add(player2,p2);
 		//new line
-		board.add(score_EW, s_EW);
-		board.add(player3, p3);
-		board.add(score_NS,s_NS);
+		this.add(score_EW, s_EW);
+		this.add(player3, p3);
+		this.add(score_NS,s_NS);
 		//end
-	
-		setLocation(0, 0); //Top-left corner of the screen
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Program ends when we close the window
-		setVisible(true); //Makes it visible
-		pack(); //minimal size to see all components
-		setResizable(false); //We cannot change the dimensions of the window by hand when the program runs (components don't move)
-		
-		
 	}
 	
 	//"BUILD" METHODS FOR EACH COMPONENT THAT WE USE MORE THAN ONCE
@@ -202,20 +179,4 @@ public class GameBoard extends JFrame
 		//add a background?
 		return bubble;
 	}
-	
-	//widow?
-	//discarded cards?
-	
-	//Eventually add JLabels in each JPanel
-	//ex: game.add(textBubble(/*arguments*/), location)
-	
-	
-	
-	//TEST
-	public static void main(String[] args) {
-		
-		JFrame Game = new GameBoard();
-
-	}
-	
 }
