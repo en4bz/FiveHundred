@@ -46,6 +46,13 @@ public class PlayerArea extends JPanel
 			this.add(aTricksWon, BorderLayout.WEST);
 			((BorderLayout) this.getLayout()).setHgap(GAP);
 		}
+		else if(aRotation == Rotation.UPSIDE_DOWN)
+		{
+			aTricksWon = new JPanel(new OverlapLayout(new Point(50,0)));
+			this.add(aHand, BorderLayout.SOUTH);
+			this.add(aTricksWon, BorderLayout.NORTH);
+			((BorderLayout) this.getLayout()).setVgap(GAP);
+		}
 		else
 		{
 			aTricksWon = new JPanel(new OverlapLayout(new Point(50,0)));
