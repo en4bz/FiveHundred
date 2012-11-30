@@ -5,8 +5,11 @@ import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 
+import comp303.fivehundred.ai.RandomRobot;
 import comp303.fivehundred.model.AllCards;
 import comp303.fivehundred.model.Bid;
+import comp303.fivehundred.player.APlayer;
+import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
 
@@ -23,13 +26,19 @@ public class GameTester extends JFrame
 		setLayout(new BorderLayout());
 		((BorderLayout) this.getLayout()).setHgap(50);
 		((BorderLayout) this.getLayout()).setVgap(50);
+		
+		APlayer p1 = new RandomRobot("p1");
 		CardList cList = new CardList();
 		cList.add(AllCards.aHJo);
 		cList.add(AllCards.a4D);
 		cList.add(AllCards.a4H);
 		cList.add(AllCards.aLJo);
+		for(Card c : cList){
+			p1.addCardToHand(c);
+		}
 		
-		CardListPanel Derp1 = new CardListPanel(cList,Rotation.ABOUT_CENTER, true);
+		PlayerArea Derp1 = new PlayerArea(p1,Rotation.UPSIDE_DOWN, true);
+		Derp1.addTrick();
 		CardListPanel Derp2 = new CardListPanel(cList,Rotation.RIGHT, true);
 		CardListPanel Derp3 = new CardListPanel(cList,Rotation.LEFT, true);
 		CardListPanel Derp4 = new CardListPanel(cList,Rotation.ABOUT_CENTER, true);
@@ -55,7 +64,7 @@ public class GameTester extends JFrame
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		Derp1.addTrick();
 		Derp2.setVisibility(false);
 	}
 	
