@@ -1,28 +1,30 @@
 package comp303.fivehundred.gui;
 
-import java.awt.Container;
-import java.awt.GridBagLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.management.Notification;
-import java.util.Random;
+
 import java.util.ResourceBundle;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JCheckBox;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import comp303.fivehundred.engine.GameEngine;
 import comp303.fivehundred.player.*;
 import comp303.fivehundred.ai.BasicRobot;
 import comp303.fivehundred.ai.RandomRobot;
@@ -34,21 +36,34 @@ import comp303.fivehundred.ai.RandomRobot;
  * 		docs.oracle.com for code on GridBagLayout
  */
 @SuppressWarnings("serial")
-public class PlayerMenu
+public class PlayerMenu extends JPanel
 {
 	private final Logger aLogger = LoggerFactory.getLogger("PlayerMenuLogger");
 	
-	public static Color BACKGROUND_COLOR = new Color(40, 160, 20);
 	private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("comp303.fivehundred.gui.MessageBundle");
-	private int MAX_CHAR_PLAYER = 12;
-	private int NUM_PLAYERS = 4;
-	private int NUM_TEAMS = 2;
 	private GameFrame aFrame;
 	
-	// Set default values
+	// Layout constants
+	public static Color BACKGROUND_COLOR = new Color(40, 160, 20);
+	private int MIN_WIDTH = 600;
+	private int MIN_HEIGHT = 300;
+	private int PRF_WIDTH = 600;
+	private int PRF_HEIGHT = 300;
+	private int MAX_WIDTH = Integer.MAX_VALUE;
+	private int MAX_HEIGHT = Integer.MAX_VALUE;
+	private int TXT_HEIGHT = 40;
+	private int H_GAP = PRF_WIDTH;
+	private int V_GAP = 10;
+	
+	// Default values
 	private PlayerType[] aPlayerTypes = {PlayerType.BasicRobot, PlayerType.BasicRobot, PlayerType.RandomRobot, PlayerType.RandomRobot};
 	private String[] aPlayerNames = {"Alice", "Alex", "John", "Jannice"};
 	private boolean practiceModeOn = true;
+	
+	// Game constants
+	private int MAX_CHAR_PLAYER = 12;
+	private int NUM_PLAYERS = 4;
+	private int NUM_TEAMS = 2;
 	
 		
 	/**
@@ -59,81 +74,145 @@ public class PlayerMenu
 	public PlayerMenu(GameFrame pFrame)
 	{
 		aFrame = pFrame;
-		aFrame.setTitle("Game settings");
-		Container pane = pFrame.getContentPane();
-		pane.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+//		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
+//		setPreferredSize(new Dimension(GameFrame.WIDTH, GameFrame.HEIGHT));	
+		// TODO wonder if I shouldn't just go ahead and create a smaller wrapper panel.
+//		setMaximumSize(new Dimension(MAX_WIDTH, MAX_HEIGHT));
 		
-		// Build select team label
-		log("Build select team label.");
-		JLabel lLabel = new JLabel(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.SelectTeam"));
-		c.fill = GridBagConstraints.NORTH;
-		c.gridx = 0;
-		c.gridy = 0;
-		pane.add(lLabel, c);
+		buildSelectTeamBox();
+		buildPracticeCheckBox();
+		buildPlayButton();
 		
-		// Build team 1 and team 2 labels
-		log("Build team 1 and team 2 labels.");
-		buildTeamLabel(pane, c, 1);		
-		buildTeamLabel(pane, c, 2);	
+
+	}
+
+	private void buildSelectTeamBox()
+	{
+		log("Build select team box.");
+		JPanel teamBox = new JPanel();
+		teamBox.setLayout(new BoxLayout(teamBox, BoxLayout.Y_AXIS));
+		teamBox.setBorder(BorderFactory.createTitledBorder(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.SelectTeam")));
+		for(int i = 0; i < NUM_TEAMS; i++)
+		{
+			buildTeamBox(teamBox, i);
+		}
+		add(teamBox);
+	}
+
+	private void buildTeamBox(JPanel pBox, int pTeamIndex)
+	{
+		JPanel teamGrid = new JPanel();
+		teamGrid.setBorder(BorderFactory.createTitledBorder(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.Team" + (pTeamIndex+1))));
+		teamGrid.setLayout(new GridLayout(2,2));
+		teamGrid.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT*0.2)));
+		
+		teamGrid.add(getTypeDropDown(pTeamIndex*2));
+		teamGrid.add(getNameTextField(pTeamIndex*2));
+		teamGrid.add(getTypeDropDown(pTeamIndex*2+1));
+		teamGrid.add(getNameTextField(pTeamIndex*2+1));		
+		pBox.add(teamGrid);
+	}
 	
-		// Build drop-down boxes to select player type
-		for(int i = 0; i < NUM_PLAYERS; i++)
-		{
-			buildTypeDropDown(pane, c, i);
-		}
-		
-		// Build text fields to select player names
-		for(int i = 0; i < NUM_PLAYERS; i++)
-		{
-			buildNameTextField(pane, c, i);
-		}
-		
-		// Build practice mode checkbox.
+	private void buildPracticeCheckBox()
+	{
 		log("Build practice mode checkbox.");
-		final JCheckBoxMenuItem lCBox = new JCheckBoxMenuItem(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.PracticeMode"));
+		JPanel lCheckBoxPanel = new JPanel();
+		lCheckBoxPanel.setLayout(new GridLayout(1,1));
+//		lCheckBoxPanel.setMinimumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+//		lCheckBoxPanel.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+//		lCheckBoxPanel.setMaximumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+		add(lCheckBoxPanel);
+		
+		final JCheckBox lCBox = new JCheckBox(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.PracticeMode"));
 		lCBox.setSelected(practiceModeOn);
+//		lCBox.setMinimumSize(new Dimension(pPanel.getMinimumSize().width, TXT_HEIGHT));
+//		lCBox.setMaximumSize(new Dimension(pPanel.getMaximumSize().width, TXT_HEIGHT));	
+		lCBox.setHorizontalAlignment(JCheckBox.CENTER);
+		
 		lCBox.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				practiceModeOn = lCBox.getState();
+				practiceModeOn = lCBox.isSelected();
 				log("practiceModeOn is now " + practiceModeOn);
 			}
 		});
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridwidth = 3;
-		c.weightx = 0.5;
-		c.gridheight = 1;
-		c.gridx = 0;
-		c.gridy = 5;
-		pane.add(lCBox, c);
-		
-		
-		// Build play button
+		lCheckBoxPanel.add(lCBox);	
+	}
+	
+	private void buildPlayButton()
+	{
+		JPanel lButtonPanel = new JPanel();
+		lButtonPanel.setLayout(new GridLayout(1,1));
+		lButtonPanel.setMinimumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+		lButtonPanel.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+		lButtonPanel.setMaximumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+		add(lButtonPanel, BorderLayout.SOUTH);
 		JButton lButton = new JButton(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.Play"));
 		lButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				
 				startGame();
 			}
 		});
-		c.fill = GridBagConstraints.SOUTH;
-		c.gridwidth = 3;
-		c.weightx = 0.5;
-		c.gridheight = 1;
-		c.gridx = 0;
-		c.gridy = 6;
-		pane.add(lButton, c);
-		
-		aFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		aFrame.setLocationRelativeTo(null);
-		aFrame.pack();
-		aFrame.setVisible( true );
+		lButtonPanel.add(lButton);
+	}
+	
+	
+	private JComboBox getTypeDropDown(final int pPlayerIndex)
+	{
+		final JComboBox lDropDown = new JComboBox(PlayerType.values());
+		lDropDown.setEditable(false);
+		lDropDown.setSelectedItem(aPlayerTypes[pPlayerIndex]);
+		lDropDown.setMinimumSize(new Dimension(lDropDown.getMinimumSize().width, TXT_HEIGHT));
+		lDropDown.setPreferredSize(new Dimension(lDropDown.getPreferredSize().width, TXT_HEIGHT));
+		lDropDown.setMaximumSize(new Dimension(lDropDown.getMaximumSize().width, TXT_HEIGHT));
+		lDropDown.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				aPlayerTypes[pPlayerIndex] = (PlayerType) lDropDown.getSelectedItem();
+				log(aPlayerTypes[pPlayerIndex]+ " was selected!");
+			}
+		});
+		return lDropDown;
+	}
+	
+	private JTextField getNameTextField(final int pPlayerIndex)
+	{
+
+		final JTextField lTField = new JTextField(MAX_CHAR_PLAYER);
+		lTField.setText(aPlayerNames[pPlayerIndex]);
+		lTField.setToolTipText("Enter the player's name. Up to " + MAX_CHAR_PLAYER + " characters.");
+		lTField.setMinimumSize(new Dimension(lTField.getMinimumSize().width, TXT_HEIGHT));
+		lTField.setPreferredSize(new Dimension(lTField.getPreferredSize().width, TXT_HEIGHT));
+		lTField.setMaximumSize(new Dimension(lTField.getMaximumSize().width, TXT_HEIGHT));
+		lTField.addKeyListener(new KeyListener()
+		{
+			
+			@Override
+			public void keyTyped(KeyEvent arg0)
+			{
+				aPlayerNames[pPlayerIndex] = lTField.getText();
+				log(aPlayerTypes[pPlayerIndex]+ " has new name: " + aPlayerNames[pPlayerIndex]);
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0){}
+
+			@Override
+			public void keyReleased(KeyEvent arg0)
+			{
+				aPlayerNames[pPlayerIndex] = lTField.getText();
+				log(aPlayerTypes[pPlayerIndex]+ " has new name: " + aPlayerNames[pPlayerIndex]);
+			}
+		});
+		return lTField;
 	}
 	
 	private void startGame()
@@ -142,11 +221,8 @@ public class PlayerMenu
 		{
 			log("Starting game.");
 			aFrame.update(new Notification("gui.gameframe", this, aFrame.getNotificationSequenceNumber(), GameFrame.State.newGame.toString()));
-		}
-		else
-		{
-			log("Error!");
-			//showErrorDialog();TODO
+			aFrame.setEnabled(true);
+			this.setVisible(false);
 		}
 	}
 	
@@ -192,63 +268,6 @@ public class PlayerMenu
 		return practiceModeOn;
 	}
 	
-	private void buildTeamLabel(Container pPane, GridBagConstraints pConstraint, int pIndex)
-	{
-		JLabel lLabel = new JLabel(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.Team" + pIndex));
-		pConstraint.fill = GridBagConstraints.VERTICAL;
-		pConstraint.gridx = 0;
-		pConstraint.gridy = 1 + 2 * (pIndex - 1);
-		pConstraint.weightx = 0.5;
-		pConstraint.gridheight = 2;
-		pPane.add(lLabel, pConstraint);
-	}
-	
-	private void buildTypeDropDown(Container pPane, GridBagConstraints pConstraint, final int pPlayerIndex)
-	{
-		Random lRand = new Random();
-		PlayerType lPlayerType = PlayerType.values()[lRand.nextInt(PlayerType.values().length)];
-		final JComboBox lDropDown = new JComboBox(PlayerType.values());
-		lDropDown.setEditable(false);
-		lDropDown.setSelectedItem(lPlayerType);
-		aPlayerTypes[pPlayerIndex] = lPlayerType;
-		lDropDown.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				aPlayerTypes[pPlayerIndex] = (PlayerType) lDropDown.getSelectedItem();
-				log(aPlayerTypes[pPlayerIndex]+ " was selected!");
-			}
-		});
-		pConstraint.gridx = 1;
-		pConstraint.gridy = 1 + pPlayerIndex;
-		pConstraint.weightx = 0.5;
-		pConstraint.gridheight = 1;
-		pPane.add(lDropDown, pConstraint);
-	}
-	
-	private void buildNameTextField(Container pPane, GridBagConstraints pConstraint, final int pPlayerIndex)
-	{
-
-		final JTextField lTField = new JTextField(MAX_CHAR_PLAYER);
-		lTField.setText(aPlayerNames[pPlayerIndex]);
-		lTField.setToolTipText("Enter the player's name. Up to " + MAX_CHAR_PLAYER + " characters.");
-		lTField.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				aPlayerNames[pPlayerIndex] = lTField.getText();
-				log(aPlayerTypes[pPlayerIndex]+ " has new name: " + aPlayerNames[pPlayerIndex]);
-			}
-		});
-		pConstraint.gridx = 2;
-		pConstraint.gridy = 1 + pPlayerIndex;
-		pConstraint.weightx = 0.5;
-		pConstraint.gridheight = 1;
-		pPane.add(lTField, pConstraint);
-	}
-	
 	/**
 	 * @return
 	 */
@@ -266,9 +285,24 @@ public class PlayerMenu
 				lHumans++;
 				if(lHumans > 1)
 				{
+					JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.TooManyHumansError"));
 					return false;
 				}
 			}
+			if(aPlayerNames[i].equals(""))
+			{
+				JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.EmptyNameError"));
+				return false;
+			}
+			for(int j = 0; j < NUM_PLAYERS; j++)
+			{
+				if(j != i && aPlayerNames[j].equals(aPlayerNames[i]))
+				{
+					JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.SameNamesError") + " \""+ aPlayerNames[i] +"\"");
+					return false;
+				}
+			}
+			
 		}
 		return true;
 	}
