@@ -64,8 +64,8 @@ public class GameBoard extends JPanel
 		JPanel contract = new ContractPanel(new Bid(7,Suit.HEARTS));
 //		contract.setLayout(new BoxLayout(contract, BoxLayout.X_AXIS)); //only one element = no alignment
 		contract.setPreferredSize(new Dimension(300,200));
-	//	contract.setBackground(Color.GREEN);
-	//	contract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
+		contract.setBackground(Color.GREEN);
+		contract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
 		
 		JPanel score_NS = new JPanel();
 		score_NS.setBorder(BorderFactory.createTitledBorder("Score North-South Team")); //set title
