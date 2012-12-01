@@ -21,7 +21,7 @@ public class CardListPanel extends JPanel
 	private static final int VERTICAL_OVERLAP = 20;
 	
 	private final CardList aCards;
-	private Rotation aRotation;
+	private final Rotation aRotation;
 	private boolean aIsVisible;
 	
 	/**
@@ -30,7 +30,7 @@ public class CardListPanel extends JPanel
 	 * @param pRotation : Rotation of the list on the display
 	 * @param pVisibility : Whether the card is facing up
 	 */
-	public CardListPanel(CardList pCardList, Rotation pRotation, boolean pVisibility)
+	public CardListPanel(final CardList pCardList, final Rotation pRotation, boolean pVisibility)
 	{
 		super();
 		aCards = pCardList;

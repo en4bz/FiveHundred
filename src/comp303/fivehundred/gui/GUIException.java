@@ -1,5 +1,6 @@
 package comp303.fivehundred.gui;
 
+@SuppressWarnings("serial")
 public class GUIException extends RuntimeException
 {	
 	/**

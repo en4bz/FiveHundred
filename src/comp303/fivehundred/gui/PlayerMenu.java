@@ -1,33 +1,33 @@
 package comp303.fivehundred.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-import javax.management.Notification;
-
 import java.util.ResourceBundle;
 
+import javax.management.Notification;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JCheckBox;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import comp303.fivehundred.player.*;
 import comp303.fivehundred.ai.BasicRobot;
 import comp303.fivehundred.ai.RandomRobot;
+import comp303.fivehundred.player.APlayer;
+import comp303.fivehundred.player.HumanPlayer;
+import comp303.fivehundred.player.Team;
 
 /**
  * 
