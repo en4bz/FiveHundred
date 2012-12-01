@@ -331,7 +331,7 @@ public class GameEngine extends Observable
         	{
         		throw new GameException("Can't play this Card");
         	}
-        
+        	notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.cardPlayed.toString()));
             lTrick.add(aCardPlayed);
         }
         
