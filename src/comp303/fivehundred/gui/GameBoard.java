@@ -81,15 +81,13 @@ public class GameBoard extends JPanel
 		aContract = new ContractPanel(new Bid(7,Suit.HEARTS));//TODO:Fix this
 		aContract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
 		
-		aScore_NS = new JPanel();
+		aScore_NS = new JPanel(new FlowLayout());
 		aScore_NS.setBorder(BorderFactory.createTitledBorder("Score North-South Team")); //set title
-		aScore_NS.setLayout(new BoxLayout(aScore_NS, BoxLayout.X_AXIS)); // only one element 
 		aScore_NS.setPreferredSize(new Dimension(200,200));
 		aScore_NS.setOpaque(false);
 		
-		aScore_EW = new JPanel();
+		aScore_EW = new JPanel(new FlowLayout());
 		aScore_EW.setBorder(BorderFactory.createTitledBorder("Score East-West Team")); //set title
-		aScore_EW.setLayout(new BoxLayout(aScore_EW, BoxLayout.X_AXIS)); // only one element
 		aScore_EW.setPreferredSize(new Dimension(200,200));
 		aScore_EW.setOpaque(false);
 		
@@ -217,7 +215,7 @@ public class GameBoard extends JPanel
 	}
 	
 	public void resetCurrentTrick(){
-	//	aCurrentTrick.removeAll();
+		aCurrentTrick.reset();
 	}
 	
 	public void updateWidow(CardList pWidow){
@@ -288,10 +286,12 @@ public class GameBoard extends JPanel
 	public void resetScores(){
 		aScore_EW.removeAll();
 		aScore_NS.removeAll();
-		JLabel lZero = new JLabel("" + 0);
-		lZero.setFont(new Font("Serif", Font.BOLD, 56));
-		aScore_EW.add(lZero);
-		aScore_NS.add(lZero);
+		JLabel lZero1 = new JLabel("" + 0);
+		lZero1.setFont(new Font("Serif", Font.BOLD, 56));
+		JLabel lZero2 = new JLabel("" + 0);
+		lZero2.setFont(new Font("Serif", Font.BOLD, 56));
+		aScore_EW.add(lZero1);
+		aScore_NS.add(lZero2);
 		
 		aScore_EW.validate();
 		aScore_EW.repaint();
