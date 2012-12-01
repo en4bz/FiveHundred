@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import comp303.fivehundred.gui.external.OverlapLayout;
 import comp303.fivehundred.mvc.Observer;
 import comp303.fivehundred.player.APlayer;
+import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardList;
 
 /**
@@ -68,9 +69,10 @@ public class PlayerArea extends JPanel
 	 * Adds a trick to the trick panel.
 	 */
 	
-	public CardListPanel getHand(){
-		return aHand;
+	public APlayer getPlayer(){
+		return aPlayer;
 	}
+	
 	public void addTrick(){
 		CardLabel lTemp = new CardLabel(null, aRotation, false);
 		lTemp.getIcon();
@@ -86,5 +88,4 @@ public class PlayerArea extends JPanel
 	{
 		aHand.redraw();
 	}
-
 }
