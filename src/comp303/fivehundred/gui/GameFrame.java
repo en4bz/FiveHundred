@@ -124,32 +124,33 @@ public class GameFrame extends JFrame implements Observer
 			}
 		}
 		if(pNotification.getType().equals("game.engine")){
-			State lState = State.valueOf(pNotification.getMessage());
-			switch(lState){
+			switch(State.valueOf(pNotification.getMessage())){
 			case newDeal:	
 				aBoard.updateCardPanels();
-				aBoard.resetTricks();
+				aBoard.resetTricksCount();
+				break;
+			case newTrick:
+				aBoard.resetCurrentTrick();
+				aBoard.updateTrick(((GameEngine)pNotification.getSource()).getCurrentPlayer() ,((GameEngine)pNotification.getSource()).getCardPlayed());
 				break;
 			case cardsDiscarded:
 				aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
-
 				break;
 			case cardPlayed:
 				aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
+				aBoard.updateTrick(((GameEngine)pNotification.getSource()).getCurrentPlayer() ,((GameEngine)pNotification.getSource()).getCardPlayed());
 				break;
 			case newBid:
 				aBoard.updateBid(((GameEngine)pNotification.getSource()).getContract());
+				break;
 			case trickWon:
-				try
-				{
-					aBoard.updateTricks(((GameEngine)pNotification.getSource()).getTrickWinner());
-				}
-				catch (Exception e){System.out.println(e);}
+				aBoard.updateTrickCount(((GameEngine)pNotification.getSource()).getTrickWinner());
+				aBoard.resetCurrentTrick();
+				break;
 			default:
 				break;
 			}
 		}
-
 	}
 	
 	GameEngine getGameEngine() {

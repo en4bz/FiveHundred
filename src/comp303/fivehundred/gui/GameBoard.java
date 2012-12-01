@@ -1,9 +1,11 @@
 package comp303.fivehundred.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -11,8 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.model.Bid;
+import comp303.fivehundred.model.Trick;
 import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.player.Team;
+import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.Card.Suit;
 
 /**
@@ -28,6 +32,7 @@ public class GameBoard extends JPanel
 	
 	final ContractPanel aContract;
 	final JPanel aWidow;
+	final JPanel aCurrentTrick;
 	
 	final PlayerArea aBottomPlayer;
 	final PlayerArea aTopPlayer;
@@ -82,11 +87,10 @@ public class GameBoard extends JPanel
 		score_EW.setPreferredSize(new Dimension(200,200));
 		score_EW.setBackground(Color.GREEN);
 		
-		JPanel game = new JPanel();
-		game.setLayout(new GridBagLayout());
-		game.setPreferredSize(new Dimension(300,200));
-		game.setBackground(Color.GREEN);
-		game.setBorder(BorderFactory.createTitledBorder("Game: 3x3 grid")); //debug
+		aCurrentTrick = new JPanel(new BorderLayout());
+		this.hack();
+		aCurrentTrick.setBackground(Color.GREEN);
+		aCurrentTrick.setBorder(BorderFactory.createTitledBorder("Game: 3x3 grid")); //debug
 		
 		
 		//Set position of each element in board (using coordinates)
@@ -153,7 +157,7 @@ public class GameBoard extends JPanel
 		this.add(aContract,con);
 		//new line
 		this.add(aLeftPlayer,p4);
-		this.add(game,g);
+		this.add(aCurrentTrick,g);
 		this.add(aRightPlayer,p2);
 		//new line
 		this.add(score_EW, s_EW);
@@ -164,22 +168,22 @@ public class GameBoard extends JPanel
 	
 	//"BUILD" METHODS FOR EACH COMPONENT THAT WE USE MORE THAN ONCE
 	
-	public PlayerArea getaBottomPlayer()
+	public PlayerArea getBottomPlayer()
 	{
 		return aBottomPlayer;
 	}
 
-	public PlayerArea getaTopPlayer()
+	public PlayerArea getTopPlayer()
 	{
 		return aTopPlayer;
 	}
 
-	public PlayerArea getaRightPlayer()
+	public PlayerArea getRightPlayer()
 	{
 		return aRightPlayer;
 	}
 
-	public PlayerArea getaLeftPlayer()
+	public PlayerArea getLeftPlayer()
 	{
 		return aLeftPlayer;
 	}
@@ -201,6 +205,30 @@ public class GameBoard extends JPanel
 		JLabel bubble = new JLabel(aString, JLabel.CENTER); //the "bubble" is in the middle of the label.
 		//add a background?
 		return bubble;
+	}
+	
+	public void updateTrick(APlayer pPlayer, Card c){
+		if(aBottomPlayer.getPlayer() == pPlayer && c != null){
+			aCurrentTrick.add(new CardLabel(c,Rotation.ABOUT_CENTER,true), BorderLayout.SOUTH);
+		}
+		else if(aTopPlayer.getPlayer() == pPlayer  && c != null){
+			aCurrentTrick.add(new CardLabel(c,Rotation.ABOUT_CENTER,true), BorderLayout.NORTH);
+		}
+		else if(aLeftPlayer.getPlayer() == pPlayer  && c != null){
+			aCurrentTrick.add(new CardLabel(c,Rotation.ABOUT_CENTER,true), BorderLayout.WEST);
+		}
+		else if(aRightPlayer.getPlayer() == pPlayer  && c != null){
+			aCurrentTrick.add(new CardLabel(c,Rotation.ABOUT_CENTER,true), BorderLayout.EAST);
+		}
+		else{
+			assert pPlayer == null;
+		}
+		aCurrentTrick.validate();
+		aCurrentTrick.repaint();
+	}
+	
+	public void resetCurrentTrick(){
+		aCurrentTrick.removeAll();
 	}
 	
 	public void updateCardPanels(){
@@ -228,7 +256,7 @@ public class GameBoard extends JPanel
 		}
 	}
 
-	public void updateTricks(APlayer pPlayer){
+	public void updateTrickCount(APlayer pPlayer){
 		if(aBottomPlayer.getPlayer() == pPlayer){
 			aBottomPlayer.addTrick();
 		}
@@ -246,7 +274,7 @@ public class GameBoard extends JPanel
 		}
 	}
 	
-	public void resetTricks(){
+	public void resetTricksCount(){
 			aBottomPlayer.clearTricks();
 			aTopPlayer.clearTricks();
 			aLeftPlayer.clearTricks();
@@ -257,5 +285,16 @@ public class GameBoard extends JPanel
 	{
 		aContract.setBid(contract);
 		aContract.redraw();
+	}
+	
+	private void hack(){
+		//TODO:Try not to use this.
+		aCurrentTrick.removeAll();
+		aCurrentTrick.add(new CardLabel(null,Rotation.ABOUT_CENTER,true), BorderLayout.SOUTH);
+		aCurrentTrick.add(new CardLabel(null,Rotation.ABOUT_CENTER,true), BorderLayout.NORTH);
+		aCurrentTrick.add(new CardLabel(null,Rotation.ABOUT_CENTER,true), BorderLayout.WEST);
+		aCurrentTrick.add(new CardLabel(null,Rotation.ABOUT_CENTER,true), BorderLayout.EAST);
+		aCurrentTrick.validate();
+		aCurrentTrick.repaint();
 	}
 }
