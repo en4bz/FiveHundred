@@ -496,7 +496,7 @@ public class GameEngine extends Observable
      * Returns the widow generated after players were dealt cards.
      * @return widow 
      */
-    protected CardList getWidow()
+    public CardList getWidow()
     {
     	return aWidow.clone();
     }
