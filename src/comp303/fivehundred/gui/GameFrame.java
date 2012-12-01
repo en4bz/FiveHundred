@@ -19,6 +19,7 @@ import comp303.fivehundred.engine.GameStatistics;
 import comp303.fivehundred.mvc.Observer;
 import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.player.Team;
+import comp303.fivehundred.util.Card;
 
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements Observer
@@ -133,22 +134,33 @@ public class GameFrame extends JFrame implements Observer
 		if(pNotification.getType().equals("game.engine")){
 			State lState = State.valueOf(pNotification.getMessage());
 			switch(lState){
-			case newDeal:
-				if(aBoard != null){
+			case newDeal:	
 					aBoard.updateCardPanels();
-				}
 				break;
 			case cardsDiscarded:
-				if(aBoard != null){
-					aBoard.updateCardPanels();
-				}
+					try
+					{
+						aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
+					}
+					catch (Exception e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				break;
 			case cardPlayed:
-				if(aBoard != null){
-					aBoard.updateCardPanels();
-				}
+					try
+					{
+						aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
+					}
+					catch (Exception e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				break;
-
+			case newBid:
+				aBoard.updateBid(((GameEngine)pNotification.getSource()).getContract());
 			default:
 				break;
 			}
