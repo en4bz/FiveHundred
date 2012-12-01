@@ -125,13 +125,16 @@ public class GameFrame extends JFrame implements Observer
 		}
 		if(pNotification.getType().equals("game.engine")){
 			switch(State.valueOf(pNotification.getMessage())){
+			case newGame:
+				break;
 			case newDeal:	
 				aBoard.updateCardPanels();
 				aBoard.resetTricksCount();
 				break;
-			case newTrick:
-				aBoard.resetCurrentTrick();
-				aBoard.updateTrick(((GameEngine)pNotification.getSource()).getCurrentPlayer() ,((GameEngine)pNotification.getSource()).getCardPlayed());
+			case newBid:
+				break;
+			case newContract:
+				aBoard.updateBid(((GameEngine)pNotification.getSource()).getContract());
 				break;
 			case cardsDiscarded:
 				aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
@@ -140,13 +143,17 @@ public class GameFrame extends JFrame implements Observer
 				aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
 				aBoard.updateTrick(((GameEngine)pNotification.getSource()).getCurrentPlayer() ,((GameEngine)pNotification.getSource()).getCardPlayed());
 				break;
-			case newBid:
-				aBoard.updateBid(((GameEngine)pNotification.getSource()).getContract());
+			case newTrick:
+				aBoard.resetCurrentTrick();
+				aBoard.updateTrick(((GameEngine)pNotification.getSource()).getCurrentPlayer() ,((GameEngine)pNotification.getSource()).getCardPlayed());
 				break;
 			case trickWon:
 				aBoard.updateTrickCount(((GameEngine)pNotification.getSource()).getTrickWinner());
 				aBoard.resetCurrentTrick();
 				break;
+			case roundEnd:
+				break;
+			case gameOver:
 			default:
 				break;
 			}
