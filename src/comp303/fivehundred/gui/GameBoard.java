@@ -78,9 +78,9 @@ public class GameBoard extends JPanel
 		aLeftPlayer = new PlayerArea(aEWTeam[0], Rotation.RIGHT, false);
 		aLeftPlayer.setBorder(BorderFactory.createTitledBorder("Player4: Tricks won+Hand")); //debug
 		
-		aContract = new ContractPanel(new Bid(7,Suit.HEARTS));//TODO:Fix this
-	
-		aContract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
+		aContract = new ContractPanel();//TODO:Fix this
+
+//		aContract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
 		
 		aScore_NS = new JPanel(new FlowLayout());
 		aScore_NS.setBorder(BorderFactory.createTitledBorder("Score North-South Team")); //set title
@@ -95,7 +95,7 @@ public class GameBoard extends JPanel
 		this.resetScores();
 		
 		aCurrentTrick = new TrickPanel();
-		aCurrentTrick.setBorder(BorderFactory.createTitledBorder("Game: 3x3 grid")); //debug
+	//	aCurrentTrick.setBorder(BorderFactory.createTitledBorder("Game: 3x3 grid")); //debug
 		
 		//Set position of each element in board (using coordinates)
 		
@@ -280,9 +280,8 @@ public class GameBoard extends JPanel
 	
 	public void updateBid(Bid contract)
 	{
-	
+		aContract.setVisible(true);
 		aContract.setBid(contract);
-		aContract.redraw();
 	}
 	
 	public void resetScores(){
