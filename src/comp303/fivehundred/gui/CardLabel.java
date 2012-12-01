@@ -3,6 +3,7 @@ package comp303.fivehundred.gui;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import comp303.fivehundred.gui.external.RotatedIcon;
@@ -41,6 +42,11 @@ public class CardLabel extends JLabel implements MouseListener
 		if(aIsVisible && aCard != null)
 		{
 			this.setIcon(new RotatedIcon(CardImages.getCard(aCard), aRotation));
+		}
+		else if(aIsVisible){
+			String lPath = getClass().getClassLoader().getResource(".").getPath();
+			ImageIcon lIcon = new ImageIcon(lPath + "../src/images/null.png");
+			this.setIcon(lIcon);
 		}
 		else
 		{
