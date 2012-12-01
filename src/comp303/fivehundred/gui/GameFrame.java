@@ -1,25 +1,17 @@
 package comp303.fivehundred.gui;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 import java.awt.FlowLayout;
+import java.util.ResourceBundle;
 
 import javax.management.Notification;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
 
 import comp303.fivehundred.engine.GameEngine;
 import comp303.fivehundred.engine.GameStatistics;
 import comp303.fivehundred.mvc.Observer;
-import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.player.Team;
-import comp303.fivehundred.util.Card;
 
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements Observer
@@ -135,32 +127,24 @@ public class GameFrame extends JFrame implements Observer
 			State lState = State.valueOf(pNotification.getMessage());
 			switch(lState){
 			case newDeal:	
-					aBoard.updateCardPanels();
+				aBoard.updateCardPanels();
+				aBoard.resetTricks();
 				break;
 			case cardsDiscarded:
-					try
-					{
-						aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
-					}
-					catch (Exception e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
+
 				break;
 			case cardPlayed:
-					try
-					{
-						aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
-					}
-					catch (Exception e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
 				break;
 			case newBid:
 				aBoard.updateBid(((GameEngine)pNotification.getSource()).getContract());
+			case trickWon:
+				try
+				{
+					aBoard.updateTricks(((GameEngine)pNotification.getSource()).getTrickWinner());
+				}
+				catch (Exception e){System.out.println(e);}
 			default:
 				break;
 			}

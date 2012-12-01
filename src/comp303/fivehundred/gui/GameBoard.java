@@ -210,24 +210,49 @@ public class GameBoard extends JPanel
 		aLeftPlayer.updatehand();
 	}
 	
-	public void updateCardPanel(APlayer a) throws Exception{
-		if(aBottomPlayer.getPlayer() == a){
+	public void updateCardPanel(APlayer pPlayer){
+		if(aBottomPlayer.getPlayer() == pPlayer){
 			aBottomPlayer.updatehand();
 		}
-		else if(aTopPlayer.getPlayer() == a){
+		else if(aTopPlayer.getPlayer() == pPlayer){
 			aTopPlayer.updatehand();
 		}
-		else if(aLeftPlayer.getPlayer() == a){
+		else if(aLeftPlayer.getPlayer() == pPlayer){
 			aLeftPlayer.updatehand();
 		}
-		else if(aRightPlayer.getPlayer() == a){
+		else if(aRightPlayer.getPlayer() == pPlayer){
 			aRightPlayer.updatehand();
 		}
 		else{
-			throw new Exception("This Shouldn't happen");
+			assert pPlayer == null;
 		}
 	}
 
+	public void updateTricks(APlayer pPlayer){
+		if(aBottomPlayer.getPlayer() == pPlayer){
+			aBottomPlayer.addTrick();
+		}
+		else if(aTopPlayer.getPlayer() == pPlayer){
+			aTopPlayer.addTrick();
+		}
+		else if(aLeftPlayer.getPlayer() == pPlayer){
+			aLeftPlayer.addTrick();
+		}
+		else if(aRightPlayer.getPlayer() == pPlayer){
+			aRightPlayer.addTrick();
+		}
+		else{
+			assert pPlayer == null;
+		}
+	}
+	
+	public void resetTricks(){
+			aBottomPlayer.clearTricks();
+			aTopPlayer.clearTricks();
+			aLeftPlayer.clearTricks();
+			aRightPlayer.clearTricks();
+	}
+	
 	public void updateBid(Bid contract)
 	{
 		aContract.setBid(contract);
