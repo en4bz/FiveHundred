@@ -164,6 +164,26 @@ public class GameBoard extends JPanel
 	
 	//"BUILD" METHODS FOR EACH COMPONENT THAT WE USE MORE THAN ONCE
 	
+	public PlayerArea getaBottomPlayer()
+	{
+		return aBottomPlayer;
+	}
+
+	public PlayerArea getaTopPlayer()
+	{
+		return aTopPlayer;
+	}
+
+	public PlayerArea getaRightPlayer()
+	{
+		return aRightPlayer;
+	}
+
+	public PlayerArea getaLeftPlayer()
+	{
+		return aLeftPlayer;
+	}
+	
 	public JLabel hand (/*arguments?*/)
 	{
 		JLabel aHand = new JLabel(/*icon?*/);
@@ -181,5 +201,12 @@ public class GameBoard extends JPanel
 		JLabel bubble = new JLabel(aString, JLabel.CENTER); //the "bubble" is in the middle of the label.
 		//add a background?
 		return bubble;
+	}
+	
+	public void updateCardPanels(){
+		aBottomPlayer.updatehand();
+		aTopPlayer.updatehand();
+		aRightPlayer.updatehand();
+		aLeftPlayer.updatehand();
 	}
 }

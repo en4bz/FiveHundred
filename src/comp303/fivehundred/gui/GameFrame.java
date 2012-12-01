@@ -15,7 +15,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.engine.GameEngine;
+import comp303.fivehundred.engine.GameStatistics;
 import comp303.fivehundred.mvc.Observer;
+import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.player.Team;
 
 @SuppressWarnings("serial")
@@ -24,7 +26,7 @@ public class GameFrame extends JFrame implements Observer
 	public static Color BACKGROUND_COLOR = new Color(40, 160, 20);
 	private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("comp303.fivehundred.gui.MessageBundle");
 	private long aNotificationSequenceNumber = 0;
-	private GameEngine aEngine;
+	private static GameEngine aEngine;
 	private PlayerMenu aPlayerMenu;
 	private GameBoard aBoard;
 	public static int WIDTH = 900;
@@ -57,8 +59,40 @@ public class GameFrame extends JFrame implements Observer
 	
 	public static void main(String[] args)
 	{
-		new GameFrame();
+		GameFrame a = new GameFrame();
+		try
+		{
+			Thread.sleep(5000);
+		}
+		catch (InterruptedException e){}
 		
+		GameStatistics lGameStats = new GameStatistics();
+		aEngine.addObserver(lGameStats);
+		aEngine.addObserver(a);
+		// TO TURN LOGGING ON UNCOMMENT THIS LINE
+		// lEngine.addObserver(new GameLogger());
+		
+		for(int i = 0; i < 10; i++)
+		{
+			aEngine.newGame();
+			while(!aEngine.isGameOver())
+			{
+				do
+				{
+					aEngine.deal();
+					aEngine.bid();
+				} while (aEngine.allPasses());
+				aEngine.exchange();
+				aEngine.playRound();
+				try
+				{
+					Thread.sleep(500);
+				}
+				catch (InterruptedException e){}
+				aEngine.computeScore();
+			}
+		}
+		lGameStats.printStatistics();
 	}
 
 	@Override
@@ -73,28 +107,53 @@ public class GameFrame extends JFrame implements Observer
 					Team[] lTeams = aPlayerMenu.getTeams();
 					System.out.println(lTeams[0]);
 					System.out.println(lTeams[1]);
-					aEngine = new GameEngine(lTeams[0], lTeams[1]);
-					aEngine.deal();
+					aEngine = new GameEngine(lTeams[0], lTeams[1]); //Shouldn't make new game engine every time
+										aEngine.deal();
 					aPracticeModeOn = aPlayerMenu.isPracticeModeOn();
 					this.remove(aPlayerMenu);
 					aBoard = new GameBoard(lTeams); 
+
 					this.add(aBoard);
 					this.pack();
 					
 //					JPanel contentPane = (JPanel) getContentPane();
 //					contentPane.removeAll();
-//					setTitle("Five Hundred");
 //					this.getContentPane().invalidate(); 
 //					this.getContentPane().repaint();
 					break;
 				case newDeal:
-					// TODO redraw handpanels Hand.update(
+					
 					break;
 				
 				default:
+					
 					break;
 			}
 		}
+		if(pNotification.getType().equals("game.engine")){
+			State lState = State.valueOf(pNotification.getMessage());
+			switch(lState){
+			case newDeal:
+				if(aBoard != null){
+					aBoard.updateCardPanels();
+				}
+				break;
+			case cardsDiscarded:
+				if(aBoard != null){
+					aBoard.updateCardPanels();
+				}
+				break;
+			case cardPlayed:
+				if(aBoard != null){
+					aBoard.updateCardPanels();
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+
 	}
 	
 	GameEngine getGameEngine() {
