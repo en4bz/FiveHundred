@@ -42,32 +42,22 @@ public class GameBoard extends JPanel
 		widow.setBorder(BorderFactory.createTitledBorder("Widow")); //debug
 		
 		JPanel lTopPlayer = new PlayerArea(lTeam1[0], Rotation.UPSIDE_DOWN, false);
-	//	lTopPlayer.setLayout(new BoxLayout(lTopPlayer, BoxLayout.Y_AXIS)); //Tricks+Hand one over the other
-		lTopPlayer.setPreferredSize(new Dimension(300,200));
 		lTopPlayer.setBackground(Color.GREEN);
 		lTopPlayer.setBorder(BorderFactory.createTitledBorder("Player1: Tricks won+Hand")); //debug
 		
 		JPanel lRightPlayer = new PlayerArea(lTeam2[1], Rotation.RIGHT, false);
-//		lRightPlayer.setLayout(new BoxLayout(lRightPlayer, BoxLayout.X_AXIS)); //Tricks+Hand next to each other
-		lRightPlayer.setPreferredSize(new Dimension(300,200));
 		lRightPlayer.setBackground(Color.GREEN);
 		lRightPlayer.setBorder(BorderFactory.createTitledBorder("Player 2: Tricks won+Hand")); //debug
 		
 		JPanel lBottomPlayer = new PlayerArea(lTeam1[1], Rotation.ABOUT_CENTER, false);
-//		lBottomPlayer.setLayout(new BoxLayout(lBottomPlayer, BoxLayout.Y_AXIS)); //Tricks+Hand one over the other
-		lBottomPlayer.setPreferredSize(new Dimension(300,200));
 		lBottomPlayer.setBackground(Color.GREEN);
 		lBottomPlayer.setBorder(BorderFactory.createTitledBorder("Player 3: Tricks won+Hand")); //debug
 		
 		JPanel lLeftPlayer = new PlayerArea(lTeam2[0], Rotation.LEFT, false);
-//		lLeftPlayer.setLayout(new BoxLayout(lLeftPlayer, BoxLayout.X_AXIS)); //Tricks+Hand next to each other
-		lLeftPlayer.setPreferredSize(new Dimension(300,200));
 		lLeftPlayer.setBackground(Color.GREEN);
 		lLeftPlayer.setBorder(BorderFactory.createTitledBorder("Player4: Tricks won+Hand")); //debug
 		
 		JPanel contract = new ContractPanel(new Bid(7,Suit.HEARTS));
-//		contract.setLayout(new BoxLayout(contract, BoxLayout.X_AXIS)); //only one element = no alignment
-		contract.setPreferredSize(new Dimension(300,200));
 		contract.setBackground(Color.GREEN);
 		contract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
 		

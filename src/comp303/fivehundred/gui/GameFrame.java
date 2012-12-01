@@ -58,6 +58,7 @@ public class GameFrame extends JFrame implements Observer
 	public static void main(String[] args)
 	{
 		new GameFrame();
+		
 	}
 
 	@Override
@@ -73,9 +74,10 @@ public class GameFrame extends JFrame implements Observer
 					System.out.println(lTeams[0]);
 					System.out.println(lTeams[1]);
 					aEngine = new GameEngine(lTeams[0], lTeams[1]);
+					aEngine.deal();
 					aPracticeModeOn = aPlayerMenu.isPracticeModeOn();
 					this.remove(aPlayerMenu);
-					aBoard = new GameBoard(); // TODO pass frame
+					aBoard = new GameBoard(lTeams); 
 					this.add(aBoard);
 					this.pack();
 					
