@@ -66,7 +66,7 @@ public class GameBoard extends JPanel
 		aLeftPlayer.setBackground(Color.GREEN);
 		aLeftPlayer.setBorder(BorderFactory.createTitledBorder("Player4: Tricks won+Hand")); //debug
 		
-		aContract = new ContractPanel(new Bid(7,Suit.HEARTS));
+		aContract = new ContractPanel(new Bid(7,Suit.HEARTS));//TODO:Fix this
 		aContract.setBackground(Color.GREEN);
 		aContract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
 		
@@ -208,5 +208,29 @@ public class GameBoard extends JPanel
 		aTopPlayer.updatehand();
 		aRightPlayer.updatehand();
 		aLeftPlayer.updatehand();
+	}
+	
+	public void updateCardPanel(APlayer a) throws Exception{
+		if(aBottomPlayer.getPlayer() == a){
+			aBottomPlayer.updatehand();
+		}
+		else if(aTopPlayer.getPlayer() == a){
+			aTopPlayer.updatehand();
+		}
+		else if(aLeftPlayer.getPlayer() == a){
+			aLeftPlayer.updatehand();
+		}
+		else if(aRightPlayer.getPlayer() == a){
+			aRightPlayer.updatehand();
+		}
+		else{
+			throw new Exception("This Shouldn't happen");
+		}
+	}
+
+	public void updateBid(Bid contract)
+	{
+		aContract.setBid(contract);
+		aContract.redraw();
 	}
 }
