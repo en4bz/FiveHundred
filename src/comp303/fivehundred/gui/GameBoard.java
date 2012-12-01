@@ -6,9 +6,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -150,6 +153,24 @@ public class GameBoard extends JPanel
 		g.gridy = 1;
 		g.fill = GridBagConstraints.BOTH;
 		g.fill = GridBagConstraints.CENTER;
+		
+		//add a button to submit a trick
+		JPanel submission = new JPanel();
+		submission.setBorder(BorderFactory.createTitledBorder("Submit the trick"));
+
+		JButton submit = new JButton("submit");
+		submit.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				//Submit new info
+			}
+		});
+		
+		submission.add(submit);
+		///////////////////////////
+		
 		
 		//add JPanels to the board
 		this.add(aWidow,w);
