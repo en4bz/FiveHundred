@@ -478,7 +478,7 @@ public class GameEngine extends Observable
      * Returns the trick winner.
      * @return the trick winner.
      */
-    protected APlayer getTrickWinner()
+    public APlayer getTrickWinner()
     {
     	return aTrickWinner;
     }
