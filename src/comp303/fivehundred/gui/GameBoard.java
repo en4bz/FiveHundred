@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.model.Bid;
-import comp303.fivehundred.model.Trick;
 import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.player.Team;
 import comp303.fivehundred.util.Card;
@@ -55,27 +53,22 @@ public class GameBoard extends JPanel
 		aWidow = new JPanel ();
 		aWidow.setLayout(new BoxLayout(aWidow, BoxLayout.LINE_AXIS));
 		aWidow.setPreferredSize(new Dimension(300,200));
-		aWidow.setBackground(Color.GREEN);
+		aWidow.setOpaque(false);
 		aWidow.setBorder(BorderFactory.createTitledBorder("Widow")); //debug
 		
 		aTopPlayer = new PlayerArea(aTeam1[0], Rotation.UPSIDE_DOWN, false);
-		aTopPlayer.setBackground(Color.GREEN);
 		aTopPlayer.setBorder(BorderFactory.createTitledBorder("Player1: Tricks won+Hand")); //debug
 		
 		aRightPlayer = new PlayerArea(aTeam2[1], Rotation.LEFT, false);
-		aRightPlayer.setBackground(Color.GREEN);
 		aRightPlayer.setBorder(BorderFactory.createTitledBorder("Player 2: Tricks won+Hand")); //debug
 		
 		aBottomPlayer = new PlayerArea(aTeam1[1], Rotation.ABOUT_CENTER, true);
-		aBottomPlayer.setBackground(Color.GREEN);
 		aBottomPlayer.setBorder(BorderFactory.createTitledBorder("Player 3: Tricks won+Hand")); //debug
 		
 		aLeftPlayer = new PlayerArea(aTeam2[0], Rotation.RIGHT, false);
-		aLeftPlayer.setBackground(Color.GREEN);
 		aLeftPlayer.setBorder(BorderFactory.createTitledBorder("Player4: Tricks won+Hand")); //debug
 		
 		aContract = new ContractPanel(new Bid(7,Suit.HEARTS));//TODO:Fix this
-		aContract.setBackground(Color.GREEN);
 		aContract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
 		
 		JPanel score_NS = new JPanel();
@@ -92,7 +85,7 @@ public class GameBoard extends JPanel
 		
 		aCurrentTrick = new JPanel(new BorderLayout());
 		this.hack();
-		aCurrentTrick.setBackground(Color.GREEN);
+		aCurrentTrick.setOpaque(false);
 		aCurrentTrick.setBorder(BorderFactory.createTitledBorder("Game: 3x3 grid")); //debug
 		
 		

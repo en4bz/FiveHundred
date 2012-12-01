@@ -17,6 +17,7 @@ public class ContractPanel extends JPanel
 	ContractPanel(Bid pBid){
 		super(new FlowLayout());
 		this.aBid = pBid;
+		this.setOpaque(false);
 		this.redraw();
 	}
 	
