@@ -6,6 +6,7 @@ import java.awt.Point;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.gui.external.OverlapLayout;
+import comp303.fivehundred.mvc.Observer;
 import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.util.CardList;
 
@@ -22,13 +23,13 @@ public class PlayerArea extends JPanel
 	private boolean aIsVisible;
 	
 	private final APlayer aPlayer;
-	private CardListPanel aHand;
+	private final CardListPanel aHand;
 	private JPanel aTricksWon;
 	
 	public PlayerArea(final APlayer pPlayer, Rotation pRotation, boolean pVisibility){
 		super(new BorderLayout());
 		aPlayer = pPlayer;
-		aHand = new CardListPanel(aPlayer.getHand(), pRotation, pVisibility);
+		aHand = new CardListPanel(aPlayer.getHandRef(), pRotation, pVisibility);
 		aRotation = pRotation;
 		aIsVisible = pVisibility;
 		
@@ -66,6 +67,10 @@ public class PlayerArea extends JPanel
 	/**
 	 * Adds a trick to the trick panel.
 	 */
+	
+	public CardListPanel getHand(){
+		return aHand;
+	}
 	public void addTrick(){
 		CardLabel lTemp = new CardLabel(null, aRotation, false);
 		lTemp.getIcon();
@@ -76,4 +81,10 @@ public class PlayerArea extends JPanel
 	{
 		aHand.setVisibility(pVisibility);
 	}
+
+	public void updatehand()
+	{
+		aHand.redraw();
+	}
+
 }
