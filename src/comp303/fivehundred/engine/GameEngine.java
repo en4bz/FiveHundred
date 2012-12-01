@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import comp303.fivehundred.mvc.Observable;
 import javax.management.Notification;
 
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.model.Trick;
+import comp303.fivehundred.mvc.Observable;
 import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.player.Team;
 import comp303.fivehundred.util.Card;
@@ -333,7 +333,6 @@ public class GameEngine extends Observable
         	}
         
             lTrick.add(aCardPlayed);
-            notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.cardPlayed.toString()));
         }
         
         // update tricks won
@@ -470,7 +469,7 @@ public class GameEngine extends Observable
      * Returns current player in a trick context. Mutable.
      * @return current player in trick
      */
-    protected APlayer getCurrentPlayer()
+    public APlayer getCurrentPlayer()
     {
     	return aCurrentPlayer;
     }
@@ -516,7 +515,7 @@ public class GameEngine extends Observable
      * Returns the game contract.
      * @return the game contract. If there's no contract, returns null.
      */
-    protected Bid getContract()
+    public Bid getContract()
     {
     	return aContract;
     }
@@ -525,7 +524,7 @@ public class GameEngine extends Observable
      * Returns the card played in a trick context. Out of a trick, returns irrelevant information.
      * @return card played in trick context by current player
      */
-    protected Card getCardPlayed()
+    public Card getCardPlayed()
     {
     	return aCardPlayed;
     }
