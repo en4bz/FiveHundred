@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -291,8 +292,10 @@ public class GameBoard extends JPanel
 	public void resetScores(){
 		aScore_EW.removeAll();
 		aScore_NS.removeAll();
-		aScore_EW.add(new JLabel("" + 0));
-		aScore_NS.add(new JLabel("" + 0));
+		JLabel lZero = new JLabel("" + 0);
+		lZero.setFont(new Font("Serif", Font.BOLD, 56));
+		aScore_EW.add(lZero);
+		aScore_NS.add(lZero);
 		
 		aScore_EW.validate();
 		aScore_EW.repaint();
@@ -305,9 +308,12 @@ public class GameBoard extends JPanel
 
 		aScore_EW.removeAll();
 		aScore_NS.removeAll();
-		
-		aScore_EW.add(new JLabel("" + aTeams[1].getScore()));
-		aScore_NS.add(new JLabel("" + aTeams[0].getScore()));
+		JLabel lScore1 = new JLabel("" + aTeams[1].getScore());
+		JLabel lScore2 = new JLabel("" + aTeams[0].getScore());
+		lScore1.setFont(new Font("Serif", Font.BOLD, 56));
+		lScore2.setFont(new Font("Serif", Font.BOLD, 56));
+		aScore_EW.add(lScore2);
+		aScore_NS.add(lScore1);
 		
 		aScore_EW.validate();
 		aScore_EW.repaint();
