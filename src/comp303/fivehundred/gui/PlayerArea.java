@@ -60,6 +60,8 @@ public class PlayerArea extends JPanel
 			this.add(aTricksWon, BorderLayout.SOUTH);
 			((BorderLayout) this.getLayout()).setVgap(GAP);
 		}
+		aTricksWon.setOpaque(false);
+		this.setOpaque(false);
 	}
 	
 	/**
