@@ -192,38 +192,6 @@ public class GameBoard extends JPanel
 	
 	//"BUILD" METHODS FOR EACH COMPONENT THAT WE USE MORE THAN ONCE
 	
-	public PlayerArea getBottomPlayer()
-	{
-		return aBottomPlayer;
-	}
-
-	public PlayerArea getTopPlayer()
-	{
-		return aTopPlayer;
-	}
-
-	public PlayerArea getRightPlayer()
-	{
-		return aRightPlayer;
-	}
-
-	public PlayerArea getLeftPlayer()
-	{
-		return aLeftPlayer;
-	}
-	
-	public JLabel hand (/*arguments?*/)
-	{
-		JLabel aHand = new JLabel(/*icon?*/);
-		return aHand;
-	}
-	
-	public JLabel tricksWon(/*arguments?*/)
-	{
-		JLabel aTrick = new JLabel(/*icon?*/);
-		return aTrick;
-	}
-	
 	public JLabel textBubble (String aString) //get aString from an observer?
 	{
 		JLabel bubble = new JLabel(aString, JLabel.CENTER); //the "bubble" is in the middle of the label.
