@@ -3,11 +3,16 @@ package comp303.fivehundred.gui;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.util.Card;
 
+/**
+ * Panel that displays a trick
+ * @author Ian Forbes
+ *
+ */
+@SuppressWarnings("serial")
 public class TrickPanel extends JPanel
 {
 	private Card aNorth;
@@ -19,7 +24,9 @@ public class TrickPanel extends JPanel
 	
 	public TrickPanel(){
 		super(new FlowLayout());
-		aNorthSouth = new JPanel(new GridLayout(2,1));
+		aNorthSouth = new JPanel(new GridLayout(2,1,0,5));
+		aNorthSouth.setOpaque(false);
+		this.setOpaque(false);
 		this.redraw();
 	}
 	
