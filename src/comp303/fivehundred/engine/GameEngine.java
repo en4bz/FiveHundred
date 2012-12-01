@@ -451,10 +451,9 @@ public class GameEngine extends Observable
      * Returns the participating teams. Mutable.
      * @return the participating teams in the game
      */
-    protected Team[] getTeams()
+    public Team[] getTeams()
     {
-    	Team[] lTeams = {aTeam1, aTeam2};
-    	return lTeams;
+    	return new Team[]{aTeam1, aTeam2};
     }
     /**
      * Returns the current dealer.
