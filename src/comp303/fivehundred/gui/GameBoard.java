@@ -96,9 +96,7 @@ public class GameBoard extends JPanel
 		this.resetScores();
 		
 		aCurrentTrick = new TrickPanel();
-		aCurrentTrick.setOpaque(false);
 		aCurrentTrick.setBorder(BorderFactory.createTitledBorder("Game: 3x3 grid")); //debug
-	//	this.hack();
 		
 		//Set position of each element in board (using coordinates)
 		
@@ -318,16 +316,5 @@ public class GameBoard extends JPanel
 		
 		aScore_NS.validate();
 		aScore_NS.repaint();
-	}
-	
-	private void hack(){
-		//TODO:Try not to use this.
-		aCurrentTrick.removeAll();
-		aCurrentTrick.add(new CardLabel(null,Rotation.ABOUT_CENTER,true), BorderLayout.SOUTH);
-		aCurrentTrick.add(new CardLabel(null,Rotation.ABOUT_CENTER,true), BorderLayout.NORTH);
-		aCurrentTrick.add(new CardLabel(null,Rotation.ABOUT_CENTER,true), BorderLayout.WEST);
-		aCurrentTrick.add(new CardLabel(null,Rotation.ABOUT_CENTER,true), BorderLayout.EAST);
-		aCurrentTrick.validate();
-		aCurrentTrick.repaint();
 	}
 }
