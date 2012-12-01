@@ -155,7 +155,7 @@ public class GameFrame extends JFrame implements Observer
 				aBoard.resetCurrentTrick();
 				break;
 			case roundEnd:
-				aBoard.updateScores(lEngine.getTeams());
+				aBoard.updateScores();
 				break;
 			case gameOver:
 			default:

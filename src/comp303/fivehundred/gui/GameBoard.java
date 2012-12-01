@@ -31,6 +31,8 @@ import comp303.fivehundred.util.CardList;
 @SuppressWarnings("serial")
 public class GameBoard extends JPanel
 {
+	final Team[] aTeams;
+	
 	final APlayer[] aTeam1;
 	final APlayer[] aTeam2;
 	
@@ -50,7 +52,7 @@ public class GameBoard extends JPanel
 	{
 		super(new GridBagLayout());
 		this.setBackground(Color.GREEN);
-		
+		aTeams = pPlayer;
 		aTeam1 = pPlayer[0].getPlayers();
 		aTeam2 = pPlayer[1].getPlayers();
 		
@@ -93,10 +95,9 @@ public class GameBoard extends JPanel
 		this.resetScores();
 		
 		aCurrentTrick = new JPanel(new BorderLayout());
-		this.hack();
 		aCurrentTrick.setOpaque(false);
 		aCurrentTrick.setBorder(BorderFactory.createTitledBorder("Game: 3x3 grid")); //debug
-		
+		this.hack();
 		
 		//Set position of each element in board (using coordinates)
 		
@@ -332,15 +333,13 @@ public class GameBoard extends JPanel
 		aScore_NS.repaint();
 	}
 	
-	public void updateScores(Team[] pTeams){
-		//TODO: Check Orientation is correct;
-		int teamOne = pTeams[0].getScore();
-		int teamTwo = pTeams[1].getScore();
+	public void updateScores(){
+
 		aScore_EW.removeAll();
 		aScore_NS.removeAll();
 		
-		aScore_EW.add(new JLabel("" + teamOne));
-		aScore_NS.add(new JLabel("" + teamTwo));
+		aScore_EW.add(new JLabel("" + aTeams[0].getScore()));
+		aScore_NS.add(new JLabel("" + aTeams[1].getScore()));
 		
 		aScore_EW.validate();
 		aScore_EW.repaint();
