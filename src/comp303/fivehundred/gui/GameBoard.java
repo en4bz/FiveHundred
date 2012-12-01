@@ -33,8 +33,8 @@ public class GameBoard extends JPanel
 {
 	final Team[] aTeams;
 	
-	final APlayer[] aTeam1;
-	final APlayer[] aTeam2;
+	final APlayer[] aNSTeam;
+	final APlayer[] aEWTeam;
 	
 	final ContractPanel aContract;
 	final JPanel aWidow;
@@ -53,8 +53,8 @@ public class GameBoard extends JPanel
 		super(new GridBagLayout());
 		this.setBackground(Color.GREEN);
 		aTeams = pPlayer;
-		aTeam1 = pPlayer[0].getPlayers();
-		aTeam2 = pPlayer[1].getPlayers();
+		aNSTeam = pPlayer[0].getPlayers();
+		aEWTeam = pPlayer[1].getPlayers();
 		
 		//Sub-Panels of game board
 		
@@ -65,16 +65,16 @@ public class GameBoard extends JPanel
 		}
 		aWidow.setBorder(BorderFactory.createTitledBorder("Widow")); //debug
 		
-		aTopPlayer = new PlayerArea(aTeam1[0], Rotation.UPSIDE_DOWN, false);
+		aTopPlayer = new PlayerArea(aNSTeam[0], Rotation.UPSIDE_DOWN, false);
 		aTopPlayer.setBorder(BorderFactory.createTitledBorder("Player1: Tricks won+Hand")); //debug
 		
-		aRightPlayer = new PlayerArea(aTeam2[1], Rotation.LEFT, false);
+		aRightPlayer = new PlayerArea(aEWTeam[1], Rotation.LEFT, false);
 		aRightPlayer.setBorder(BorderFactory.createTitledBorder("Player 2: Tricks won+Hand")); //debug
 		
-		aBottomPlayer = new PlayerArea(aTeam1[1], Rotation.ABOUT_CENTER, true);
+		aBottomPlayer = new PlayerArea(aNSTeam[1], Rotation.ABOUT_CENTER, true);
 		aBottomPlayer.setBorder(BorderFactory.createTitledBorder("Player 3: Tricks won+Hand")); //debug
 		
-		aLeftPlayer = new PlayerArea(aTeam2[0], Rotation.RIGHT, false);
+		aLeftPlayer = new PlayerArea(aEWTeam[0], Rotation.RIGHT, false);
 		aLeftPlayer.setBorder(BorderFactory.createTitledBorder("Player4: Tricks won+Hand")); //debug
 		
 		aContract = new ContractPanel(new Bid(7,Suit.HEARTS));//TODO:Fix this
@@ -338,8 +338,8 @@ public class GameBoard extends JPanel
 		aScore_EW.removeAll();
 		aScore_NS.removeAll();
 		
-		aScore_EW.add(new JLabel("" + aTeams[0].getScore()));
-		aScore_NS.add(new JLabel("" + aTeams[1].getScore()));
+		aScore_EW.add(new JLabel("" + aTeams[1].getScore()));
+		aScore_NS.add(new JLabel("" + aTeams[0].getScore()));
 		
 		aScore_EW.validate();
 		aScore_EW.repaint();
