@@ -3,11 +3,9 @@ package comp303.fivehundred.gui;
 import java.awt.Component;
 import java.awt.Point;
 
-import javax.management.Notification;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.gui.external.OverlapLayout;
-import comp303.fivehundred.mvc.Observer;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardList;
 
@@ -53,12 +51,12 @@ public class CardListPanel extends JPanel
 	protected void redraw()
 	{
 		this.removeAll();
-		System.out.println(aCards.toString());
 		for(Card c : aCards)
 		{
 			this.add(new CardLabel(c,aRotation, aIsVisible));
 		}
 		this.validate();
+		this.repaint();
 	}
 	
 	public void setVisibility(boolean pVisibility)
