@@ -124,35 +124,38 @@ public class GameFrame extends JFrame implements Observer
 			}
 		}
 		if(pNotification.getType().equals("game.engine")){
+			GameEngine lEngine = (GameEngine) (pNotification.getSource());
 			switch(State.valueOf(pNotification.getMessage())){
 			case newGame:
+				aBoard.resetScores();
 				break;
 			case newDeal:	
 				aBoard.updateCardPanels();
 				aBoard.resetTricksCount();
-				aBoard.updateWidow(((GameEngine)pNotification.getSource()).getWidow());
+				aBoard.updateWidow(lEngine.getWidow());
 				break;
 			case newBid:
 				break;
 			case newContract:
-				aBoard.updateBid(((GameEngine)pNotification.getSource()).getContract());
+				aBoard.updateBid(lEngine.getContract());
 				break;
 			case cardsDiscarded:
-				aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
+				aBoard.updateCardPanel(lEngine.getCurrentPlayer());
 				break;
 			case cardPlayed:
-				aBoard.updateCardPanel(((GameEngine)pNotification.getSource()).getCurrentPlayer());
-				aBoard.updateTrick(((GameEngine)pNotification.getSource()).getCurrentPlayer() ,((GameEngine)pNotification.getSource()).getCardPlayed());
+				aBoard.updateCardPanel(lEngine.getCurrentPlayer());
+				aBoard.updateTrick(lEngine.getCurrentPlayer() ,((GameEngine)pNotification.getSource()).getCardPlayed());
 				break;
 			case newTrick:
 				aBoard.resetCurrentTrick();
-				aBoard.updateTrick(((GameEngine)pNotification.getSource()).getCurrentPlayer() ,((GameEngine)pNotification.getSource()).getCardPlayed());
+				aBoard.updateTrick(lEngine.getCurrentPlayer() ,((GameEngine)pNotification.getSource()).getCardPlayed());
 				break;
 			case trickWon:
-				aBoard.updateTrickCount(((GameEngine)pNotification.getSource()).getTrickWinner());
+				aBoard.updateTrickCount(lEngine.getTrickWinner());
 				aBoard.resetCurrentTrick();
 				break;
 			case roundEnd:
+				aBoard.updateScores(lEngine.getTeams());
 				break;
 			case gameOver:
 			default:

@@ -38,6 +38,9 @@ public class GameBoard extends JPanel
 	final JPanel aWidow;
 	final JPanel aCurrentTrick;
 	
+	final JPanel aScore_NS;
+	final JPanel aScore_EW;
+	
 	final PlayerArea aBottomPlayer;
 	final PlayerArea aTopPlayer;
 	final PlayerArea aRightPlayer;
@@ -75,17 +78,19 @@ public class GameBoard extends JPanel
 		aContract = new ContractPanel(new Bid(7,Suit.HEARTS));//TODO:Fix this
 		aContract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
 		
-		JPanel score_NS = new JPanel();
-		score_NS.setBorder(BorderFactory.createTitledBorder("Score North-South Team")); //set title
-		score_NS.setLayout(new BoxLayout(score_NS, BoxLayout.X_AXIS)); // only one element 
-		score_NS.setPreferredSize(new Dimension(200,200));
-		score_NS.setBackground(Color.GREEN);
+		aScore_NS = new JPanel();
+		aScore_NS.setBorder(BorderFactory.createTitledBorder("Score North-South Team")); //set title
+		aScore_NS.setLayout(new BoxLayout(aScore_NS, BoxLayout.X_AXIS)); // only one element 
+		aScore_NS.setPreferredSize(new Dimension(200,200));
+		aScore_NS.setOpaque(false);
 		
-		JPanel score_EW = new JPanel();
-		score_EW.setBorder(BorderFactory.createTitledBorder("Score East-West Team")); //set title
-		score_EW.setLayout(new BoxLayout(score_EW, BoxLayout.X_AXIS)); // only one element
-		score_EW.setPreferredSize(new Dimension(200,200));
-		score_EW.setBackground(Color.GREEN);
+		aScore_EW = new JPanel();
+		aScore_EW.setBorder(BorderFactory.createTitledBorder("Score East-West Team")); //set title
+		aScore_EW.setLayout(new BoxLayout(aScore_EW, BoxLayout.X_AXIS)); // only one element
+		aScore_EW.setPreferredSize(new Dimension(200,200));
+		aScore_EW.setOpaque(false);
+		
+		this.resetScores();
 		
 		aCurrentTrick = new JPanel(new BorderLayout());
 		this.hack();
@@ -178,9 +183,9 @@ public class GameBoard extends JPanel
 		this.add(aCurrentTrick,g);
 		this.add(aRightPlayer,p2);
 		//new line
-		this.add(score_EW, s_EW);
+		this.add(aScore_EW, s_EW);
 		this.add(aBottomPlayer, p3);
-		this.add(score_NS,s_NS);
+		this.add(aScore_NS,s_NS);
 		//end
 	}
 	
@@ -312,6 +317,36 @@ public class GameBoard extends JPanel
 	{
 		aContract.setBid(contract);
 		aContract.redraw();
+	}
+	
+	public void resetScores(){
+		aScore_EW.removeAll();
+		aScore_NS.removeAll();
+		aScore_EW.add(new JLabel("" + 0));
+		aScore_NS.add(new JLabel("" + 0));
+		
+		aScore_EW.validate();
+		aScore_EW.repaint();
+		
+		aScore_NS.validate();
+		aScore_NS.repaint();
+	}
+	
+	public void updateScores(Team[] pTeams){
+		//TODO: Check Orientation is correct;
+		int teamOne = pTeams[0].getScore();
+		int teamTwo = pTeams[1].getScore();
+		aScore_EW.removeAll();
+		aScore_NS.removeAll();
+		
+		aScore_EW.add(new JLabel("" + teamOne));
+		aScore_NS.add(new JLabel("" + teamTwo));
+		
+		aScore_EW.validate();
+		aScore_EW.repaint();
+		
+		aScore_NS.validate();
+		aScore_NS.repaint();
 	}
 	
 	private void hack(){
