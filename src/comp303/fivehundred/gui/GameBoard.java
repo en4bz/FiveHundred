@@ -79,6 +79,9 @@ public class GameBoard extends JPanel
 		aLeftPlayer.setBorder(BorderFactory.createTitledBorder("Player4: Tricks won+Hand")); //debug
 		
 		aContract = new ContractPanel(new Bid(7,Suit.HEARTS));//TODO:Fix this
+		aContract.setVisible(false);
+		aContract.validate();
+		aContract.repaint();
 		aContract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
 		
 		aScore_NS = new JPanel(new FlowLayout());
@@ -279,6 +282,7 @@ public class GameBoard extends JPanel
 	
 	public void updateBid(Bid contract)
 	{
+		aContract.setVisible(true);
 		aContract.setBid(contract);
 		aContract.redraw();
 	}
