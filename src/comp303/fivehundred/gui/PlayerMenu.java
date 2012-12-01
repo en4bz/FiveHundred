@@ -19,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,30 +75,48 @@ public class PlayerMenu extends JPanel
 	public PlayerMenu(GameFrame pFrame)
 	{
 		aFrame = pFrame;
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-//		setPreferredSize(new Dimension(GameFrame.WIDTH, GameFrame.HEIGHT));	
+		setLayout(new BorderLayout());
+		setMinimumSize(new Dimension(GameFrame.WIDTH, GameFrame.HEIGHT));
+		setPreferredSize(new Dimension(GameFrame.WIDTH, GameFrame.HEIGHT));	
 		// TODO wonder if I shouldn't just go ahead and create a smaller wrapper panel.
-//		setMaximumSize(new Dimension(MAX_WIDTH, MAX_HEIGHT));
+		setMaximumSize(new Dimension(GameFrame.WIDTH, GameFrame.HEIGHT));
 		
-		buildSelectTeamBox();
-		buildPracticeCheckBox();
-		buildPlayButton();
+		JPanel lWrapper = new JPanel();
+		lWrapper.setLayout(new BoxLayout(lWrapper, BoxLayout.Y_AXIS));
+//		lWrapper.setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
+//		lWrapper.setPreferredSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
+//		lWrapper.setMaximumSize(new Dimension(MAX_WIDTH, MAX_HEIGHT));
+		int lTopPadding = (int) (GameFrame.HEIGHT * 0.3); 
+		System.out.println(lTopPadding);
+		lWrapper.setBorder(new EmptyBorder( (int) (GameFrame.HEIGHT * 0.2),
+											(int) (GameFrame.WIDTH * 0.2),
+											(int) (GameFrame.HEIGHT * 0.2),
+											(int) (GameFrame.WIDTH * 0.2)));
+		
+		add(lWrapper, BorderLayout.CENTER);
+		
+		buildSelectTeamBox(lWrapper);
+		buildPracticeCheckBox(lWrapper);
+		buildPlayButton(lWrapper);
 		
 
 	}
 
-	private void buildSelectTeamBox()
+	private void buildSelectTeamBox(JPanel lWrapper)
 	{
 		log("Build select team box.");
 		JPanel teamBox = new JPanel();
+		double ratio = 1;
 		teamBox.setLayout(new BoxLayout(teamBox, BoxLayout.Y_AXIS));
+//		teamBox.setMinimumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT*ratio)));
+//		teamBox.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT*ratio)));
+//		teamBox.setMaximumSize(new Dimension(MAX_WIDTH, (int) (MAX_HEIGHT*ratio)));
 		teamBox.setBorder(BorderFactory.createTitledBorder(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.SelectTeam")));
 		for(int i = 0; i < NUM_TEAMS; i++)
 		{
 			buildTeamBox(teamBox, i);
 		}
-		add(teamBox);
+		lWrapper.add(teamBox);
 	}
 
 	private void buildTeamBox(JPanel pBox, int pTeamIndex)
@@ -105,7 +124,7 @@ public class PlayerMenu extends JPanel
 		JPanel teamGrid = new JPanel();
 		teamGrid.setBorder(BorderFactory.createTitledBorder(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.Team" + (pTeamIndex+1))));
 		teamGrid.setLayout(new GridLayout(2,2));
-		teamGrid.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT*0.2)));
+//		teamGrid.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT*0.2)));
 		
 		teamGrid.add(getTypeDropDown(pTeamIndex*2));
 		teamGrid.add(getNameTextField(pTeamIndex*2));
@@ -114,20 +133,20 @@ public class PlayerMenu extends JPanel
 		pBox.add(teamGrid);
 	}
 	
-	private void buildPracticeCheckBox()
+	private void buildPracticeCheckBox(JPanel lWrapper)
 	{
 		log("Build practice mode checkbox.");
 		JPanel lCheckBoxPanel = new JPanel();
 		lCheckBoxPanel.setLayout(new GridLayout(1,1));
-//		lCheckBoxPanel.setMinimumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
-//		lCheckBoxPanel.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
-//		lCheckBoxPanel.setMaximumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
-		add(lCheckBoxPanel);
+		lCheckBoxPanel.setMinimumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+		lCheckBoxPanel.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+		lCheckBoxPanel.setMaximumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+		lWrapper.add(lCheckBoxPanel);
 		
 		final JCheckBox lCBox = new JCheckBox(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.PracticeMode"));
 		lCBox.setSelected(practiceModeOn);
-//		lCBox.setMinimumSize(new Dimension(pPanel.getMinimumSize().width, TXT_HEIGHT));
-//		lCBox.setMaximumSize(new Dimension(pPanel.getMaximumSize().width, TXT_HEIGHT));	
+//		lCBox.setMinimumSize(new Dimension(lWrapper.getMinimumSize().width, TXT_HEIGHT));
+//		lCBox.setMaximumSize(new Dimension(lWrapper.getMaximumSize().width, TXT_HEIGHT));	
 		lCBox.setHorizontalAlignment(JCheckBox.CENTER);
 		
 		lCBox.addActionListener(new ActionListener()
@@ -142,14 +161,15 @@ public class PlayerMenu extends JPanel
 		lCheckBoxPanel.add(lCBox);	
 	}
 	
-	private void buildPlayButton()
+	private void buildPlayButton(JPanel lWrapper)
 	{
 		JPanel lButtonPanel = new JPanel();
 		lButtonPanel.setLayout(new GridLayout(1,1));
-		lButtonPanel.setMinimumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
-		lButtonPanel.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
-		lButtonPanel.setMaximumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
-		add(lButtonPanel, BorderLayout.SOUTH);
+		int buttonWidth = 200;
+		lButtonPanel.setMinimumSize(new Dimension(buttonWidth, (int) (MIN_HEIGHT * 0.15)));
+		lButtonPanel.setPreferredSize(new Dimension(buttonWidth, (int) (MIN_HEIGHT * 0.15)));
+		lButtonPanel.setMaximumSize(new Dimension(buttonWidth, (int) (MIN_HEIGHT * 0.15)));
+		lWrapper.add(lButtonPanel, BorderLayout.SOUTH);
 		JButton lButton = new JButton(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.Play"));
 		lButton.addActionListener(new ActionListener()
 		{
