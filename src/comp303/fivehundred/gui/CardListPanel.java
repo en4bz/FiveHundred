@@ -17,7 +17,7 @@ import comp303.fivehundred.util.CardList;
  */
 
 @SuppressWarnings("serial")
-public class CardListPanel extends JPanel implements Observer
+public class CardListPanel extends JPanel
 {
 	private final CardList aCards;
 	private Rotation aRotation;
@@ -47,15 +47,18 @@ public class CardListPanel extends JPanel implements Observer
 		{
 			this.setLayout(new OverlapLayout(new Point(30,0)));
 		}
-		this.reDraw();
+		this.redraw();
 	}
 	
-	private void reDraw()
+	protected void redraw()
 	{
+		this.removeAll();
+		System.out.println(aCards.toString());
 		for(Card c : aCards)
 		{
 			this.add(new CardLabel(c,aRotation, aIsVisible));
 		}
+		this.validate();
 	}
 	
 	public void setVisibility(boolean pVisibility)
@@ -64,15 +67,5 @@ public class CardListPanel extends JPanel implements Observer
 		{
 			((CardLabel) c).setVisibility(pVisibility);
 		}
-	}
-
-	/**
-	 * In the case of an update redraw the card list.
-	 */
-	@Override
-	public void update(Notification pNotification)
-	{
-		this.removeAll();
-		this.reDraw();
 	}
 }
