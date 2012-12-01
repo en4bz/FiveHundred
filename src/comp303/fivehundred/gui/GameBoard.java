@@ -39,7 +39,7 @@ public class GameBoard extends JPanel
 	
 	final ContractPanel aContract;
 	final JPanel aWidow;
-	final JPanel aCurrentTrick;
+	final TrickPanel aCurrentTrick;
 	
 	final JPanel aScore_NS;
 	final JPanel aScore_EW;
@@ -95,10 +95,10 @@ public class GameBoard extends JPanel
 		
 		this.resetScores();
 		
-		aCurrentTrick = new JPanel(new BorderLayout());
+		aCurrentTrick = new TrickPanel();
 		aCurrentTrick.setOpaque(false);
 		aCurrentTrick.setBorder(BorderFactory.createTitledBorder("Game: 3x3 grid")); //debug
-		this.hack();
+	//	this.hack();
 		
 		//Set position of each element in board (using coordinates)
 		
@@ -202,26 +202,24 @@ public class GameBoard extends JPanel
 	
 	public void updateTrick(APlayer pPlayer, Card c){
 		if(aBottomPlayer.getPlayer() == pPlayer && c != null){
-			aCurrentTrick.add(new CardLabel(c,Rotation.ABOUT_CENTER,true), BorderLayout.SOUTH);
+			aCurrentTrick.setSouth(c);
 		}
 		else if(aTopPlayer.getPlayer() == pPlayer  && c != null){
-			aCurrentTrick.add(new CardLabel(c,Rotation.ABOUT_CENTER,true), BorderLayout.NORTH);
+			aCurrentTrick.setNorth(c);
 		}
 		else if(aLeftPlayer.getPlayer() == pPlayer  && c != null){
-			aCurrentTrick.add(new CardLabel(c,Rotation.ABOUT_CENTER,true), BorderLayout.WEST);
+			aCurrentTrick.setWest(c);
 		}
 		else if(aRightPlayer.getPlayer() == pPlayer  && c != null){
-			aCurrentTrick.add(new CardLabel(c,Rotation.ABOUT_CENTER,true), BorderLayout.EAST);
+			aCurrentTrick.setEast(c);
 		}
 		else{
 			assert pPlayer == null;
 		}
-		aCurrentTrick.validate();
-		aCurrentTrick.repaint();
 	}
 	
 	public void resetCurrentTrick(){
-		aCurrentTrick.removeAll();
+	//	aCurrentTrick.removeAll();
 	}
 	
 	public void updateWidow(CardList pWidow){
