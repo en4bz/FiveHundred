@@ -65,7 +65,7 @@ public class RotatedIcon implements Icon
 	 */
 	public RotatedIcon(Icon icon, double angle)
 	{
-		this(icon, Rotation.ABOUT_CENTER);
+		this(icon, Rotation.DEFAULT);
 		this.angle = angle;
 	}
 
@@ -112,7 +112,7 @@ public class RotatedIcon implements Icon
     public int getIconWidth()
     {
 		if (rotate == Rotation.UPSIDE_DOWN
-		||  rotate == Rotation.ABOUT_CENTER)
+		||  rotate == Rotation.DEFAULT)
 			return icon.getIconWidth();
 		else
 			return icon.getIconHeight();
@@ -127,7 +127,7 @@ public class RotatedIcon implements Icon
     public int getIconHeight()
     {
 		if (rotate == Rotation.UPSIDE_DOWN
-		||  rotate == Rotation.ABOUT_CENTER)
+		||  rotate == Rotation.DEFAULT)
 			return icon.getIconHeight();
 		else
 			return icon.getIconWidth();
@@ -169,7 +169,7 @@ public class RotatedIcon implements Icon
 			g2.rotate( Math.toRadians( 180 ) );
 			icon.paintIcon(c, g2, xAdjustment - cWidth, yAdjustment - cHeight);
     	}
-    	else if (rotate == Rotation.ABOUT_CENTER)
+    	else if (rotate == Rotation.DEFAULT)
     	{
 			Rectangle r = new Rectangle(x, y, icon.getIconWidth(), icon.getIconHeight());
 			g2.setClip(r);

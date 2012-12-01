@@ -59,10 +59,10 @@ public class GameBoard extends JPanel
 		
 		//Sub-Panels of game board
 		
-		aWidow = new JPanel (new GridLayout(2,3));
+		aWidow = new JPanel (new GridLayout(2,3,5,5));
 		aWidow.setOpaque(false);
 		for(int i = 0; i < 6; i++){
-			aWidow.add(new CardLabel(null,Rotation.ABOUT_CENTER,false));
+			aWidow.add(new CardLabel(null,Rotation.DEFAULT,false));
 		}
 		aWidow.setBorder(BorderFactory.createTitledBorder("Widow")); //debug
 		
@@ -72,7 +72,7 @@ public class GameBoard extends JPanel
 		aRightPlayer = new PlayerArea(aEWTeam[1], Rotation.LEFT, false);
 		aRightPlayer.setBorder(BorderFactory.createTitledBorder("Player 2: Tricks won+Hand")); //debug
 		
-		aBottomPlayer = new PlayerArea(aNSTeam[1], Rotation.ABOUT_CENTER, true);
+		aBottomPlayer = new PlayerArea(aNSTeam[1], Rotation.DEFAULT, true);
 		aBottomPlayer.setBorder(BorderFactory.createTitledBorder("Player 3: Tricks won+Hand")); //debug
 		
 		aLeftPlayer = new PlayerArea(aEWTeam[0], Rotation.RIGHT, false);
@@ -222,7 +222,7 @@ public class GameBoard extends JPanel
 	public void updateWidow(CardList pWidow){
 		aWidow.removeAll();
 		for(Card c : pWidow){
-			aWidow.add(new CardLabel(c,Rotation.ABOUT_CENTER,true));
+			aWidow.add(new CardLabel(c,Rotation.DEFAULT,true));
 		}
 		aWidow.validate();
 		aWidow.repaint();

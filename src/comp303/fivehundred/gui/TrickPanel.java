@@ -33,12 +33,12 @@ public class TrickPanel extends JPanel
 	
 	private void redraw(){
 		this.removeAll();
-		this.add(new CardLabel(aEast,Rotation.ABOUT_CENTER, true));
+		this.add(new CardLabel(aEast,Rotation.DEFAULT, true));
 		aNorthSouth.removeAll();
-		aNorthSouth.add(new CardLabel(aSouth,Rotation.ABOUT_CENTER, true));
-		aNorthSouth.add(new CardLabel(aNorth,Rotation.ABOUT_CENTER, true));
+		aNorthSouth.add(new CardLabel(aSouth,Rotation.DEFAULT, true));
+		aNorthSouth.add(new CardLabel(aNorth,Rotation.DEFAULT, true));
 		this.add(aNorthSouth);
-		this.add(new CardLabel(aWest,Rotation.ABOUT_CENTER, true));
+		this.add(new CardLabel(aWest,Rotation.DEFAULT, true));
 
 		this.validate();
 		this.repaint();
