@@ -17,6 +17,9 @@ import comp303.fivehundred.util.CardList;
 @SuppressWarnings("serial")
 public class CardListPanel extends JPanel
 {
+	private static final int HORIZONTAL_OVERLAP = 30;
+	private static final int VERTICAL_OVERLAP = 20;
+	
 	private final CardList aCards;
 	private Rotation aRotation;
 	private boolean aIsVisible;
@@ -35,15 +38,15 @@ public class CardListPanel extends JPanel
 		aIsVisible = pVisibility;
 		if(aRotation == Rotation.RIGHT)
 		{
-			this.setLayout(new OverlapLayout(new Point(0,30)));
+			this.setLayout(new OverlapLayout(new Point(0,VERTICAL_OVERLAP)));
 		}
 		else if (aRotation == Rotation.LEFT)
 		{
-			this.setLayout(new OverlapLayout(new Point(0,30),false));
+			this.setLayout(new OverlapLayout(new Point(0,VERTICAL_OVERLAP),false));
 		}
 		else
 		{
-			this.setLayout(new OverlapLayout(new Point(30,0)));
+			this.setLayout(new OverlapLayout(new Point(HORIZONTAL_OVERLAP,0)));
 		}
 		this.redraw();
 	}
