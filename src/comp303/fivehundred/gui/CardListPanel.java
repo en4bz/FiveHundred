@@ -48,6 +48,7 @@ public class CardListPanel extends JPanel
 		{
 			this.setLayout(new OverlapLayout(new Point(HORIZONTAL_OVERLAP,0)));
 		}
+		this.setOpaque(false);
 		this.redraw();
 	}
 	
