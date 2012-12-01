@@ -3,8 +3,10 @@ package comp303.fivehundred.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,6 +21,7 @@ import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.player.Team;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.Card.Suit;
+import comp303.fivehundred.util.CardList;
 
 /**
  * Board of the game (new board for every new game)
@@ -50,10 +53,11 @@ public class GameBoard extends JPanel
 		
 		//Sub-Panels of game board
 		
-		aWidow = new JPanel ();
-		aWidow.setLayout(new BoxLayout(aWidow, BoxLayout.LINE_AXIS));
-		aWidow.setPreferredSize(new Dimension(300,200));
+		aWidow = new JPanel (new GridLayout(2,3));
 		aWidow.setOpaque(false);
+		for(int i = 0; i < 6; i++){
+			aWidow.add(new CardLabel(null,Rotation.ABOUT_CENTER,false));
+		}
 		aWidow.setBorder(BorderFactory.createTitledBorder("Widow")); //debug
 		
 		aTopPlayer = new PlayerArea(aTeam1[0], Rotation.UPSIDE_DOWN, false);
@@ -243,6 +247,15 @@ public class GameBoard extends JPanel
 	
 	public void resetCurrentTrick(){
 		aCurrentTrick.removeAll();
+	}
+	
+	public void updateWidow(CardList pWidow){
+		aWidow.removeAll();
+		for(Card c : pWidow){
+			aWidow.add(new CardLabel(c,Rotation.ABOUT_CENTER,true));
+		}
+		aWidow.validate();
+		aWidow.repaint();
 	}
 	
 	public void updateCardPanels(){

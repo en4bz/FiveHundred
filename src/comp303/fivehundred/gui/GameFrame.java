@@ -130,6 +130,7 @@ public class GameFrame extends JFrame implements Observer
 			case newDeal:	
 				aBoard.updateCardPanels();
 				aBoard.resetTricksCount();
+				aBoard.updateWidow(((GameEngine)pNotification.getSource()).getWidow());
 				break;
 			case newBid:
 				break;
