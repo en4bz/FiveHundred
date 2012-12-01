@@ -35,6 +35,13 @@ public abstract class APlayer
     }
     
     /**
+     * Gets the reference to the players hand
+     * @return A reference to the players hand rather than a clone.
+     */
+    public Hand getHandRef(){
+    	return aHand;
+    }
+    /**
      * Adds pCard to players hand.
      * @param pCard : Card to add.
      */
