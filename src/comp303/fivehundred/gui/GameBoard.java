@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.model.Bid;
+import comp303.fivehundred.player.APlayer;
+import comp303.fivehundred.player.Team;
 import comp303.fivehundred.util.Card.Suit;
 
 /**
@@ -23,43 +25,45 @@ import comp303.fivehundred.util.Card.Suit;
 public class GameBoard extends JPanel
 {
 
-	public GameBoard()
+	public GameBoard(Team[] pPlayer)
 	{
 		super(new GridBagLayout());
 		this.setBackground(Color.GREEN);
-		this.setPreferredSize(new Dimension(900,600));
+	//	this.setPreferredSize(new Dimension(900,600));
+		
+		APlayer[] lTeam1 = pPlayer[0].getPlayers();
+		APlayer[] lTeam2 = pPlayer[1].getPlayers();
 		
 		//Sub-Panels of game board
-		
 		JPanel widow = new JPanel ();
 		widow.setLayout(new BoxLayout(widow, BoxLayout.LINE_AXIS));
 		widow.setPreferredSize(new Dimension(300,200));
 		widow.setBackground(Color.GREEN);
 		widow.setBorder(BorderFactory.createTitledBorder("Widow")); //debug
 		
-		JPanel player1 = new JPanel();
-		player1.setLayout(new BoxLayout(player1, BoxLayout.Y_AXIS)); //Tricks+Hand one over the other
-		player1.setPreferredSize(new Dimension(300,200));
-		player1.setBackground(Color.GREEN);
-		player1.setBorder(BorderFactory.createTitledBorder("Player1: Tricks won+Hand")); //debug
+		JPanel lTopPlayer = new PlayerArea(lTeam1[0], Rotation.UPSIDE_DOWN, false);
+	//	lTopPlayer.setLayout(new BoxLayout(lTopPlayer, BoxLayout.Y_AXIS)); //Tricks+Hand one over the other
+		lTopPlayer.setPreferredSize(new Dimension(300,200));
+		lTopPlayer.setBackground(Color.GREEN);
+		lTopPlayer.setBorder(BorderFactory.createTitledBorder("Player1: Tricks won+Hand")); //debug
 		
-		JPanel player2 = new JPanel();
-		player2.setLayout(new BoxLayout(player2, BoxLayout.X_AXIS)); //Tricks+Hand next to each other
-		player2.setPreferredSize(new Dimension(300,200));
-		player2.setBackground(Color.GREEN);
-		player2.setBorder(BorderFactory.createTitledBorder("Player 2: Tricks won+Hand")); //debug
+		JPanel lRightPlayer = new PlayerArea(lTeam2[1], Rotation.RIGHT, false);
+//		lRightPlayer.setLayout(new BoxLayout(lRightPlayer, BoxLayout.X_AXIS)); //Tricks+Hand next to each other
+		lRightPlayer.setPreferredSize(new Dimension(300,200));
+		lRightPlayer.setBackground(Color.GREEN);
+		lRightPlayer.setBorder(BorderFactory.createTitledBorder("Player 2: Tricks won+Hand")); //debug
 		
-		JPanel player3 = new JPanel();
-		player3.setLayout(new BoxLayout(player3, BoxLayout.Y_AXIS)); //Tricks+Hand one over the other
-		player3.setPreferredSize(new Dimension(300,200));
-		player3.setBackground(Color.GREEN);
-		player3.setBorder(BorderFactory.createTitledBorder("Player 3: Tricks won+Hand")); //debug
+		JPanel lBottomPlayer = new PlayerArea(lTeam1[1], Rotation.ABOUT_CENTER, false);
+//		lBottomPlayer.setLayout(new BoxLayout(lBottomPlayer, BoxLayout.Y_AXIS)); //Tricks+Hand one over the other
+		lBottomPlayer.setPreferredSize(new Dimension(300,200));
+		lBottomPlayer.setBackground(Color.GREEN);
+		lBottomPlayer.setBorder(BorderFactory.createTitledBorder("Player 3: Tricks won+Hand")); //debug
 		
-		JPanel player4 = new JPanel();
-		player4.setLayout(new BoxLayout(player4, BoxLayout.X_AXIS)); //Tricks+Hand next to each other
-		player4.setPreferredSize(new Dimension(300,200));
-		player4.setBackground(Color.GREEN);
-		player4.setBorder(BorderFactory.createTitledBorder("Player4: Tricks won+Hand")); //debug
+		JPanel lLeftPlayer = new PlayerArea(lTeam2[0], Rotation.LEFT, false);
+//		lLeftPlayer.setLayout(new BoxLayout(lLeftPlayer, BoxLayout.X_AXIS)); //Tricks+Hand next to each other
+		lLeftPlayer.setPreferredSize(new Dimension(300,200));
+		lLeftPlayer.setBackground(Color.GREEN);
+		lLeftPlayer.setBorder(BorderFactory.createTitledBorder("Player4: Tricks won+Hand")); //debug
 		
 		JPanel contract = new ContractPanel(new Bid(7,Suit.HEARTS));
 //		contract.setLayout(new BoxLayout(contract, BoxLayout.X_AXIS)); //only one element = no alignment
@@ -146,15 +150,15 @@ public class GameBoard extends JPanel
 		
 		//add JPanels to the board
 		this.add(widow,w);
-		this.add(player1,p1);
+		this.add(lTopPlayer,p1);
 		this.add(contract,con);
 		//new line
-		this.add(player4,p4);
+		this.add(lLeftPlayer,p4);
 		this.add(game,g);
-		this.add(player2,p2);
+		this.add(lRightPlayer,p2);
 		//new line
 		this.add(score_EW, s_EW);
-		this.add(player3, p3);
+		this.add(lBottomPlayer, p3);
 		this.add(score_NS,s_NS);
 		//end
 	}
