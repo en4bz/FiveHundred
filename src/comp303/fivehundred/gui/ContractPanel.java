@@ -14,41 +14,37 @@ public class ContractPanel extends JPanel
 {
 	private Bid aBid;
 	
-	ContractPanel(Bid pBid){
+	ContractPanel(){
 		super(new FlowLayout());
-		this.aBid = pBid;
 		this.setOpaque(false);
-		this.redraw();
+		String lPath = getClass().getClassLoader().getResource(".").getPath();
+		ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/null.png");
+		this.add(new JLabel(lIcon));
 	}
 	
-	protected void redraw(){
+	private void redraw(){
 		String lSuit;
 		this.removeAll();
-		try{ //TODO: Fix this ugly shit
-			if(aBid.getSuit() == null){
-				lSuit = "NT";
-			}
-			else if(aBid.getSuit().equals(Suit.CLUBS)){
-				lSuit = "C";
-			}
-			else if(aBid.getSuit().equals(Suit.SPADES)){
-				lSuit = "S";
-			}
-			else if(aBid.getSuit().equals(Suit.DIAMONDS)){
-				lSuit = "D";
-			}
-			else{
-				lSuit = "H";
-			}
-			String lPath = getClass().getClassLoader().getResource(".").getPath();
-			ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/" + lSuit + aBid.getTricksBid() + ".png");
-			this.add(new JLabel(lIcon));
+		if(aBid.getSuit() == null){
+			lSuit = "NT";
 		}
-		catch(Exception e){}
-		finally{
-			this.validate();
-			this.repaint();
+		else if(aBid.getSuit().equals(Suit.CLUBS)){
+			lSuit = "C";
 		}
+		else if(aBid.getSuit().equals(Suit.SPADES)){
+			lSuit = "S";
+		}
+		else if(aBid.getSuit().equals(Suit.DIAMONDS)){
+			lSuit = "D";
+		}
+		else{
+			lSuit = "H";
+		}
+		String lPath = getClass().getClassLoader().getResource(".").getPath();
+		ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/" + lSuit + aBid.getTricksBid() + ".png");
+		this.add(new JLabel(lIcon));
+		this.validate();
+		this.repaint();
 	}
 	
 	public void setBid(Bid pBid){
