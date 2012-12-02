@@ -4,9 +4,14 @@ package comp303.fivehundred.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.io.*;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
 
 /**
  * Menu visible at the top of a GameBoard window
@@ -17,8 +22,6 @@ import javax.swing.JMenuItem;
 @SuppressWarnings("serial")
 public class Menu extends JMenuBar
 {
-
-	//TODO: link each menu component to what they refer to
 	
 	JMenu game = new JMenu("Game");
 	JMenu stats = new JMenu ("Statistics");
@@ -32,6 +35,16 @@ public class Menu extends JMenuBar
 	JMenuItem logFile = new JMenuItem ("Change log file directory");
 	JMenuItem changeName = new JMenuItem ("Change name of the file");
 	JMenuItem ask = new JMenuItem ("Ask for help...");
+	
+	String directory = "c:\\"; //default location?
+	String logName = "work"; //where is it supposed to be?
+	String log = ".log";
+	String fileName = directory+logName+log;
+	
+	//TODO: CREATE A STAT FILE
+	//TODO: CHANGE DIRECTORY
+	//TODO: CHANGE NAME OF THE FILE
+
 	
 	public Menu() 
 	{
@@ -59,7 +72,7 @@ public class Menu extends JMenuBar
 		
 		//Link menu components
 		
-		//File -> quit = The program terminates
+		//File -> quit = The program terminates**WORKS
 		quit.addActionListener(new ActionListener()
 		{
 			@Override
@@ -69,7 +82,7 @@ public class Menu extends JMenuBar
 			}
 		});
 		
-		//File -> New Game = create a new Game (Create a new stats file, etc)
+		//File -> New Game = create a new Game (Create a new stats file, etc)*WORKS
 		newGame.addActionListener(new ActionListener()
 		{
 			@Override
@@ -85,27 +98,43 @@ public class Menu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//Read the stats file
+				//TODO: Show stat in a dialog box?
 			}
-		});
+
+			});
 		
-		//Statistics -> Reset Stats
+		//Statistics -> Reset Stats**WORKS
 		reset.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//Reset stats file
+				File f = new File (fileName);
+				f.delete();
+				
+				File aFile=new File(fileName);
+				if(!aFile.exists()){
+					try{
+						aFile.createNewFile();
+					}
+					catch (Exception creation)
+					{
+						System.out.println("Error");
+					}
+					
+				  }
+				
 			}
 		});
 		
-		//Settings -> Change log file
+		//Settings -> Change log file directory
 		logFile.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//Change directory
+				directory = (String)JOptionPane.showInputDialog(getRootPane(), "New directory:", "Customized Dialog", JOptionPane.PLAIN_MESSAGE, null,null, directory);
+				//change the directory
 			}
 		});
 		
@@ -115,17 +144,19 @@ public class Menu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//Change name of the log file
+				logName = (String)JOptionPane.showInputDialog(getRootPane(), "New name:", "Customized Dialog", JOptionPane.PLAIN_MESSAGE, null,null, logName);
+				//change the name of the file
+			
 			}
 		});
 		
-		//Help -> ask for help...
+		//Help -> ask for help...OK
 		ask.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//"Instruction guide" that contains all the rules of the game? (TextFile)
+				JOptionPane.showMessageDialog(getRootPane(), "WRITE SOMETHING HERE");
 			}
 		});
 

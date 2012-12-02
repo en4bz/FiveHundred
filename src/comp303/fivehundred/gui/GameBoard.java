@@ -155,22 +155,22 @@ public class GameBoard extends JPanel
 		g.fill = GridBagConstraints.BOTH;
 		g.fill = GridBagConstraints.CENTER;
 		
-		//add a button to submit a trick
-		JPanel submission = new JPanel();
-		submission.setBorder(BorderFactory.createTitledBorder("Submit the trick"));
-
-		JButton submit = new JButton("submit");
-		submit.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				//Submit new info
-			}
-		});
-		
-		submission.add(submit);
-		///////////////////////////
+//		//add a button to submit a trick
+//		JPanel submission = new JPanel();
+//		submission.setBorder(BorderFactory.createTitledBorder("Submit the trick"));
+//
+//		JButton submit = new JButton("submit");
+//		submit.addActionListener(new ActionListener()
+//		{
+//			@Override
+//			public void actionPerformed(ActionEvent e)
+//			{
+//				//Submit new info
+//			}
+//		});
+//		
+//		submission.add(submit);
+//		///////////////////////////
 		
 		
 		//add JPanels to the board
