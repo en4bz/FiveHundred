@@ -153,35 +153,30 @@ public class GameEngine extends Observable
      */
     public void bid()
     {
-    	// check that each player has 10 cards in hand
-    	for(APlayer p: aPlayers)
+    	for(APlayer p: aPlayers) // check that each player has 10 cards in hand
     	{
-    		if (p.getHand().size() != CARDSINHAND)
-    			{
-    				throw new GameException("Players must be dealt exactly 10 cards not " + 
-    						Integer.toString(p.getHand().size()) + " before the player bids.");
-    			}
+    		if(p.getHand().size() != CARDSINHAND)
+    		{
+    			throw new GameException("Players must be dealt exactly 10 cards not " + Integer.toString(p.getHand().size()) + " before the player bids.");
+    		}
     	}
-    	
         aAllPasses = true;
         Bid[]lBids = new Bid[4];
         aContract = new Bid(); // default is pass
         Bid lBid = new Bid(); // last bid
         
-        // make sure no team has a contract
-        for(Team t: getTeams())
+        for(Team t : getTeams()) // make sure no team has a contract
         {
     		t.setContract(new Bid());
         }
         
-        // construct previousBids array to pass on to APlayer.selectBid
-        aBids = new Bid[0];
+        aBids = new Bid[0];  // construct previousBids array to pass on to APlayer.selectBid
         
         for(int i = 0; i < aPlayers.length; i++)
 	    {
         	aCurrentPlayer = aPlayers[i];
         	lBid = aPlayers[i].selectBid(aBids);
-        	
+	
         	// validate bid
         	if(aBids.length > 0 && !lBid.isPass() && lBid.compareTo(Bid.max(aBids)) <= 0)
         	{
@@ -489,7 +484,7 @@ public class GameEngine extends Observable
      * Returns the bids done so far.
      * @return array of bids (size 0 to 4)
      */
-    protected Bid[] getBids()
+    public Bid[] getBids()
     {
     	return aBids;
     }
