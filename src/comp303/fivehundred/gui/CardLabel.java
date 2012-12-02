@@ -114,7 +114,7 @@ public class CardLabel extends JLabel implements MouseListener
 	public void mouseEntered(MouseEvent e)
 	{
 		if(this.getParent().getParent() instanceof PlayerArea){
-			this.setLocation(this.getX(), this.getY() + 5);
+			this.setLocation(this.getX(), this.getY() - 10);
 			this.repaint();
 		}
 	}
@@ -122,8 +122,8 @@ public class CardLabel extends JLabel implements MouseListener
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
-		if(this.getParent() instanceof CardListPanel){
-			this.setLocation(this.getX(), this.getY() - 5);
+		if(this.getParent().getParent() instanceof PlayerArea){
+			this.setLocation(this.getX(), this.getY() + 10);
 			this.repaint();
 		}
 	}
