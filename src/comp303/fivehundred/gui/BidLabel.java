@@ -1,5 +1,7 @@
 package comp303.fivehundred.gui;
 
+import java.awt.Image;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -9,33 +11,30 @@ import comp303.fivehundred.util.Card.Suit;
 @SuppressWarnings("serial")
 public class BidLabel extends JLabel
 {
-	Bid aBid;
+	private static final int SIZE = 100;
 	
 	public BidLabel(Bid pBid){
-		aBid = pBid;
-		this.redraw();
-	}
-	
-	private void redraw(){
 		String lSuit;
-		this.removeAll();
-		if(aBid.isNoTrump()){
+		if(pBid.isPass()){
+			lSuit = "P";
+		}
+		else if(pBid.isNoTrump()){
 			lSuit = "NT";
 		}
-		else if(aBid.getSuit().equals(Suit.CLUBS)){
+		else if(pBid.getSuit().equals(Suit.CLUBS)){
 			lSuit = "C";
 		}
-		else if(aBid.getSuit().equals(Suit.SPADES)){
+		else if(pBid.getSuit().equals(Suit.SPADES)){
 			lSuit = "S";
 		}
-		else if(aBid.getSuit().equals(Suit.DIAMONDS)){
+		else if(pBid.getSuit().equals(Suit.DIAMONDS)){
 			lSuit = "D";
 		}
 		else{
 			lSuit = "H";
 		}
 		String lPath = getClass().getClassLoader().getResource(".").getPath();
-		ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/" + lSuit + aBid.getTricksBid() + ".png");
-		this.setIcon(lIcon);
+		ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/" + lSuit + pBid.getTricksBid() + ".png");
+		this.setIcon(new ImageIcon( lIcon.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH)));
 	}
 }
