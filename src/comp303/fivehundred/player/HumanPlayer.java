@@ -1,8 +1,7 @@
 package comp303.fivehundred.player;
 
 
-import comp303.fivehundred.gui.ConsoleInterface;
-import comp303.fivehundred.gui.UserInterface;
+import comp303.fivehundred.gui.GameFrame;
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.model.Trick;
@@ -17,9 +16,6 @@ import comp303.fivehundred.util.CardList;
  */
 public class HumanPlayer extends APlayer
 {
-		
-	private UserInterface aInterface;
-	
 	/**
 	 * Constructs a new human player.
 	 * @param pName : Player name
@@ -27,9 +23,6 @@ public class HumanPlayer extends APlayer
 	public HumanPlayer(String pName)
 	{
 		super(pName);
-		// @TODO prompt user for name
-		// CHANGE THIS FOR DIFFERENT USER INTERFACE 
-		aInterface = new ConsoleInterface();
 	}	
 
 	/**
@@ -37,7 +30,20 @@ public class HumanPlayer extends APlayer
 	 */
 	public Card play(Trick pTrick)
 	{
-		Card lPlayed = aInterface.play(pTrick);
+		Card lPlayed;
+		while(GameFrame.nextCard == null)
+		{
+			try
+			{
+				Thread.sleep(10);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		lPlayed = GameFrame.nextCard;
+		GameFrame.nextCard = null;
 		this.removeCardFromHand(lPlayed);
 		return lPlayed;
 	}
@@ -47,24 +53,40 @@ public class HumanPlayer extends APlayer
 	 */
 	public Bid selectBid(Bid[] pPreviousBids)
 	{
-		return aInterface.selectBid(pPreviousBids);
-	}
+		return new Bid();
+	} 
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public CardList exchange(Bid[] pBids, int pIndex, Hand pWidow)
 	{
+		CardList toDiscard = new CardList();
+		for(int i = 0; i < 6; i++)
+		{
+			while(GameFrame.nextCard == null)
+			{
+				try
+				{
+					Thread.sleep(10);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+			}
+			toDiscard.add(GameFrame.nextCard);
+			GameFrame.nextCard = null;
+		}
 		for(Card c: pWidow)
 		{
 			this.addCardToHand(c);
 		}
-		CardList lDiscarded = aInterface.exchange(pBids, pIndex, pWidow);
-		for(Card c: lDiscarded)
+		
+		for(Card c: toDiscard)
 		{
 			this.removeCardFromHand(c);
 		}
-		return lDiscarded;
+		return toDiscard;
 	}
-
 }
