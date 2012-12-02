@@ -265,4 +265,10 @@ public class GameFrame extends JFrame implements Observer
         gameOver
     }
 
+    public enum Action {
+    	play,
+    	discard,
+    	bid
+    }
+    
 }
