@@ -46,26 +46,18 @@ public class GameFrame extends JFrame implements Observer
         this.setTitle("Five Hundred");  
         this.setLayout(new FlowLayout());
         this.setLocation(0, 0); //Top-left corner of the screen
-        this.setSize(new Dimension(WIDTH, HEIGHT));
-   //     this.setResizable(false); //We cannot change the dimensions of the window by hand when the program runs (components don't move) 
+        this.setSize(Toolkit.getDefaultToolkit().getScreenSize()); //Force Full Screen 
         
         // Add Menu
         this.setJMenuBar(new Menu()); //add menu to the new window (new game)
         
         // Start the party
         aPlayerMenu = new PlayerMenu(this);
-        add(aPlayerMenu);
-        
-        // Make visible
+        this.add(aPlayerMenu);
         this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        this.setLocationRelativeTo(null);
-        Toolkit tk = Toolkit.getDefaultToolkit();  
-        int xSize = ((int) tk.getScreenSize().getWidth());  
-        int ySize = ((int) tk.getScreenSize().getHeight());  
-        this.setSize(xSize,ySize);
-        this.setBackground(BACKGROUND_COLOR);
+        this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+         
         this.setVisible( true );
-        
     }
     
     public static void main(String[] args)
