@@ -338,4 +338,8 @@ public class GameFrame extends JFrame implements Observer, IObservable
     {
     	return aNotificationSequenceNumber++;	
     }
+    
+    public boolean inPracticeMode(){
+    	return aPracticeModeOn;
+    }
 }

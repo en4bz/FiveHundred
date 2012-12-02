@@ -193,7 +193,7 @@ public class GameBoard extends JPanel
 		
 		
 		//add JPanels to the board
-	//	this.add(aWidow,w);
+	// 	this.add(aWidow,w);
 		this.add(aTopPlayer,p1);
 		this.add(aContract,con);
 		//new line
@@ -204,8 +204,6 @@ public class GameBoard extends JPanel
 		this.add(aScore_EW, s_EW);
 		this.add(aBottomPlayer, p3);
 		this.add(aScore_NS,s_NS);
-		//end
-		aCenter.add(aCurrentTrick);
 	}
 	
 	/**
@@ -289,7 +287,7 @@ public class GameBoard extends JPanel
 	
 	public void updateWidow(CardList pWidow, APlayer pContractor){
 		aContract.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), "Contractor: " + pContractor.getName(), TitledBorder.CENTER, TitledBorder.BELOW_TOP));
-		if(pContractor == aBottomPlayer.getPlayer()){
+		if(pContractor == aBottomPlayer.getPlayer() || ((GameFrame)this.getTopLevelAncestor()).inPracticeMode() ){
 			aWidow.setVisibility(true);
 		}
 		else{
