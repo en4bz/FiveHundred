@@ -202,6 +202,7 @@ public class GameFrame extends JFrame implements Observer
             	play();
             	break;
             case cardsDiscarded:
+            	aBoard.updateWidow(lEngine.getWidow(),lEngine.getContractor());
                 aBoard.updateCardPanel(lEngine.getCurrentPlayer());
                 break;
             case cardPlayed:
