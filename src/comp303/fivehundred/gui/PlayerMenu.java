@@ -16,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -60,11 +61,15 @@ public class PlayerMenu extends JPanel
 	private PlayerType[] aPlayerTypes = {PlayerType.BasicRobot, PlayerType.BasicRobot, PlayerType.RandomRobot, PlayerType.RandomRobot};
 	private String[] aPlayerNames = {"Alice", "Alex", "John", "Jannice"};
 	private boolean practiceModeOn = true;
+	private int numGamesToPlay = 1;
 	
 	// Game constants
 	private int MAX_CHAR_PLAYER = 12;
 	private int NUM_PLAYERS = 4;
 	private int NUM_TEAMS = 2;
+	
+	// Set to true to log
+	private boolean aIsLogging = false;
 	
 		
 	/**
@@ -96,8 +101,12 @@ public class PlayerMenu extends JPanel
 		add(lWrapper, BorderLayout.CENTER);
 		
 		buildSelectTeamBox(lWrapper);
+		buildNumberOfGamesBox(lWrapper);
 		buildPracticeCheckBox(lWrapper);
 		buildPlayButton(lWrapper);
+		
+		aFrame.add(this);
+		aFrame.pack();
 		
 
 	}
@@ -131,6 +140,73 @@ public class PlayerMenu extends JPanel
 		teamGrid.add(getTypeDropDown(pTeamIndex*2+1));
 		teamGrid.add(getNameTextField(pTeamIndex*2+1));		
 		pBox.add(teamGrid);
+	}
+	
+	private void buildNumberOfGamesBox(JPanel lWrapper)
+	{
+		JPanel lTextBoxPanel = new JPanel();
+		lTextBoxPanel.setLayout(new GridLayout(1,2));
+		lTextBoxPanel.setMinimumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+		lTextBoxPanel.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+		lTextBoxPanel.setMaximumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT * 0.15)));
+		lWrapper.add(lTextBoxPanel);
+		
+		JLabel lLabel = new JLabel(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.NumGames"));
+		lTextBoxPanel.add(lLabel);
+		
+		final JTextField lTField = new JTextField(MAX_CHAR_PLAYER);
+		lTField.setText(Integer.toString(numGamesToPlay));
+		lTField.setMinimumSize(new Dimension(lTField.getMinimumSize().width, TXT_HEIGHT));
+		lTField.setPreferredSize(new Dimension(lTField.getPreferredSize().width, TXT_HEIGHT));
+		lTField.setMaximumSize(new Dimension(lTField.getMaximumSize().width, TXT_HEIGHT));
+		lTField.addKeyListener(new KeyListener()
+		{
+			
+			@Override
+			public void keyTyped(KeyEvent arg0)
+			{
+				if(lTField.getText().equals(""))
+				{
+					numGamesToPlay = 0;
+				}
+				else
+				{
+					try {
+						numGamesToPlay = Integer.parseInt(lTField.getText());
+					} 
+					catch(NumberFormatException nFE)
+					{
+						JOptionPane.showMessageDialog(PlayerMenu.this, MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.NumberFormatError"));
+						lTField.setText(Integer.toString(numGamesToPlay));
+					}
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0){}
+
+			@Override
+			public void keyReleased(KeyEvent arg0)
+			{
+				if(lTField.getText().equals(""))
+				{
+					numGamesToPlay = 0;
+				}
+				else
+				{
+					try {
+						numGamesToPlay = Integer.parseInt(lTField.getText());
+					} 
+					catch(NumberFormatException nFE)
+					{
+						JOptionPane.showMessageDialog(PlayerMenu.this, MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.NumberFormatError"));
+						lTField.setText(Integer.toString(numGamesToPlay));
+					}
+				}		
+			}
+		});
+		lTextBoxPanel.add(lTField);
+		
 	}
 	
 	private void buildPracticeCheckBox(JPanel lWrapper)
@@ -240,9 +316,9 @@ public class PlayerMenu extends JPanel
 		if(validatePlayers())
 		{
 			log("Starting game.");
-			aFrame.update(new Notification("gui.gameframe", this, aFrame.getNotificationSequenceNumber(), GameFrame.State.newGame.toString()));
-			aFrame.setEnabled(true);
-			this.setVisible(false);
+			aFrame.update(new Notification("gui.gameframe", this, aFrame.getNotificationSequenceNumber(), GameFrame.State.newGameSet.toString()));
+			//aFrame.setEnabled(true);
+			//this.setVisible(false);
 		}
 	}
 	
@@ -281,6 +357,11 @@ public class PlayerMenu extends JPanel
 			throw new GUIException("Trying to get teams from incorrectly configurated player settings.");
 		}
 		return lTeams;
+	}
+	
+	protected int getNumberOfGamesToPlay()
+	{
+		return numGamesToPlay;
 	}
 	
 	protected boolean isPracticeModeOn()
@@ -324,12 +405,20 @@ public class PlayerMenu extends JPanel
 			}
 			
 		}
+		
+		if(numGamesToPlay <= 0)
+		{
+			JOptionPane.showMessageDialog(PlayerMenu.this, MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.NumberFormatError"));
+			return false;
+		}
+		
 		return true;
 	}
 	
-	public void log(String message)
+	private void log(String message)
 	{
-		aLogger.info(message);
+		if(aIsLogging)
+			aLogger.info(message);
 	}
 	
 	public enum PlayerType
