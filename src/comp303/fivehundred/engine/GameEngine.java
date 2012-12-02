@@ -158,7 +158,8 @@ public class GameEngine extends Observable
     	{
     		if (p.getHand().size() != CARDSINHAND)
     			{
-    				throw new GameException("Cards must be dealt before the player deals");
+    				throw new GameException("Players must be dealt exactly 10 cards not " + 
+    						Integer.toString(p.getHand().size()) + " before the player bids.");
     			}
     	}
     	
@@ -189,7 +190,6 @@ public class GameEngine extends Observable
         	
             lBids[i] = lBid;
             aBids = Arrays.copyOf(lBids, i+1);
-            notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.newBid.toString()));
 
             // update contract if bid is not pass
             if (lBid.compareTo(aContract) > 0)
@@ -198,6 +198,8 @@ public class GameEngine extends Observable
                 aContract = lBid;
                 aAllPasses = false;
             }
+            notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.newBid.toString()));
+
 	    } 
         
         if(!allPasses())
@@ -205,9 +207,9 @@ public class GameEngine extends Observable
 	        // update contractor team
 	        Team lContractorTeam = getTeamFromPlayer(aContractor);
 	        lContractorTeam.setContract(aContract);
-	        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.newContract.toString()));
 	        // update dealer
 	        aDealer = aPlayers[0];
+	        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.newContract.toString()));
         }
         else
         {
@@ -215,6 +217,7 @@ public class GameEngine extends Observable
         	{
         		p.resetHand();
         	}
+	        notifyObservers(new Notification("game.engine", this, getNotificationSequenceNumber(), State.allPasses.toString()));
         }
     }
     
@@ -667,6 +670,8 @@ public class GameEngine extends Observable
     	return null;
     }
     
+    
+    
     /**
      * Enum class representing the different states of the game engine that can be 
      * passed as a notification message to the different class observers.
@@ -678,6 +683,7 @@ public class GameEngine extends Observable
 		newGame,
 		newDeal,
 		newBid,
+		allPasses,
 		newContract,
 		cardsDiscarded,
 		cardPlayed,
