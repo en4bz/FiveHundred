@@ -25,7 +25,7 @@ public class ContractPanel extends JPanel
 	private void redraw(){
 		String lSuit;
 		this.removeAll();
-		if(aBid.getSuit() == null){
+		if(aBid.isNoTrump()){
 			lSuit = "NT";
 		}
 		else if(aBid.getSuit().equals(Suit.CLUBS)){
