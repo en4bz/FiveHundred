@@ -32,6 +32,9 @@ import comp303.fivehundred.util.CardList;
 @SuppressWarnings("serial")
 public class GameBoard extends JPanel
 {
+	private final static int XPAD = 50;
+	private final static int YPAD = 50;
+	
 	final Team[] aTeams;
 	
 	final APlayer[] aNSTeam;
@@ -102,42 +105,56 @@ public class GameBoard extends JPanel
 		GridBagConstraints w = new GridBagConstraints();
 		w.gridx = 0;
 		w.gridy = 0;
+		w.ipadx = XPAD;
+		w.ipady = YPAD;
 		w.fill = GridBagConstraints.BOTH;
 		w.fill = GridBagConstraints.CENTER;
 		
 		GridBagConstraints p1 = new GridBagConstraints();
 		p1.gridx = 1;
 		p1.gridy = 0;
+		p1.ipadx = XPAD;
+		p1.ipady = YPAD;
 		p1.fill = GridBagConstraints.BOTH;
 		p1.fill = GridBagConstraints.CENTER;
 		
 		GridBagConstraints p2 = new GridBagConstraints();
 		p2.gridx = 2;
 		p2.gridy = 1;
+		p2.ipadx = XPAD;
+		p2.ipady = YPAD;
 		p2.fill = GridBagConstraints.BOTH;
 		p2.fill = GridBagConstraints.CENTER;
 		
 		GridBagConstraints p3 = new GridBagConstraints();
 		p3.gridx = 1;
 		p3.gridy = 2;
+		p3.ipadx = XPAD;
+		p3.ipady = YPAD;
 		p3.fill = GridBagConstraints.BOTH;
 		p3.fill = GridBagConstraints.CENTER;
 		
 		GridBagConstraints p4 = new GridBagConstraints();
 		p4.gridx = 0;
 		p4.gridy = 1;
+		p4.ipadx = XPAD;
+		p4.ipady = YPAD;
 		p4.fill = GridBagConstraints.BOTH;
 		p4.fill = GridBagConstraints.CENTER;
 		
 		GridBagConstraints con = new GridBagConstraints();
 		con.gridx = 2;
 		con.gridy = 0;
+		con.ipadx = XPAD;
+		con.ipady = YPAD;
 		con.fill = GridBagConstraints.BOTH;
 		con.fill = GridBagConstraints.CENTER;
 		
 		GridBagConstraints s_EW = new GridBagConstraints();
 		s_EW.gridx = 0;
 		s_EW.gridy = 2;
+		s_EW.ipadx = XPAD;
+		s_EW.ipady = YPAD;
 		s_EW.fill = GridBagConstraints.BOTH;
 		s_EW.fill = GridBagConstraints.CENTER;
 		s_EW.anchor = GridBagConstraints.LINE_START;
@@ -145,6 +162,8 @@ public class GameBoard extends JPanel
 		GridBagConstraints s_NS = new GridBagConstraints();
 		s_NS.gridx = 2;
 		s_NS.gridy = 2;
+		s_NS.ipadx = XPAD;
+		s_NS.ipady = YPAD;
 		s_NS.fill = GridBagConstraints.BOTH;
 		s_NS.fill = GridBagConstraints.CENTER;
 		s_NS.anchor = GridBagConstraints.LINE_END;
@@ -152,6 +171,8 @@ public class GameBoard extends JPanel
 		GridBagConstraints g = new GridBagConstraints();
 		g.gridx = 1;
 		g.gridy = 1;
+		g.ipadx = XPAD;
+		g.ipady = YPAD;
 		g.fill = GridBagConstraints.BOTH;
 		g.fill = GridBagConstraints.CENTER;
 		
