@@ -4,7 +4,7 @@ import javax.management.Notification;
 
 /**
  * Interface that can be implemented to provide observer support.
- * @author Gabrielle Germain
+ * @author Eleyine Zarour
  *
  */
 public interface Observer

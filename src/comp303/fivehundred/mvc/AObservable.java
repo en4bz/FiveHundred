@@ -6,10 +6,10 @@ import javax.management.Notification;
 
 /**
  * Implements a class which can be extended to provide observer support.
- * @author Gabrielle Germain
+ * @author Eleyine Zarour
  *
  */
-public class Observable
+public class AObservable
 {
     // MVC-related fields
 	private ArrayList<Observer> aObservers = new ArrayList<Observer>();
@@ -43,7 +43,7 @@ public class Observable
      * Get the notification sequence number within the source object.
      * @return Serial number identifying a particular instance of notification in the context of the notification source.
      */
-    protected long getNotificationSequenceNumber()
+    public long getNotificationSequenceNumber()
     {
     	return aNotificationSequenceNumber++;	
     }
