@@ -1,6 +1,7 @@
 package comp303.fivehundred.gui;
 
 import java.awt.FlowLayout;
+import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -12,6 +13,7 @@ import comp303.fivehundred.util.Card.Suit;
 @SuppressWarnings("serial")
 public class ContractPanel extends JPanel
 {
+	private static final int SIZE = 150;
 	private Bid aBid;
 	
 	ContractPanel(){
@@ -19,8 +21,10 @@ public class ContractPanel extends JPanel
 		this.setOpaque(false);
 		String lPath = getClass().getClassLoader().getResource(".").getPath();
 		ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/null.png");
+		lIcon = new ImageIcon( lIcon.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH));
 		this.add(new JLabel(lIcon));
 	}
+	
 	
 	private void redraw(){
 		String lSuit;
@@ -42,6 +46,7 @@ public class ContractPanel extends JPanel
 		}
 		String lPath = getClass().getClassLoader().getResource(".").getPath();
 		ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/" + lSuit + aBid.getTricksBid() + ".png");
+		lIcon = new ImageIcon( lIcon.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH));
 		this.add(new JLabel(lIcon));
 		this.validate();
 		this.repaint();
