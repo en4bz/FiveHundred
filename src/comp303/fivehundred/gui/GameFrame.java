@@ -2,6 +2,7 @@ package comp303.fivehundred.gui;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.management.Notification;
@@ -14,17 +15,17 @@ import org.slf4j.LoggerFactory;
 import comp303.fivehundred.engine.GameEngine;
 import comp303.fivehundred.engine.GameLogger;
 import comp303.fivehundred.engine.GameStatistics;
+import comp303.fivehundred.mvc.IObservable;
 import comp303.fivehundred.mvc.Observer;
 import comp303.fivehundred.player.Team;
 import comp303.fivehundred.util.Card;
 
 @SuppressWarnings("serial")
-public class GameFrame extends JFrame implements Observer
+public class GameFrame extends JFrame implements Observer, IObservable
 {
     public static Color BACKGROUND_COLOR = new Color(40, 160, 20);
     public static Card nextCard;
     private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("comp303.fivehundred.gui.MessageBundle");
-    private long aNotificationSequenceNumber = 0;
     private GameEngine aEngine;
     private GameStatistics aGameStats;
     private GameLogger aGameLogger;
@@ -37,6 +38,13 @@ public class GameFrame extends JFrame implements Observer
     
     private final static Logger aLogger = LoggerFactory.getLogger("GameFrameLogger");
     private static boolean aIsLogging = true;
+    
+    private int aSpeed = 500;
+    private boolean aAutoPlay = false;
+    
+    // MVC-related fields
+	private ArrayList<Observer> aObservers = new ArrayList<Observer>();
+	private long aNotificationSequenceNumber = 0;
 
     public GameFrame()
     {
@@ -231,7 +239,7 @@ public class GameFrame extends JFrame implements Observer
     {
         try
         {
-            Thread.sleep(100);
+            Thread.sleep(aSpeed);
         }
         catch (InterruptedException e){}
     }
@@ -246,10 +254,6 @@ public class GameFrame extends JFrame implements Observer
         return aEngine;
     }
             
-    protected long getNotificationSequenceNumber()
-    {
-        return aNotificationSequenceNumber++;   
-    }
     
     public enum State {
         displayMenu,
@@ -267,4 +271,61 @@ public class GameFrame extends JFrame implements Observer
         gameOver
     }
 
+    public enum Human {
+    	playDone,
+    	playPrompt,
+    	playValidated,
+    	discardDone,
+    	discardPrompt,
+    	discardValidated,
+    	bidDone,
+    	bidPrompt,
+    	bidValidated
+    }
+    
+    protected void setSpeed(int pSpeed)
+    {
+    	aSpeed = pSpeed;
+    }
+
+	protected int getSpeed()
+	{
+		return aSpeed;
+	}
+
+	protected void setAutoPlay(boolean lBit)
+	{
+		if(lBit)
+		{
+			aAutoPlay = true;
+		}
+		else
+		{
+			aAutoPlay = false;
+		}
+		
+	}
+
+	@Override
+	public void addObserver(Observer pObserver)
+	{
+		if(!aObservers.contains(pObserver))
+		{
+			aObservers.add(pObserver);
+		}		
+	}
+
+	@Override
+	public void notifyObservers(Notification pNotification)
+	{
+		for(Observer observer : aObservers)
+		{
+			observer.update(pNotification);
+		}		
+	}
+	
+    public long getNotificationSequenceNumber()
+    {
+    	return aNotificationSequenceNumber++;	
+    }
 }
