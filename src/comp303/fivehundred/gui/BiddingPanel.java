@@ -3,13 +3,15 @@ package comp303.fivehundred.gui;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.model.Bid;
-import comp303.fivehundred.util.Card.Suit;
 
+/**
+ * Graphical representation of the bidding play. Similar to trick play but with contract labels rather than cards.
+ * @author Ian Forbes
+ *
+ */
 @SuppressWarnings("serial")
 public class BiddingPanel extends JPanel
 {
@@ -30,13 +32,12 @@ public class BiddingPanel extends JPanel
 	
 	private void redraw(){
 		this.removeAll();
-		
-		this.add(new JLabel(generateIcon(aEast)));
+		this.add(new BidLabel(aWest));
 		aNorthSouth.removeAll();
-		aNorthSouth.add(new JLabel(generateIcon(aSouth)));
-		aNorthSouth.add(new JLabel(generateIcon(aNorth)));
+		aNorthSouth.add(new BidLabel(aNorth));
+		aNorthSouth.add(new BidLabel(aSouth));
 		this.add(aNorthSouth);
-		this.add(new JLabel(generateIcon(aWest)));
+		this.add(new BidLabel(aEast));
 
 		this.validate();
 		this.repaint();
@@ -68,31 +69,5 @@ public class BiddingPanel extends JPanel
 		aEast = null;
 		aWest = null;
 		this.redraw();
-	}
-	
-	private ImageIcon generateIcon(Bid pBid){
-		String lSuit;
-		this.removeAll();
-		if(pBid.isPass()){
-			
-		}
-		else if(pBid.isNoTrump()){
-			lSuit = "NT";
-		}
-		else if(pBid.getSuit().equals(Suit.CLUBS)){
-			lSuit = "C";
-		}
-		else if(pBid.getSuit().equals(Suit.SPADES)){
-			lSuit = "S";
-		}
-		else if(pBid.getSuit().equals(Suit.DIAMONDS)){
-			lSuit = "D";
-		}
-		else{
-			lSuit = "H";
-		}
-		String lPath = getClass().getClassLoader().getResource(".").getPath();
-//		ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/" + lSuit + pBid.getTricksBid() + ".png");
-		return null;
 	}
 }
