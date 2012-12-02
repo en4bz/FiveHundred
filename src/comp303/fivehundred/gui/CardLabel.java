@@ -95,6 +95,9 @@ public class CardLabel extends JLabel implements MouseListener
 		if(this.getParent().getParent() instanceof PlayerArea && ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT){
 			GameFrame.nextCard = aCard;
 		}
+		if(this.getParent() instanceof WidowPanel){
+			
+		}
 	}
 
 	@Override
@@ -110,6 +113,10 @@ public class CardLabel extends JLabel implements MouseListener
 			this.setLocation(this.getX(), this.getY() - 10);
 			this.repaint();
 		}
+		if(this.getParent() instanceof WidowPanel){
+			this.setVisibility(false);
+		//	this.repaint();
+		}
 	}
 
 	@Override
@@ -118,6 +125,10 @@ public class CardLabel extends JLabel implements MouseListener
 		if(this.getParent().getParent() instanceof PlayerArea && ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT){
 			this.setLocation(this.getX(), this.getY() + 10);
 			this.repaint();
+		}
+		if(this.getParent() instanceof WidowPanel){
+			this.setVisibility(true);
+	//		this.repaint();
 		}
 	}
 }
