@@ -31,6 +31,7 @@ public class HumanPlayer extends APlayer
 	public Card play(Trick pTrick)
 	{
 		Card lPlayed;
+		GameFrame.nextCard = null;
 		while(GameFrame.nextCard == null)
 		{
 			try
@@ -62,6 +63,7 @@ public class HumanPlayer extends APlayer
 	public CardList exchange(Bid[] pBids, int pIndex, Hand pWidow)
 	{
 		CardList toDiscard = new CardList();
+		GameFrame.nextCard = null;
 		for(int i = 0; i < 6; i++)
 		{
 			while(GameFrame.nextCard == null)
