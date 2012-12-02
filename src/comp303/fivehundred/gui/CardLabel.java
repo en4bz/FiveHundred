@@ -7,7 +7,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import comp303.fivehundred.gui.external.RotatedIcon;
-import comp303.fivehundred.player.HumanPlayer;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardImages;
 
