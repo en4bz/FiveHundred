@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import comp303.fivehundred.gui.external.RotatedIcon;
+import comp303.fivehundred.player.HumanPlayer;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardImages;
 
@@ -112,14 +113,18 @@ public class CardLabel extends JLabel implements MouseListener
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
-		
+		if(this.getParent().getParent() instanceof PlayerArea){
+			this.setLocation(this.getX(), this.getY() + 5);
+			this.repaint();
+		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
-		
+		if(this.getParent() instanceof CardListPanel){
+			this.setLocation(this.getX(), this.getY() - 5);
+			this.repaint();
+		}
 	}
 }
