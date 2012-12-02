@@ -2,6 +2,7 @@ package comp303.fivehundred.gui;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -15,10 +16,13 @@ import org.slf4j.LoggerFactory;
 import comp303.fivehundred.engine.GameEngine;
 import comp303.fivehundred.engine.GameLogger;
 import comp303.fivehundred.engine.GameStatistics;
+import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.mvc.IObservable;
 import comp303.fivehundred.mvc.Observer;
+import comp303.fivehundred.player.HumanPlayer;
 import comp303.fivehundred.player.Team;
 import comp303.fivehundred.util.Card;
+import comp303.fivehundred.util.CardList;
 
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements Observer, IObservable
@@ -35,62 +39,71 @@ public class GameFrame extends JFrame implements Observer, IObservable
     public static int HEIGHT = 600;
     private int aGamesLeft = 10;
     private boolean aPracticeModeOn = true;
-    
+
     private final static Logger aLogger = LoggerFactory.getLogger("GameFrameLogger");
     private static boolean aIsLogging = true;
-    
-    private int aSpeed = 100;
+
+    private int aSpeed = 500;
     private boolean aAutoPlay = false;
-    
+
     // MVC-related fields
-	private ArrayList<Observer> aObservers = new ArrayList<Observer>();
-	private long aNotificationSequenceNumber = 0;
+    private ArrayList<Observer> aObservers = new ArrayList<Observer>();
+    private long aNotificationSequenceNumber = 0;
+
+    // Human player fields
+    private boolean aPlayPrompted = false;
+    private boolean aBidPrompted = false;
+    private boolean aDiscardPrompted = false;
+    private HumanPlayer aHuman;
+    private CardList aPlayableCards;
+    private Card aPlayedCard = null;
+    private Bid aSelectedBid = null;
+    private Bid[] aPreviousBids = null;
+    private CardList aDiscardedCards = null;
 
     public GameFrame()
     {
         // Build basic frame
-        this.setTitle("Five Hundred");  
+        this.setTitle("Five Hundred");
         this.setLayout(new FlowLayout());
-        this.setLocation(5, 5); //Top-left corner of the screen
-     //   this.setSize(Toolkit.getDefaultToolkit().getScreenSize()); //Force Full Screen 
-        
+        this.setLocation(5, 5); // Top-left corner of the screen
+        this.setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
+
         // Add Menu
-        this.setJMenuBar(new Menu()); //add menu to the new window (new game)
-        
+        this.setJMenuBar(new Menu()); // add menu to the new window (new game)
+
         // Start the party
         aPlayerMenu = new PlayerMenu(this);
         this.add(aPlayerMenu);
-        this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
- //       this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-         
-        this.setVisible( true );
-    }
-    
-    public static void main(String[] args)
-    {
-      new GameFrame();
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+
+        this.setVisible(true);
     }
 
-    
+    public static void main(String[] args)
+    {
+        new GameFrame();
+    }
+
     private void newGameSet()
     {
-    	log("Starting new game set.");
+        log("Starting new game set.");
         Team[] lTeams = aPlayerMenu.getTeams();
         System.out.println(lTeams[0]);
         System.out.println(lTeams[1]);
-        
+
         aPracticeModeOn = aPlayerMenu.isPracticeModeOn();
         aGamesLeft = aPlayerMenu.getNumberOfGamesToPlay();
-        
+
         // make new game engine
         aEngine = new GameEngine(lTeams[0], lTeams[1]);
-        
+
         this.remove(aPlayerMenu);
-        aBoard = new GameBoard(lTeams); 
+        aBoard = new GameBoard(lTeams);
         this.add(aBoard);
-      
+
         log("Game Board drawn.");
-        
 
         aEngine.addObserver(this);
         aGameStats = new GameStatistics();
@@ -98,13 +111,12 @@ public class GameFrame extends JFrame implements Observer, IObservable
         aEngine.addObserver(aGameStats);
         aEngine.addObserver(aGameLogger);
 
-
         newGame();
     }
-    
+
     private void newGame()
     {
-        if(aGamesLeft > 0)
+        if (aGamesLeft > 0)
         {
             log("Starting new game.");
             aEngine.newGame();
@@ -117,10 +129,11 @@ public class GameFrame extends JFrame implements Observer, IObservable
             remove(aBoard);
             JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.GameFrame.GameSetOver"));
             aPlayerMenu = new PlayerMenu(this);
+            setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
             pack();
         }
     }
-    
+
     private void newDeal()
     {
         log("Starting new deal.");
@@ -128,20 +141,20 @@ public class GameFrame extends JFrame implements Observer, IObservable
         log("Starting new bid.");
         aEngine.bid();
     }
-    
+
     private void newBid()
     {
         log("Starting new bid.");
         aEngine.bid();
     }
-    
+
     private void play()
     {
         log("Play!");
         aEngine.exchange();
         aEngine.playRound();
         aEngine.computeScore();
-        if(aEngine.isGameOver())
+        if (aEngine.isGameOver())
         {
             aGamesLeft--;
             newGame();
@@ -151,72 +164,74 @@ public class GameFrame extends JFrame implements Observer, IObservable
             newDeal();
         }
     }
-    
+
     @Override
     public void update(Notification pNotification)
     {
-        if(pNotification.getType().equals("gui.gameframe"))
+        if (pNotification.getType().equals("gui.gameframe"))
         {
             State lState = State.valueOf(pNotification.getMessage());
-            switch (lState) 
+            switch (lState)
             {
-                case newGameSet:
-                	Thread t = new Thread(new Runnable() {
-                	    @Override
-                	    public void run() {
-                	       newGameSet();
-                	    }
-                	   });
-                	t.start();
+            case newGameSet:
+                Thread t = new Thread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        newGameSet();
+                    }
+                });
+                t.start();
 
-                    break; 
-                default:
-                    break;
+                break;
+            default:
+                break;
             }
         }
-        if(pNotification.getType().equals("game.engine")){
+        if (pNotification.getType().equals("game.engine"))
+        {
             setTitle(pNotification.getMessage());
-           
+
             sleep();
             GameEngine lEngine = (GameEngine) (pNotification.getSource());
-            switch(GameEngine.State.valueOf(pNotification.getMessage())){
+            switch (GameEngine.State.valueOf(pNotification.getMessage()))
+            {
             case newGame:
                 log("Resetting game board scores.");
                 aBoard.resetScores();
-                if(aPracticeModeOn){
-                	aBoard.setPracticeMode();
+                if (aPracticeModeOn)
+                {
+                    aBoard.setPracticeMode();
                 }
                 break;
-            case newDeal: 
+            case newDeal:
                 log("Updating card panels.");
                 aBoard.updateCardPanels();
                 log("Resetting tricks count.");
                 aBoard.resetTricksCount();
-                aBoard.setBiddingCentral();
                 invalidate();
                 validate();
                 repaint();
                 break;
             case newBid:
-            	aBoard.updateBids(lEngine.getCurrentPlayer(),aEngine.getBids());
-            	break;
+                aBoard.updateBids(lEngine.getCurrentPlayer(), aEngine.getBids());
+                break;
             case allPasses:
-            	log("All passes!");
-            	aBoard.resetBids();
-            	newDeal();
-            	break;
+                log("All passes!");
+                newDeal();
+                break;
             case newContract:
-            	log("New contract.");
-            	aBoard.updateWidow(lEngine.getWidow(),lEngine.getContractor());
-            	aBoard.setWidowCentral();
+                log("New contract.");
+                aBoard.updateWidow(lEngine.getWidow(), lEngine.getContractor());
+                aBoard.setWidowCentral();
             	aBoard.setContract(lEngine.getContract());
             	invalidate();
                 validate();
-            	repaint();
-            	play();
-            	break;
+            	repaint();                play();
+                break;
             case cardsDiscarded:
-            	aBoard.updateWidow(lEngine.getWidow(),lEngine.getContractor());
+                aBoard.updateWidow(lEngine.getWidow(), lEngine.getContractor());
             	aBoard.setPlayingCentral();
                 aBoard.updateCardPanel(lEngine.getCurrentPlayer());
                 invalidate();
@@ -225,7 +240,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 break;
             case cardPlayed:
                 aBoard.updateCardPanel(lEngine.getCurrentPlayer());
-                aBoard.updateTrick(lEngine.getCurrentPlayer() ,((GameEngine)pNotification.getSource()).getCardPlayed());
+                aBoard.updateTrick(lEngine.getCurrentPlayer(), ((GameEngine) pNotification.getSource()).getCardPlayed());
                 break;
             case newTrick:
                 aBoard.resetCurrentTrick();
@@ -243,103 +258,216 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 break;
             }
         }
+        if (pNotification.getType().equals("gui.humanplayer"))
+        {
+
+            aHuman = (HumanPlayer) (pNotification.getSource());
+            aPlayableCards = aHuman.getPlayableCards();
+            aPreviousBids = aHuman.getPreviousBids();
+            switch (GameFrame.Human.valueOf(pNotification.getMessage()))
+            {
+            case playPrompt:
+                if(!aPlayPrompted)
+                    log("Human player is prompted to play.");
+                notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+                        GameFrame.Human.playPrompt.toString()));
+                aPlayPrompted = true;
+                break;
+            case playDone:
+                log("Human has played the card");
+                aPlayPrompted = false;
+                aPlayedCard = null;
+                aPlayableCards = null;
+                notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+                        GameFrame.Human.playDone.toString()));
+                break;
+            case bidDone:
+                log("Human has bid.");
+                aBidPrompted = false;
+                aSelectedBid = null;
+                notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+                        GameFrame.Human.bidDone.toString()));
+                break;
+            case bidPrompt:
+                if(!aBidPrompted)
+                    log("Human player is prompted to bid.");
+                aBidPrompted = true;
+                notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+                        GameFrame.Human.bidPrompt.toString()));
+                break;
+            case discardPrompt:
+                if(!aDiscardPrompted)
+                    log("Human player is prompted to discard.");
+                notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+                        GameFrame.Human.discardPrompt.toString()));
+                aDiscardPrompted = true;
+                break;
+            case discardDone:
+                log("Human has discarded cards.");
+                aDiscardPrompted = false;
+                aDiscardedCards = null;
+                notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+                        GameFrame.Human.discardDone.toString()));
+                break;
+            default:
+                break;
+            }
+        }
+        if (pNotification.getType().equals("game.actiontoolbar"))
+        {
+
+            ActionToolbar lBar = (ActionToolbar) (pNotification.getSource());
+            switch (GameFrame.Human.valueOf(pNotification.getMessage()))
+            {
+            case bidDone:
+                log("Human has bid.");
+                if (aBidPrompted)
+                {
+                    if (aPreviousBids.length == 0
+                            || aSelectedBid.compareTo(aPreviousBids[aPreviousBids.length - 1]) > 0)
+                    {
+                        log("Bid valid.");
+                        aSelectedBid = lBar.geBid();
+                        notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+                                GameFrame.Human.bidValidated.toString()));
+                    }
+                    else
+                    {
+                        // TODO send invalidBid notification
+                        aSelectedBid = null;
+                    }
+                }
+                aBidPrompted = false;
+                break;
+
+            default:
+                break;
+            }
+        }
+        if (pNotification.getType().equals("game.cardLabel"))
+        {
+
+            CardLabel lCardLabel = (CardLabel) (pNotification.getSource());
+            switch (GameFrame.Human.valueOf(pNotification.getMessage()))
+            {
+            case cardClicked:
+                log("Human player has clicked a card.");
+                if (aPlayPrompted)
+                {
+                    if (aPlayableCards.contains(lCardLabel.getCard()))
+                    {
+                        aPlayedCard = lCardLabel.getCard();
+                        notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+                                GameFrame.Human.playValidated.toString()));
+                    }
+                    else
+                    {
+                        // TODO send invalid play notification
+                        aPlayedCard = null;
+                    }
+                }
+                if(aDiscardPrompted)
+                {
+                    // how to check if card clicked came from widow TODO
+                    if(aDiscardedCards == null)
+                    {
+                        aDiscardedCards = new CardList();
+                    }
+                }
+                aPlayPrompted = false;
+                break;
+            default:
+                break;
+            }
+        }
     }
-    
+
+    public Card getPlayedCard()
+    {
+        return aPlayedCard;
+    }
+
     private void sleep()
     {
         try
         {
             Thread.sleep(aSpeed);
         }
-        catch (InterruptedException e){}
+        catch (InterruptedException e)
+        {
+        }
     }
-    
+
     public static void log(String message)
     {
-        if(aIsLogging)
+        if (aIsLogging)
             aLogger.info(message);
     }
-    
-    GameEngine getGameEngine() {
+
+    GameEngine getGameEngine()
+    {
         return aEngine;
     }
-            
-    
-    public enum State {
-        displayMenu,
-        play,
-        newGameSet,
-        newGame,
-        newDeal,
-        newBid,
-        newContract,
-        cardsDiscarded,
-        cardPlayed,
-        newTrick,
-        trickWon,
-        roundEnd,
-        gameOver
+
+    public enum State
+    {
+        displayMenu, play, newGameSet, newGame, newDeal, newBid, newContract, cardsDiscarded, cardPlayed, newTrick, trickWon, roundEnd, gameOver
     }
 
-    public enum Human {
-    	playDone,
-    	playPrompt,
-    	playValidated,
-    	discardDone,
-    	discardPrompt,
-    	discardValidated,
-    	bidDone,
-    	bidPrompt,
-    	bidValidated
+    public enum Human
+    {
+        playDone, playPrompt, playValidated, discardDone, discardPrompt, discardValidated, bidDone, bidPrompt, bidValidated, cardClicked
     }
-    
+
     protected void setSpeed(int pSpeed)
     {
-    	aSpeed = pSpeed;
+        aSpeed = pSpeed;
     }
 
-	protected int getSpeed()
-	{
-		return aSpeed;
-	}
+    protected int getSpeed()
+    {
+        return aSpeed;
+    }
 
-	protected void setAutoPlay(boolean lBit)
-	{
-		if(lBit)
-		{
-			aAutoPlay = true;
-		}
-		else
-		{
-			aAutoPlay = false;
-		}
-		
-	}
+    protected void setAutoPlay(boolean lBit)
+    {
+        if (lBit)
+        {
+            aAutoPlay = true;
+        }
+        else
+        {
+            aAutoPlay = false;
+        }
 
-	@Override
-	public void addObserver(Observer pObserver)
-	{
-		if(!aObservers.contains(pObserver))
-		{
-			aObservers.add(pObserver);
-		}		
-	}
+    }
 
-	@Override
-	public void notifyObservers(Notification pNotification)
-	{
-		for(Observer observer : aObservers)
-		{
-			observer.update(pNotification);
-		}		
-	}
-	
+    @Override
+    public void addObserver(Observer pObserver)
+    {
+        if (!aObservers.contains(pObserver))
+        {
+            aObservers.add(pObserver);
+        }
+    }
+
+    @Override
+    public void notifyObservers(Notification pNotification)
+    {
+        for (Observer observer : aObservers)
+        {
+            observer.update(pNotification);
+        }
+    }
+
     public long getNotificationSequenceNumber()
     {
-    	return aNotificationSequenceNumber++;	
+        return aNotificationSequenceNumber++;
     }
-    
-    public boolean inPracticeMode(){
-    	return aPracticeModeOn;
+
+    public Bid getSelectedBid()
+    {
+        return aSelectedBid;
     }
+
 }
