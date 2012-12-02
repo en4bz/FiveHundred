@@ -1,7 +1,6 @@
 package comp303.fivehundred.gui;
 
 import java.awt.Component;
-import java.awt.Insets;
 import java.awt.Point;
 
 import javax.swing.BorderFactory;
@@ -60,7 +59,7 @@ public class CardListPanel extends JPanel
 	protected void redraw()
 	{
 		this.removeAll();
-		for(Card c : aCards)
+		for(Card c : aCards.sort(new Card.BySuitNoTrumpComparator()))
 		{
 			this.add(new CardLabel(c,aRotation, aIsVisible));
 		}
@@ -70,6 +69,7 @@ public class CardListPanel extends JPanel
 	
 	public void setVisibility(boolean pVisibility)
 	{
+		aIsVisible = pVisibility;
 		for(Component c : this.getComponents())
 		{
 			((CardLabel) c).setVisibility(pVisibility);
