@@ -27,7 +27,6 @@ public class BiddingPanel extends JPanel
 		aNorthSouth = new JPanel(new GridLayout(2,1,0,5));
 		aNorthSouth.setOpaque(false);
 		this.setOpaque(false);
-
 		this.redraw();
 	}
 	
