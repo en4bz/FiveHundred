@@ -39,7 +39,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
     private final static Logger aLogger = LoggerFactory.getLogger("GameFrameLogger");
     private static boolean aIsLogging = true;
     
-    private int aSpeed = 500;
+    private int aSpeed = 1000;
     private boolean aAutoPlay = false;
     
     // MVC-related fields

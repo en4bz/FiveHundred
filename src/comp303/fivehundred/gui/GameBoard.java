@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -402,22 +401,27 @@ public class GameBoard extends JPanel
 		}
 	}
 
+	private static int bidCounter = 0;
+	
 	public void updateBids(APlayer pPlayer, Bid[] bids)
 	{
 		if(aBottomPlayer.getPlayer() == pPlayer){
-			aBidding.setSouth(bids[0]);
+			aBidding.setSouth(bids[bidCounter++]);
 		}
 		else if(aTopPlayer.getPlayer() == pPlayer){
-			aBidding.setNorth(bids[0]);
+			aBidding.setNorth(bids[bidCounter++]);
 		}
 		else if(aLeftPlayer.getPlayer() == pPlayer){
-			aBidding.setWest(bids[0]);
+			aBidding.setWest(bids[bidCounter++]);
 		}
 		else if(aRightPlayer.getPlayer() == pPlayer){
-			aBidding.setEast(bids[0]);
+			aBidding.setEast(bids[bidCounter++]);
 		}
 		else{
 			assert pPlayer == null;
+		}
+		if(bidCounter == 4){
+			bidCounter = 0;
 		}
 	}
 }
