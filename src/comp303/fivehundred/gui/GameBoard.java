@@ -32,8 +32,8 @@ import comp303.fivehundred.util.CardList;
 @SuppressWarnings("serial")
 public class GameBoard extends JPanel
 {
-	private final static int XPAD = 50;
-	private final static int YPAD = 50;
+	private final static int XPAD = 0;
+	private final static int YPAD = 0;
 	
 	final Team[] aTeams;
 	
