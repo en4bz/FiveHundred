@@ -42,10 +42,12 @@ public class CardListPanel extends JPanel
 		if(aRotation == Rotation.RIGHT)
 		{
 			this.setLayout(new OverlapLayout(new Point(0,VERTICAL_OVERLAP)));
+			this.setBorder(BorderFactory.createEmptyBorder(0, BORDER_SIZE, 0, BORDER_SIZE));
 		}
 		else if (aRotation == Rotation.LEFT)
 		{
 			this.setLayout(new OverlapLayout(new Point(0,VERTICAL_OVERLAP),false));
+			this.setBorder(BorderFactory.createEmptyBorder(0, BORDER_SIZE, 0, BORDER_SIZE));
 		}
 		else
 		{

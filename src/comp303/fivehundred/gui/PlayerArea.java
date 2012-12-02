@@ -18,7 +18,6 @@ import comp303.fivehundred.player.APlayer;
 @SuppressWarnings("serial")
 public class PlayerArea extends JPanel
 {
-	private static final int GAP = 5;
 	private static final int TRICK_OVERLAP = 25;
 	private final Rotation aRotation;
 	private final APlayer aPlayer;
@@ -37,7 +36,6 @@ public class PlayerArea extends JPanel
 			this.hack();
 			this.add(aHand, BorderLayout.WEST);
 			this.add(aTricksWon, BorderLayout.EAST);
-			((BorderLayout) this.getLayout()).setHgap(GAP);
 		}
 		else if(aRotation == Rotation.RIGHT)
 		{
@@ -45,7 +43,6 @@ public class PlayerArea extends JPanel
 			this.hack();
 			this.add(aHand, BorderLayout.EAST);
 			this.add(aTricksWon, BorderLayout.WEST);
-			((BorderLayout) this.getLayout()).setHgap(GAP);
 		}
 		else if(aRotation == Rotation.UPSIDE_DOWN)
 		{
@@ -53,7 +50,6 @@ public class PlayerArea extends JPanel
 			this.hack();
 			this.add(aHand, BorderLayout.SOUTH);
 			this.add(aTricksWon, BorderLayout.NORTH);
-			((BorderLayout) this.getLayout()).setVgap(GAP);
 		}
 		else
 		{
@@ -61,7 +57,6 @@ public class PlayerArea extends JPanel
 			this.hack();
 			this.add(aHand, BorderLayout.NORTH);
 			this.add(aTricksWon, BorderLayout.SOUTH);
-			((BorderLayout) this.getLayout()).setVgap(GAP);
 		}
 		aTricksWon.setOpaque(false);
 		this.setOpaque(false);
