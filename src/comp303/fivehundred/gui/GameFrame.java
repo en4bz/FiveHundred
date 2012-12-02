@@ -192,6 +192,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 aBoard.updateCardPanels();
                 log("Resetting tricks count.");
                 aBoard.resetTricksCount();
+                aBoard.setBiddingCentral();
                 invalidate();
                 validate();
                 repaint();
@@ -206,7 +207,8 @@ public class GameFrame extends JFrame implements Observer, IObservable
             case newContract:
             	log("New contract.");
             	aBoard.updateWidow(lEngine.getWidow(),lEngine.getContractor());
-                aBoard.updateBid(lEngine.getContract());
+            	aBoard.setPlayingCentral();
+            	aBoard.setContract(lEngine.getContract());
             	play();
             	break;
             case cardsDiscarded:

@@ -40,6 +40,7 @@ public class GameBoard extends JPanel
 	final APlayer[] aEWTeam;
 	
 	final ContractPanel aContract;
+	final JPanel aCenter;
 	final WidowPanel aWidow;
 	final TrickPanel aCurrentTrick;
 	final BiddingPanel aBidding;
@@ -62,7 +63,8 @@ public class GameBoard extends JPanel
 		aNSTeam = pPlayer[0].getPlayers();
 		aEWTeam = pPlayer[1].getPlayers();
 		
-		
+		aCenter= new JPanel(new FlowLayout());
+		aCenter.setOpaque(false);
 		//Sub-Panels of game board
 		
 		aWidow = new WidowPanel();	
@@ -197,13 +199,14 @@ public class GameBoard extends JPanel
 		this.add(aContract,con);
 		//new line
 		this.add(aLeftPlayer,p4);
-		this.add(aCurrentTrick,g);
+		this.add(aCenter,g);
 		this.add(aRightPlayer,p2);
 		//new line
 		this.add(aScore_EW, s_EW);
 		this.add(aBottomPlayer, p3);
 		this.add(aScore_NS,s_NS);
 		//end
+		aCenter.add(aCurrentTrick);
 	}
 	
 	/**
@@ -276,6 +279,9 @@ public class GameBoard extends JPanel
 		}
 	}
 	
+	public void setContract(Bid pContract){
+		aContract.setBid(pContract);
+	}
 	public void resetCurrentTrick(){
 		aCurrentTrick.reset();
 	}
@@ -336,10 +342,18 @@ public class GameBoard extends JPanel
 			aRightPlayer.clearTricks();
 	}
 	
-	public void updateBid(Bid contract)
-	{
-		aContract.setVisible(true);
-		aContract.setBid(contract);
+	public void setBiddingCentral(){
+		aCenter.removeAll();
+		aCenter.add(aBidding);
+		aCenter.revalidate();
+		aCenter.repaint();
+	}
+	
+	public void setPlayingCentral(){
+		aCenter.removeAll();
+		aCenter.add(aCurrentTrick);
+		aCenter.revalidate();
+		aCenter.repaint();
 	}
 	
 	public void resetScores(){
