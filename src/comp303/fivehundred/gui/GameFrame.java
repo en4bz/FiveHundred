@@ -1,16 +1,12 @@
 package comp303.fivehundred.gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Toolkit;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
 import javax.management.Notification;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +16,13 @@ import comp303.fivehundred.engine.GameLogger;
 import comp303.fivehundred.engine.GameStatistics;
 import comp303.fivehundred.mvc.Observer;
 import comp303.fivehundred.player.Team;
+import comp303.fivehundred.util.Card;
 
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements Observer
 {
     public static Color BACKGROUND_COLOR = new Color(40, 160, 20);
+    public static Card nextCard;
     private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("comp303.fivehundred.gui.MessageBundle");
     private long aNotificationSequenceNumber = 0;
     private GameEngine aEngine;
@@ -45,8 +43,8 @@ public class GameFrame extends JFrame implements Observer
         // Build basic frame
         this.setTitle("Five Hundred");  
         this.setLayout(new FlowLayout());
-        this.setLocation(0, 0); //Top-left corner of the screen
-        this.setSize(Toolkit.getDefaultToolkit().getScreenSize()); //Force Full Screen 
+        this.setLocation(5, 5); //Top-left corner of the screen
+     //   this.setSize(Toolkit.getDefaultToolkit().getScreenSize()); //Force Full Screen 
         
         // Add Menu
         this.setJMenuBar(new Menu()); //add menu to the new window (new game)
@@ -55,7 +53,7 @@ public class GameFrame extends JFrame implements Observer
         aPlayerMenu = new PlayerMenu(this);
         this.add(aPlayerMenu);
         this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+ //       this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
          
         this.setVisible( true );
     }
@@ -85,7 +83,7 @@ public class GameFrame extends JFrame implements Observer
       
         log("Game Board drawn.");
         
-        log("Adding Observers.");
+
         aEngine.addObserver(this);
         aGameStats = new GameStatistics();
         aGameLogger = new GameLogger();
@@ -119,7 +117,8 @@ public class GameFrame extends JFrame implements Observer
     {
         log("Starting new deal.");
         aEngine.deal();
-        newBid();
+        log("Starting new bid.");
+        aEngine.bid();
     }
     
     private void newBid()
@@ -189,14 +188,17 @@ public class GameFrame extends JFrame implements Observer
                 validate();
                 repaint();
                 break;
+            case newBid:
+            	aBoard.updateBids(lEngine.getCurrentPlayer(),aEngine.getBids());
+            	break;
             case allPasses:
             	log("All passes!");
             	newDeal();
             	break;
             case newContract:
             	log("New contract.");
+            	aBoard.updateWidow(lEngine.getWidow(),lEngine.getContractor());
                 aBoard.updateBid(lEngine.getContract());
-                aBoard.updateWidow(lEngine.getWidow(),lEngine.getContractor());
             	play();
             	break;
             case cardsDiscarded:
@@ -265,10 +267,4 @@ public class GameFrame extends JFrame implements Observer
         gameOver
     }
 
-    public enum Action {
-    	play,
-    	discard,
-    	bid
-    }
-    
 }
