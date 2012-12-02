@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.model.Bid;
+import comp303.fivehundred.util.Card.Suit;
 
 /**
  * Graphical representation of the bidding play. Similar to trick play but with contract labels rather than cards.
@@ -27,6 +28,10 @@ public class BiddingPanel extends JPanel
 		aNorthSouth = new JPanel(new GridLayout(2,1,0,5));
 		aNorthSouth.setOpaque(false);
 		this.setOpaque(false);
+		aNorth = new Bid(7,Suit.HEARTS);
+		aSouth = new Bid(7,Suit.HEARTS);
+		aEast = new Bid(7,Suit.HEARTS);
+		aWest = new Bid(7,Suit.HEARTS);
 		this.redraw();
 	}
 	

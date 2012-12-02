@@ -15,8 +15,11 @@ public class BidLabel extends JLabel
 	
 	public BidLabel(Bid pBid){
 		String lSuit;
+		String lPath = getClass().getClassLoader().getResource(".").getPath();
 		if(pBid.isPass()){
-			lSuit = "P";
+			ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/10NT.png");
+			this.setIcon(new ImageIcon( lIcon.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH)));
+			return;
 		}
 		else if(pBid.isNoTrump()){
 			lSuit = "NT";
@@ -33,7 +36,6 @@ public class BidLabel extends JLabel
 		else{
 			lSuit = "H";
 		}
-		String lPath = getClass().getClassLoader().getResource(".").getPath();
 		ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/" + lSuit + pBid.getTricksBid() + ".png");
 		this.setIcon(new ImageIcon( lIcon.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH)));
 	}
