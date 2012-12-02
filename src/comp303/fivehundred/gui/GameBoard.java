@@ -16,6 +16,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.player.APlayer;
@@ -67,38 +70,36 @@ public class GameBoard extends JPanel
 		for(int i = 0; i < 6; i++){
 			aWidow.add(new CardLabel(null,Rotation.DEFAULT,false));
 		}
-		aWidow.setBorder(BorderFactory.createTitledBorder("Widow")); //debug
 		
 		aTopPlayer = new PlayerArea(aNSTeam[0], Rotation.UPSIDE_DOWN, false);
-		aTopPlayer.setBorder(BorderFactory.createTitledBorder("Player1: Tricks won+Hand")); //debug
+		aTopPlayer.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), aNSTeam[0].getName(), TitledBorder.CENTER, TitledBorder.BELOW_TOP)); //debug
 		
 		aRightPlayer = new PlayerArea(aEWTeam[1], Rotation.LEFT, false);
-		aRightPlayer.setBorder(BorderFactory.createTitledBorder("Player 2: Tricks won+Hand")); //debug
+		aRightPlayer.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), aEWTeam[1].getName(), TitledBorder.CENTER, TitledBorder.BELOW_TOP)); //debug
 		
 		aBottomPlayer = new PlayerArea(aNSTeam[1], Rotation.DEFAULT, true);
-		aBottomPlayer.setBorder(BorderFactory.createTitledBorder("Player 3: Tricks won+Hand")); //debug
+		aBottomPlayer.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), aNSTeam[1].getName(), TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM));
 		
 		aLeftPlayer = new PlayerArea(aEWTeam[0], Rotation.RIGHT, false);
-		aLeftPlayer.setBorder(BorderFactory.createTitledBorder("Player4: Tricks won+Hand")); //debug
+		aLeftPlayer.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), aEWTeam[0].getName(), TitledBorder.CENTER, TitledBorder.BELOW_TOP)); //debug
 		
 		aContract = new ContractPanel();//TODO:Fix this
-
+		aContract.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), "Contractor: ", TitledBorder.CENTER, TitledBorder.BELOW_TOP));
 //		aContract.setBorder(BorderFactory.createTitledBorder("Contract")); //debug
 		
 		aScore_NS = new JPanel(new FlowLayout());
-		aScore_NS.setBorder(BorderFactory.createTitledBorder("Score North-South Team")); //set title
+		aScore_NS.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), "Score North-South Team", TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM)); //set title
 		aScore_NS.setPreferredSize(new Dimension(200,200));
 		aScore_NS.setOpaque(false);
 		
 		aScore_EW = new JPanel(new FlowLayout());
-		aScore_EW.setBorder(BorderFactory.createTitledBorder("Score East-West Team")); //set title
+		aScore_EW.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), "Score East-West Team", TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM)); //set title
 		aScore_EW.setPreferredSize(new Dimension(200,200));
 		aScore_EW.setOpaque(false);
 		
 		this.resetScores();
 		
 		aCurrentTrick = new TrickPanel();
-	//	aCurrentTrick.setBorder(BorderFactory.createTitledBorder("Game: 3x3 grid")); //debug
 		
 		//Set position of each element in board (using coordinates)
 		
@@ -240,10 +241,18 @@ public class GameBoard extends JPanel
 		aCurrentTrick.reset();
 	}
 	
-	public void updateWidow(CardList pWidow){
+	public void updateWidow(CardList pWidow, APlayer pContractor){
+		aContract.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), "Contractor: " + pContractor.getName(), TitledBorder.CENTER, TitledBorder.BELOW_TOP));
 		aWidow.removeAll();
-		for(Card c : pWidow){
-			aWidow.add(new CardLabel(c,Rotation.DEFAULT,true));
+		if(pContractor == aBottomPlayer.getPlayer()){	
+			for(Card c : pWidow){
+				aWidow.add(new CardLabel(c,Rotation.DEFAULT,true));
+			}
+		}
+		else{
+			for(Card c : pWidow){
+				aWidow.add(new CardLabel(null,Rotation.DEFAULT,false));
+			}
 		}
 		aWidow.validate();
 		aWidow.repaint();
