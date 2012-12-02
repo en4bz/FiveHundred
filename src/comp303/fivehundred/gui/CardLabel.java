@@ -92,27 +92,21 @@ public class CardLabel extends JLabel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		this.setVisibility(!aIsVisible);
+		if(this.getParent().getParent() instanceof PlayerArea && ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT){
+			GameFrame.nextCard = aCard;
+		}
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent e){}
 
 	@Override
-	public void mouseReleased(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent e){}
 
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
-		if(this.getParent().getParent() instanceof PlayerArea){
+		if(this.getParent().getParent() instanceof PlayerArea && ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT){
 			this.setLocation(this.getX(), this.getY() - 10);
 			this.repaint();
 		}
@@ -121,7 +115,7 @@ public class CardLabel extends JLabel implements MouseListener
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
-		if(this.getParent().getParent() instanceof PlayerArea){
+		if(this.getParent().getParent() instanceof PlayerArea && ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT){
 			this.setLocation(this.getX(), this.getY() + 10);
 			this.repaint();
 		}

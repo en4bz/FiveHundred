@@ -75,4 +75,8 @@ public class CardListPanel extends JPanel
 			((CardLabel) c).setVisibility(pVisibility);
 		}
 	}
+	
+	public Rotation getRotation(){
+		return aRotation;
+	}
 }
