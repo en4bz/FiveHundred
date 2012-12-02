@@ -208,13 +208,20 @@ public class GameFrame extends JFrame implements Observer, IObservable
             case newContract:
             	log("New contract.");
             	aBoard.updateWidow(lEngine.getWidow(),lEngine.getContractor());
-            	aBoard.setPlayingCentral();
+            	aBoard.setWidowCentral();
             	aBoard.setContract(lEngine.getContract());
+            	invalidate();
+                validate();
+            	repaint();
             	play();
             	break;
             case cardsDiscarded:
             	aBoard.updateWidow(lEngine.getWidow(),lEngine.getContractor());
+            	aBoard.setPlayingCentral();
                 aBoard.updateCardPanel(lEngine.getCurrentPlayer());
+                invalidate();
+                validate();
+            	repaint();
                 break;
             case cardPlayed:
                 aBoard.updateCardPanel(lEngine.getCurrentPlayer());

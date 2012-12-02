@@ -66,7 +66,7 @@ public class GameBoard extends JPanel
 		aCenter.setOpaque(false);
 		//Sub-Panels of game board
 		
-		aWidow = new WidowPanel();	
+		aWidow = new WidowPanel(false);	
 		aBidding = new BiddingPanel();
 		
 		aTopPlayer = new PlayerArea(aNSTeam[0], Rotation.UPSIDE_DOWN, false);
@@ -96,7 +96,7 @@ public class GameBoard extends JPanel
 		this.resetScores();
 		
 		aCurrentTrick = new TrickPanel();
-		aCurrentTrick.setVisible(false);
+	
 		
 		//Set position of each element in board (using coordinates)
 		
@@ -193,7 +193,7 @@ public class GameBoard extends JPanel
 		
 		
 		//add JPanels to the board
-		this.add(aWidow,w);
+	//	this.add(aWidow,w);
 		this.add(aTopPlayer,p1);
 		this.add(aContract,con);
 		//new line
@@ -288,8 +288,13 @@ public class GameBoard extends JPanel
 	}
 	
 	public void updateWidow(CardList pWidow, APlayer pContractor){
-		aCurrentTrick.setVisible(true);
 		aContract.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), "Contractor: " + pContractor.getName(), TitledBorder.CENTER, TitledBorder.BELOW_TOP));
+		if(pContractor == aBottomPlayer.getPlayer()){
+			aWidow.setVisibility(true);
+		}
+		else{
+			aWidow.setVisibility(false);
+		}
 		aWidow.updateWidow(pWidow);
 	}
 	
@@ -343,6 +348,12 @@ public class GameBoard extends JPanel
 			aRightPlayer.clearTricks();
 	}
 	
+	public void setWidowCentral(){
+		aCenter.removeAll();
+		aCenter.add(aWidow);
+		aCenter.revalidate();
+		aCenter.repaint();
+	}
 	public void setBiddingCentral(){
 		aCenter.removeAll();
 		aBidding.reset();
