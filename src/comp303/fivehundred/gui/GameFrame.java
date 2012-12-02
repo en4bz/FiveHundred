@@ -62,7 +62,7 @@ public class GameFrame extends JFrame implements Observer
     
     public static void main(String[] args)
     {
-        GameFrame a = new GameFrame();
+      new GameFrame();
     }
 
     
@@ -82,7 +82,7 @@ public class GameFrame extends JFrame implements Observer
         this.remove(aPlayerMenu);
         aBoard = new GameBoard(lTeams); 
         this.add(aBoard);
-  
+      
         log("Game Board drawn.");
         
         log("Adding Observers.");
@@ -176,6 +176,9 @@ public class GameFrame extends JFrame implements Observer
             case newGame:
                 log("Resetting game board scores.");
                 aBoard.resetScores();
+                if(aPracticeModeOn){
+                	aBoard.setPracticeMode();
+                }
                 break;
             case newDeal: 
                 log("Updating card panels.");

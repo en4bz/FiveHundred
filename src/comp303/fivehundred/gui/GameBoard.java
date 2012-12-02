@@ -2,6 +2,7 @@ package comp303.fivehundred.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -332,7 +333,6 @@ public class GameBoard extends JPanel
 	}
 	
 	public void updateScores(){
-
 		aScore_EW.removeAll();
 		aScore_NS.removeAll();
 		JLabel lScore1 = new JLabel("" + aTeams[1].getScore());
@@ -347,5 +347,15 @@ public class GameBoard extends JPanel
 		
 		aScore_NS.validate();
 		aScore_NS.repaint();
+	}
+	
+	public void setPracticeMode(){
+		aBottomPlayer.setVisibility(true);
+		aTopPlayer.setVisibility(true);
+		aRightPlayer.setVisibility(true);
+		aLeftPlayer.setVisibility(true);
+		for(Component c : aWidow.getComponents()){
+			((CardLabel) c).setVisibility(true);
+		}
 	}
 }
