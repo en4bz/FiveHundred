@@ -16,8 +16,13 @@ public class BidLabel extends JLabel
 	public BidLabel(Bid pBid){
 		String lSuit;
 		String lPath = getClass().getClassLoader().getResource(".").getPath();
-		if(pBid.isPass()){
-			ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/10NT.png");
+		if(pBid == null){
+			ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/null.png");
+			this.setIcon(new ImageIcon( lIcon.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH)));
+			return;
+		}
+		else if(pBid.isPass()){
+			ImageIcon lIcon = new ImageIcon(lPath + "../lib/TrumpImages/P.png");
 			this.setIcon(new ImageIcon( lIcon.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH)));
 			return;
 		}
