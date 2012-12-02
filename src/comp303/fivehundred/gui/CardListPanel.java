@@ -50,8 +50,8 @@ public class CardListPanel extends JPanel
 		else
 		{
 			this.setLayout(new OverlapLayout(new Point(HORIZONTAL_OVERLAP,0)));
+			this.setBorder(BorderFactory.createEmptyBorder(BORDER_SIZE, BORDER_SIZE, BORDER_SIZE, BORDER_SIZE));
 		}
-		this.setBorder(BorderFactory.createEmptyBorder(BORDER_SIZE, BORDER_SIZE, BORDER_SIZE, BORDER_SIZE));
 		this.setOpaque(false);
 	}
 	

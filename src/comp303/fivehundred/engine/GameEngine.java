@@ -507,7 +507,7 @@ public class GameEngine extends Observable
      * Returns the game contractor player.
      * @return the game contractor player. If there's no contractor, returns null.
      */
-    protected APlayer getContractor()
+    public APlayer getContractor()
     {
     	return aContractor;
     }
