@@ -3,9 +3,12 @@ package comp303.fivehundred.gui;
 import java.awt.BorderLayout;
 import java.awt.Point;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.gui.external.OverlapLayout;
+import comp303.fivehundred.gui.external.RotatedIcon;
 import comp303.fivehundred.player.APlayer;
 
 /**
@@ -73,8 +76,9 @@ public class PlayerArea extends JPanel
 	}
 	
 	public void addTrick(){
-		CardLabel lTemp = new CardLabel(null, aRotation, false);
-		this.aTricksWon.add(lTemp);
+		String lPath = getClass().getClassLoader().getResource(".").getPath();
+		RotatedIcon lIcon = new RotatedIcon(new ImageIcon(lPath + "../src/images/tinyBack.gif"), aRotation);
+		aTricksWon.add(new JLabel(lIcon));
 		this.validate();
 		this.repaint();
 	}
@@ -98,7 +102,9 @@ public class PlayerArea extends JPanel
 	
 	private void hack(){
 		//TODO: Try not to use this
-		CardLabel lTemp = new CardLabel(null, aRotation, false);
+		String lPath = getClass().getClassLoader().getResource(".").getPath();
+		RotatedIcon lIcon = new RotatedIcon(new ImageIcon(lPath + "../src/images/tinyBack.gif"), aRotation);
+		JLabel lTemp = new JLabel(lIcon);
 		lTemp.setVisible(false);
 		aTricksWon.add(lTemp);
 	}
