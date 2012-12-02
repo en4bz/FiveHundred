@@ -46,7 +46,7 @@ public class GameFrame extends JFrame implements Observer
         this.setLayout(new FlowLayout());
         this.setLocation(0, 0); //Top-left corner of the screen
         this.setSize(new Dimension(WIDTH, HEIGHT));
-        this.setResizable(false); //We cannot change the dimensions of the window by hand when the program runs (components don't move) 
+   //     this.setResizable(false); //We cannot change the dimensions of the window by hand when the program runs (components don't move) 
         
         // Add Menu
         this.setJMenuBar(new Menu()); //add menu to the new window (new game)
@@ -82,13 +82,10 @@ public class GameFrame extends JFrame implements Observer
         // make new game engine
         aEngine = new GameEngine(lTeams[0], lTeams[1]);
         
-        remove(aPlayerMenu);
+        this.remove(aPlayerMenu);
         aBoard = new GameBoard(lTeams); 
-        add(aBoard);
-        pack();
-        invalidate();
-        validate();
-        repaint();
+        this.add(aBoard);
+  
         log("Game Board drawn.");
         
         log("Adding Observers.");
@@ -167,7 +164,7 @@ public class GameFrame extends JFrame implements Observer
                 	    }
                 	   });
                 	t.start();
-                	pack();
+
                     break; 
                 default:
                     break;
@@ -175,13 +172,8 @@ public class GameFrame extends JFrame implements Observer
         }
         if(pNotification.getType().equals("game.engine")){
             setTitle(pNotification.getMessage());
-            invalidate();
-            validate();
-            repaint();
-            pack();
+           
             sleep();
-
- 
             GameEngine lEngine = (GameEngine) (pNotification.getSource());
             switch(GameEngine.State.valueOf(pNotification.getMessage())){
             case newGame:
@@ -195,6 +187,8 @@ public class GameFrame extends JFrame implements Observer
                 aBoard.resetTricksCount();
                 log("Updating widow.");
                 aBoard.updateWidow(lEngine.getWidow());
+                revalidate();
+                repaint();
                 break;
             case allPasses:
             	log("All passes!");
@@ -235,7 +229,7 @@ public class GameFrame extends JFrame implements Observer
     {
         try
         {
-            Thread.sleep(500);
+            Thread.sleep(100);
         }
         catch (InterruptedException e){}
     }
