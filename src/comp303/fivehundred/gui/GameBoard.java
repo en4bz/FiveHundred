@@ -42,6 +42,7 @@ public class GameBoard extends JPanel
 	final ContractPanel aContract;
 	final WidowPanel aWidow;
 	final TrickPanel aCurrentTrick;
+	final BiddingPanel aBidding;
 	
 	final JPanel aScore_NS;
 	final JPanel aScore_EW;
@@ -65,6 +66,7 @@ public class GameBoard extends JPanel
 		//Sub-Panels of game board
 		
 		aWidow = new WidowPanel();	
+		aBidding = new BiddingPanel();
 		
 		aTopPlayer = new PlayerArea(aNSTeam[0], Rotation.UPSIDE_DOWN, false);
 		aTopPlayer.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), aNSTeam[0].getName(), TitledBorder.CENTER, TitledBorder.BELOW_TOP));
@@ -384,9 +386,22 @@ public class GameBoard extends JPanel
 		}
 	}
 
-	public void updateBids(APlayer currentPlayer, Bid[] bids)
+	public void updateBids(APlayer pPlayer, Bid[] bids)
 	{
-		// TODO Auto-generated method stub
-		
+		if(aBottomPlayer.getPlayer() == pPlayer){
+			aBidding.setSouth(bids[0]);
+		}
+		else if(aTopPlayer.getPlayer() == pPlayer){
+			aBidding.setNorth(bids[0]);
+		}
+		else if(aLeftPlayer.getPlayer() == pPlayer){
+			aBidding.setWest(bids[0]);
+		}
+		else if(aRightPlayer.getPlayer() == pPlayer){
+			aBidding.setEast(bids[0]);
+		}
+		else{
+			assert pPlayer == null;
+		}
 	}
 }

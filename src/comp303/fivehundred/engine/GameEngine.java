@@ -10,7 +10,7 @@ import javax.management.Notification;
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.model.Trick;
-import comp303.fivehundred.mvc.Observable;
+import comp303.fivehundred.mvc.AObservable;
 import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.player.Team;
 import comp303.fivehundred.util.Card;
@@ -23,7 +23,7 @@ import comp303.fivehundred.util.Deck;
  * @author Eleyine Zarour and Ian Forbes (Design)
  * @author Gabrielle Germain (Exception handling)
  */
-public class GameEngine extends Observable
+public class GameEngine extends AObservable
 {
     //Constants
     private static final int MAXTRICKS = 10;
