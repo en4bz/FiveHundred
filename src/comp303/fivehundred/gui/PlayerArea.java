@@ -96,6 +96,7 @@ public class PlayerArea extends JPanel
 	public void clearTricks()
 	{
 		aTricksWon.removeAll();
+		this.hack();
 		aTricksWon.validate();
 		aTricksWon.repaint();
 	}
