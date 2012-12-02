@@ -1,6 +1,5 @@
 package comp303.fivehundred.gui;
 
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
@@ -33,12 +32,12 @@ public class TrickPanel extends JPanel
 	
 	private void redraw(){
 		this.removeAll();
-		this.add(new CardLabel(aEast,Rotation.DEFAULT, true));
-		aNorthSouth.removeAll();
-		aNorthSouth.add(new CardLabel(aSouth,Rotation.DEFAULT, true));
-		aNorthSouth.add(new CardLabel(aNorth,Rotation.DEFAULT, true));
-		this.add(aNorthSouth);
 		this.add(new CardLabel(aWest,Rotation.DEFAULT, true));
+		aNorthSouth.removeAll();
+		aNorthSouth.add(new CardLabel(aNorth,Rotation.DEFAULT, true));
+		aNorthSouth.add(new CardLabel(aSouth,Rotation.DEFAULT, true));
+		this.add(aNorthSouth);
+		this.add(new CardLabel(aEast,Rotation.DEFAULT, true));
 
 		this.validate();
 		this.repaint();
@@ -70,13 +69,6 @@ public class TrickPanel extends JPanel
 		aEast = null;
 		aWest = null;
 		this.redraw();
-	}
-	
-	public void reset2(){
-		for(Component c : this.getComponents()){
-			c.setVisible(false);
-			c.repaint();
-		}
 	}
 }
 
