@@ -3,6 +3,7 @@ package comp303.fivehundred.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
@@ -58,7 +59,11 @@ public class GameFrame extends JFrame implements Observer
         // Make visible
         this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         this.setLocationRelativeTo(null);
-        this.pack();
+        Toolkit tk = Toolkit.getDefaultToolkit();  
+        int xSize = ((int) tk.getScreenSize().getWidth());  
+        int ySize = ((int) tk.getScreenSize().getHeight());  
+        this.setSize(xSize,ySize);
+        this.setBackground(BACKGROUND_COLOR);
         this.setVisible( true );
         
     }
