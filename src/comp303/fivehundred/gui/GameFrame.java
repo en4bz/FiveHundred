@@ -185,9 +185,8 @@ public class GameFrame extends JFrame implements Observer
                 aBoard.updateCardPanels();
                 log("Resetting tricks count.");
                 aBoard.resetTricksCount();
-                log("Updating widow.");
-               
-                revalidate();
+                invalidate();
+                validate();
                 repaint();
                 break;
             case allPasses:
