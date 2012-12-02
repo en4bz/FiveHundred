@@ -1,8 +1,10 @@
 package comp303.fivehundred.gui;
 
 import java.awt.Component;
+import java.awt.Insets;
 import java.awt.Point;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import comp303.fivehundred.gui.external.OverlapLayout;
@@ -17,6 +19,7 @@ import comp303.fivehundred.util.CardList;
 @SuppressWarnings("serial")
 public class CardListPanel extends JPanel
 {
+	private static final int BORDER_SIZE = 10;
 	private static final int HORIZONTAL_OVERLAP = 30;
 	private static final int VERTICAL_OVERLAP = 20;
 	
@@ -48,6 +51,7 @@ public class CardListPanel extends JPanel
 		{
 			this.setLayout(new OverlapLayout(new Point(HORIZONTAL_OVERLAP,0)));
 		}
+		this.setBorder(BorderFactory.createEmptyBorder(BORDER_SIZE, BORDER_SIZE, BORDER_SIZE, BORDER_SIZE));
 		this.setOpaque(false);
 	}
 	
