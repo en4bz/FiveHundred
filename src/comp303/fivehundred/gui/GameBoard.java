@@ -39,7 +39,7 @@ public class GameBoard extends JPanel
 	final APlayer[] aEWTeam;
 	
 	final ContractPanel aContract;
-	final JPanel aWidow;
+	final WidowPanel aWidow;
 	final TrickPanel aCurrentTrick;
 	
 	final JPanel aScore_NS;
@@ -60,11 +60,7 @@ public class GameBoard extends JPanel
 		
 		//Sub-Panels of game board
 		
-		aWidow = new JPanel (new GridLayout(2,3,5,5));
-		aWidow.setOpaque(false);
-		for(int i = 0; i < 6; i++){
-			aWidow.add(new CardLabel(null,Rotation.DEFAULT,false));
-		}
+		aWidow = new WidowPanel();	
 		
 		aTopPlayer = new PlayerArea(aNSTeam[0], Rotation.UPSIDE_DOWN, false);
 		aTopPlayer.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), aNSTeam[0].getName(), TitledBorder.CENTER, TitledBorder.BELOW_TOP));
@@ -238,19 +234,7 @@ public class GameBoard extends JPanel
 	public void updateWidow(CardList pWidow, APlayer pContractor){
 		aCurrentTrick.setVisible(true);
 		aContract.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), "Contractor: " + pContractor.getName(), TitledBorder.CENTER, TitledBorder.BELOW_TOP));
-		aWidow.removeAll();
-		if(pContractor == aBottomPlayer.getPlayer()){	
-			for(Card c : pWidow){
-				aWidow.add(new CardLabel(c,Rotation.DEFAULT,true));
-			}
-		}
-		else{
-			for(Card c : pWidow){
-				aWidow.add(new CardLabel(null,Rotation.DEFAULT,false));
-			}
-		}
-		aWidow.validate();
-		aWidow.repaint();
+		aWidow.updateWidow(pWidow);
 	}
 	
 	public void updateCardPanels(){
