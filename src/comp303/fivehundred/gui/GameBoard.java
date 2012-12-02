@@ -281,6 +281,8 @@ public class GameBoard extends JPanel
 	
 	public void setContract(Bid pContract){
 		aContract.setBid(pContract);
+		aContract.revalidate();
+		aContract.repaint();
 	}
 	public void resetCurrentTrick(){
 		aCurrentTrick.reset();
