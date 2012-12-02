@@ -30,9 +30,15 @@ public class HumanPlayer extends APlayer
 	 */
 	public Card play(Trick pTrick)
 	{
-		Card lPlayed;
+		CardList lPlayable;
 		GameFrame.nextCard = null;
-		while(GameFrame.nextCard == null)
+		if(pTrick.getFirst().isJoker() || pTrick.size() == 0){
+			lPlayable = new CardList();
+		}
+		else{
+			lPlayable = this.getHand().playableCards(pTrick.getSuitLed(), pTrick.getTrumpSuit());
+		}
+		while(GameFrame.nextCard == null ||  (lPlayable.size() > 0 && !lPlayable.contains(GameFrame.nextCard)))
 		{
 			try
 			{
@@ -43,10 +49,9 @@ public class HumanPlayer extends APlayer
 				e.printStackTrace();
 			}
 		}
-		lPlayed = GameFrame.nextCard;
-		GameFrame.nextCard = null;
-		this.removeCardFromHand(lPlayed);
-		return lPlayed;
+		
+		this.removeCardFromHand(GameFrame.nextCard);
+		return GameFrame.nextCard;
 	}
 
 	/**
