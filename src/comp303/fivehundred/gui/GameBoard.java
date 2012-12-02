@@ -204,6 +204,10 @@ public class GameBoard extends JPanel
 		//end
 	}
 	
+	/**
+	 * Helper method to place the human player (if there is one) at the bottom of the game board.
+	 * @pre there cannot be two human players (should be taken care of during input validation)
+	 */
 	private void rearrangeTeams()
 	{
 		HumanPlayer lHuman = null;
@@ -241,7 +245,6 @@ public class GameBoard extends JPanel
 			aTeams[0] = new Team(lPlayers[1], lPlayers[0]);
 		}
 		
-		return;
 	}
 	
 	//"BUILD" METHODS FOR EACH COMPONENT THAT WE USE MORE THAN ONCE
