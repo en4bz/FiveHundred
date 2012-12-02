@@ -345,6 +345,7 @@ public class GameBoard extends JPanel
 	
 	public void setBiddingCentral(){
 		aCenter.removeAll();
+		aBidding.reset();
 		aCenter.add(aBidding);
 		aCenter.revalidate();
 		aCenter.repaint();
@@ -352,6 +353,7 @@ public class GameBoard extends JPanel
 	
 	public void setPlayingCentral(){
 		aCenter.removeAll();
+		aCurrentTrick.reset();
 		aCenter.add(aCurrentTrick);
 		aCenter.revalidate();
 		aCenter.repaint();
@@ -423,5 +425,9 @@ public class GameBoard extends JPanel
 		if(bidCounter == 4){
 			bidCounter = 0;
 		}
+	}
+	
+	public void resetBids(){
+		aBidding.reset();
 	}
 }
