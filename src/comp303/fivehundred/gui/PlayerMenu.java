@@ -340,6 +340,7 @@ public class PlayerMenu extends JPanel
 					break;
 				case Human:
 					lPlayers[i] = new HumanPlayer(aPlayerNames[i]);
+					break;
 				case Advanced:
 					// TODO change robot to advanced once the functionality is implemented
 					lPlayers[i] = new BasicRobot(aPlayerNames[i]);
