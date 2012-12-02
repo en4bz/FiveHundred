@@ -210,7 +210,6 @@ public class GameFrame extends JFrame implements Observer
                 break;
             case newTrick:
                 aBoard.resetCurrentTrick();
-                aBoard.updateTrick(lEngine.getCurrentPlayer() ,((GameEngine)pNotification.getSource()).getCardPlayed());
                 break;
             case trickWon:
                 aBoard.updateTrickCount(lEngine.getTrickWinner());
