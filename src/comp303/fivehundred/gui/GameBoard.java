@@ -55,7 +55,6 @@ public class GameBoard extends JPanel
 	public GameBoard(final Team[] pPlayer)
 	{
 		super(new GridBagLayout());
-		this.setBackground(Color.GREEN);
 		aTeams = pPlayer;
 		rearrangeTeams();
 
@@ -85,12 +84,12 @@ public class GameBoard extends JPanel
 		
 		aScore_NS = new JPanel(new FlowLayout());
 		aScore_NS.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), "Score North-South Team", TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM));
-		aScore_NS.setPreferredSize(new Dimension(200,200));
+		//aScore_NS.setPreferredSize(new Dimension(200,200));
 		aScore_NS.setOpaque(false);
 		
 		aScore_EW = new JPanel(new FlowLayout());
 		aScore_EW.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), "Score East-West Team", TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM));
-		aScore_EW.setPreferredSize(new Dimension(200,200));
+		//aScore_EW.setPreferredSize(new Dimension(200,200));
 		aScore_EW.setOpaque(false);
 		
 		this.resetScores();
@@ -100,79 +99,16 @@ public class GameBoard extends JPanel
 		
 		//Set position of each element in board (using coordinates)
 		
-		GridBagConstraints w = new GridBagConstraints();
-		w.gridx = 0;
-		w.gridy = 0;
-		w.ipadx = XPAD;
-		w.ipady = YPAD;
-		w.fill = GridBagConstraints.BOTH;
-		w.fill = GridBagConstraints.CENTER;
+		GridBagConstraints w = getPlayerTrickConstraints(0, 0);
+		GridBagConstraints p1 = getPlayerTrickConstraints(1, 0);
+		GridBagConstraints p2 = getPlayerTrickConstraints(2, 1);
+		GridBagConstraints p3 = getPlayerTrickConstraints(1, 2);
+		GridBagConstraints p4 = getPlayerTrickConstraints(0, 1);
+		GridBagConstraints con = getPlayerTrickConstraints(2, 0);
+		GridBagConstraints s_EW = getPlayerTrickConstraints(0, 2, GridBagConstraints.LINE_START);
+		GridBagConstraints s_NS = getPlayerTrickConstraints(2, 2, GridBagConstraints.LINE_END);
+		GridBagConstraints g = getPlayerTrickConstraints(1, 1);
 		
-		GridBagConstraints p1 = new GridBagConstraints();
-		p1.gridx = 1;
-		p1.gridy = 0;
-		p1.ipadx = XPAD;
-		p1.ipady = YPAD;
-		p1.fill = GridBagConstraints.BOTH;
-		p1.fill = GridBagConstraints.CENTER;
-		
-		GridBagConstraints p2 = new GridBagConstraints();
-		p2.gridx = 2;
-		p2.gridy = 1;
-		p2.ipadx = XPAD;
-		p2.ipady = YPAD;
-		p2.fill = GridBagConstraints.BOTH;
-		p2.fill = GridBagConstraints.CENTER;
-		
-		GridBagConstraints p3 = new GridBagConstraints();
-		p3.gridx = 1;
-		p3.gridy = 2;
-		p3.ipadx = XPAD;
-		p3.ipady = YPAD;
-		p3.fill = GridBagConstraints.BOTH;
-		p3.fill = GridBagConstraints.CENTER;
-		
-		GridBagConstraints p4 = new GridBagConstraints();
-		p4.gridx = 0;
-		p4.gridy = 1;
-		p4.ipadx = XPAD;
-		p4.ipady = YPAD;
-		p4.fill = GridBagConstraints.BOTH;
-		p4.fill = GridBagConstraints.CENTER;
-		
-		GridBagConstraints con = new GridBagConstraints();
-		con.gridx = 2;
-		con.gridy = 0;
-		con.ipadx = XPAD;
-		con.ipady = YPAD;
-		con.fill = GridBagConstraints.BOTH;
-		con.fill = GridBagConstraints.CENTER;
-		
-		GridBagConstraints s_EW = new GridBagConstraints();
-		s_EW.gridx = 0;
-		s_EW.gridy = 2;
-		s_EW.ipadx = XPAD;
-		s_EW.ipady = YPAD;
-		s_EW.fill = GridBagConstraints.BOTH;
-		s_EW.fill = GridBagConstraints.CENTER;
-		s_EW.anchor = GridBagConstraints.LINE_START;
-		
-		GridBagConstraints s_NS = new GridBagConstraints();
-		s_NS.gridx = 2;
-		s_NS.gridy = 2;
-		s_NS.ipadx = XPAD;
-		s_NS.ipady = YPAD;
-		s_NS.fill = GridBagConstraints.BOTH;
-		s_NS.fill = GridBagConstraints.CENTER;
-		s_NS.anchor = GridBagConstraints.LINE_END;
-		
-		GridBagConstraints g = new GridBagConstraints();
-		g.gridx = 1;
-		g.gridy = 1;
-		g.ipadx = XPAD;
-		g.ipady = YPAD;
-		g.fill = GridBagConstraints.BOTH;
-		g.fill = GridBagConstraints.CENTER;
 		
 //		//add a button to submit a trick
 //		JPanel submission = new JPanel();
@@ -204,6 +140,40 @@ public class GameBoard extends JPanel
 		this.add(aScore_EW, s_EW);
 		this.add(aBottomPlayer, p3);
 		this.add(aScore_NS,s_NS);
+		//newline
+		
+	}
+
+	private GridBagConstraints getPlayerTrickConstraints(int x, int y)
+	{
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = x;
+		c.gridy = y;
+//		c.ipadx = XPAD;
+//		c.ipady = YPAD;
+		c.fill = GridBagConstraints.HORIZONTAL;
+//		c.fill = GridBagConstraints.CENTER;
+		return c;
+	}
+	
+	private GridBagConstraints getPlayerTrickConstraints(int x, int y, int anchor)
+	{
+		GridBagConstraints c = getPlayerTrickConstraints(x,y);
+		c.anchor = anchor;
+		return c;
+	}
+	
+	protected void addActionToolBar(ActionToolbar lActionToolbar)
+	{
+		GridBagConstraints lActionToolbarConstraints = new GridBagConstraints();
+		lActionToolbarConstraints.gridx = 0;
+		lActionToolbarConstraints.gridy = 3;
+		lActionToolbarConstraints.gridwidth = this.getWidth();
+		lActionToolbarConstraints.fill = GridBagConstraints.HORIZONTAL;
+		lActionToolbarConstraints.anchor = GridBagConstraints.PAGE_END;
+		lActionToolbarConstraints.ipady = 0;
+		lActionToolbarConstraints.weighty = 0.5;
+		this.add(lActionToolbar, lActionToolbarConstraints);
 	}
 	
 	/**
