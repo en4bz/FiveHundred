@@ -17,6 +17,7 @@ import javax.swing.border.TitledBorder;
 
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.player.APlayer;
+import comp303.fivehundred.player.HumanPlayer;
 import comp303.fivehundred.player.Team;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardList;
@@ -33,7 +34,7 @@ public class GameBoard extends JPanel
 	private final static int YPAD = 0;
 	private final static Font SCORE_FONT = new Font("Serif", Font.BOLD, 56);
 	
-	final Team[] aTeams;
+	Team[] aTeams;
 	
 	final APlayer[] aNSTeam;
 	final APlayer[] aEWTeam;
@@ -55,8 +56,11 @@ public class GameBoard extends JPanel
 		super(new GridBagLayout());
 		this.setBackground(Color.GREEN);
 		aTeams = pPlayer;
+		rearrangeTeams();
+
 		aNSTeam = pPlayer[0].getPlayers();
 		aEWTeam = pPlayer[1].getPlayers();
+		
 		
 		//Sub-Panels of game board
 		
@@ -198,6 +202,46 @@ public class GameBoard extends JPanel
 		this.add(aBottomPlayer, p3);
 		this.add(aScore_NS,s_NS);
 		//end
+	}
+	
+	private void rearrangeTeams()
+	{
+		HumanPlayer lHuman = null;
+		
+		// Check to see if a player is human
+		for(Team lTeam: aTeams)
+		{
+			for(APlayer p: lTeam.getPlayers())
+			{
+				if (p instanceof HumanPlayer)
+				{
+					lHuman = (HumanPlayer) p;
+				}
+			}
+		}
+		
+		if(lHuman == null)
+		{
+			return;
+		}
+		
+		
+		// rearrange teams such that the human is in aTeams[0]
+		if(aTeams[1].isInTeam(lHuman))
+		{
+			Team lTmp = aTeams[0];
+			aTeams[0] = aTeams[1];
+			aTeams[1] = lTmp;
+		}
+		
+		// rearrange aTeams[0] such that player is at index 1
+		if(aTeams[0].getPlayers()[0] == lHuman) // should be same reference
+		{
+			APlayer[] lPlayers = aTeams[0].getPlayers();
+			aTeams[0] = new Team(lPlayers[1], lPlayers[0]);
+		}
+		
+		return;
 	}
 	
 	//"BUILD" METHODS FOR EACH COMPONENT THAT WE USE MORE THAN ONCE
