@@ -97,7 +97,7 @@ public class Menu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				JOptionPane.showMessageDialog(getRootPane(), "WRITE SOMETHING HERE");
+				JOptionPane.showMessageDialog(getRootPane(), "Please refer to the instructions of the game");
 			}
 		});
 
