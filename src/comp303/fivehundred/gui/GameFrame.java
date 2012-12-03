@@ -387,6 +387,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 						{
 							aHuman.notify();
 						}
+						aCurrentPrompt = PromptState.none;
 					}
 					else
 					{
@@ -394,7 +395,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 						JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.InvalidDiscardError"));
 					}
 				}
-				aCurrentPrompt = PromptState.none;
+				
 				break;
 
 			default:
