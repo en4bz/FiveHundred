@@ -67,25 +67,4 @@ public abstract class AIObserver extends ARobotPlayer implements Observer
 		
 	}
 
-	@Override
-	public Bid selectBid(Bid[] pPreviousBids, Hand pHand)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public CardList selectCardsToDiscard(Bid[] pBids, int pIndex, Hand pHand)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Card play(Trick pTrick, Hand pHand)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
