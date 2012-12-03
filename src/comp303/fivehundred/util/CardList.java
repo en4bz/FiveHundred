@@ -28,6 +28,16 @@ public class CardList implements Iterable<Card>, Cloneable
 	}
 	
 	/**
+	 * Clears the card list
+	 */
+	public void clear()
+	{
+		
+		aCards.clear();
+		
+	}
+	
+	/**
 	 * Adds a card if it is not
 	 * already in the list. Has no effect if the card
 	 * is already in the list.
