@@ -26,7 +26,6 @@ public class Menu extends JMenuBar
 	JMenu help = new JMenu ("Help");
 	
 	JMenuItem quit = new JMenuItem ("Quit");
-	JMenuItem newGame = new JMenuItem ("New Game");
 	JMenuItem show = new JMenuItem ("Show Statistics");
 	JMenuItem reset = new JMenuItem ("Reset Statistics");
 	JMenuItem ask = new JMenuItem ("Ask for help...");
@@ -39,7 +38,6 @@ public class Menu extends JMenuBar
 		this.add(stats);
 		this.add(help);
 		//SubItems
-		game.add(newGame);
 		game.add(quit);
 		stats.add(show);
 		stats.add(reset);
@@ -52,18 +50,6 @@ public class Menu extends JMenuBar
 			public void actionPerformed(ActionEvent e)
 			{
 				System.exit(0);
-			}
-		});
-		
-		//File -> New Game = create a new Game (Create a new stats file, etc)*WORKS
-		newGame.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				GameFrame lFrame = (GameFrame) Menu.this.getTopLevelAncestor();
-				lFrame.resetFrame();
-		//		lEngine.update(new Notification("stats.show",this,lEngine.getNotificationSequenceNumber(), ""));
 			}
 		});
 		
