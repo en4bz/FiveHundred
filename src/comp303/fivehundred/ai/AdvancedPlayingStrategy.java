@@ -20,14 +20,14 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 	// Total number of trumps possible
 	private int NUMBER_OF_TOTAL_TRUMPS = 14;
 
-	// TODO: CardLists of the discarded widow and all other discards
+	// CardLists of the discarded widow and all other discards
 	private static Hand aDiscards;
 	private static Hand aWidow;
 
-	// TODO: CardList representing all cards that can be seen
+	// CardList representing all cards that can be seen
 	private static Hand aAllCardsSeen;
 
-	// TODO:Boolean representing whether this robot is the contractor
+	// Boolean representing whether this robot is the contractor
 	private static boolean contractor;
 
 	// Trump suit of this game
@@ -40,7 +40,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 	private static Rank[] aRanks = new Rank[] {Rank.ACE, Rank.KING, Rank.QUEEN, Rank.JACK, Rank.TEN, Rank.NINE, Rank.EIGHT, Rank.SEVEN, Rank.SIX, Rank.FIVE, Rank.FOUR};
 
 	// All trump ranks
-	private static Rank[] aTrumpRanks = new Rank[] {Rank.JACK, Rank.JACK, Rank.ACE, Rank.KING, Rank.QUEEN, Rank.TEN, Rank.NINE, Rank.EIGHT, Rank.SEVEN, Rank.SIX, Rank.FIVE, Rank.FOUR};
+	private static Rank[] aTrumpRanks = new Rank[] {Rank.ACE, Rank.KING, Rank.QUEEN, Rank.TEN, Rank.NINE, Rank.EIGHT, Rank.SEVEN, Rank.SIX, Rank.FIVE, Rank.FOUR};
 
 
 	// Rank of the cards in order
@@ -67,8 +67,10 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		Hand handClone = pHand.clone();
 		aDiscards = null;
 		aWidow = null;
+		aAllCardsSeen = new Hand();
 
 		// TODO: Checks if this robot is the contractor
+		contractor = pObserver.isContractor();
 
 		// Updates what cards can be seen
 		updateCardsSeen(pObserver);
@@ -126,8 +128,8 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		// if i am the contractor
 		if (contractor)
 		{
-			aDiscards = (Hand) pObserver.getDiscardedCards();
-			aWidow = (Hand) pObserver.getDiscardedWidow();
+			aDiscards = pObserver.getDiscardedCards();
+			aWidow = pObserver.getDiscardedWidow();
 
 			// Gets all cards from the discards
 			for (Card card : aDiscards) 
@@ -145,7 +147,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 		else
 		{
-			aDiscards = (Hand) pObserver.getDiscardedCards();
+			aDiscards = pObserver.getDiscardedCards();
 
 			for (Card card : aDiscards) 
 			{
@@ -182,7 +184,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 	{
 
 		// gets non jokers
-		Hand nonJokers = (Hand) pHand.getNonJokers();
+		Hand nonJokers = new Hand(pHand.getNonJokers());
 
 		// returns a joker if there is nothing else to play
 		if (nonJokers.size() == 0)
@@ -194,8 +196,8 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 		BySuitNoTrumpComparator compareNoTrump = new BySuitNoTrumpComparator();
 
-		nonJokers = (Hand) nonJokers.sort(compareNoTrump);
-		nonJokers = (Hand) nonJokers.reverse();
+		nonJokers = new Hand(nonJokers.sort(compareNoTrump));
+		nonJokers = new Hand(nonJokers.reverse());
 
 		ByRankComparator compareByRank = new ByRankComparator();
 
@@ -216,7 +218,20 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 			myCards[i] = nonJokers.getCardsOfNonTrumpSuit(aSuits[i]).sort(compareByRank).reverse();
 			discards[i] = aAllCardsSeen.getCardsOfNonTrumpSuit(aSuits[i]).sort(compareByRank).reverse();
-			myHighestCards[i] =  myCards[i].getFirst();
+			
+			if (myCards[i].size() > 0)
+			{
+				
+				myHighestCards[i] =  myCards[i].getFirst();
+				
+			}
+
+			else
+			{
+				
+				myHighestCards[i] = null;
+				
+			}
 
 		}
 
@@ -250,6 +265,17 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		// Find if there is a higher card to play
 		for (int i = 0; i < myHighestCards.length; i++)
 		{
+			
+			if (myHighestCards[i] == null)
+			{
+				continue;
+			}
+
+			if (highestDiscard[i] == null)
+			{
+				winnableCards.add(myHighestCards[i]);
+				continue;
+			}
 
 			if (myHighestCards[i].getRank().compareTo(highestDiscard[i]) >= 0)
 			{
@@ -281,6 +307,13 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 		CardList trumpsInDiscards = aAllCardsSeen.getTrumpCards(pTrumpSuit);
 		CardList trumpsInHand = pHand.getTrumpCards(pTrumpSuit);
+		
+		if (trumpsInHand.size() == 0)
+		{
+			
+			return noTrumpLead(pHand);
+			
+		}
 
 		int amountOfTrumpsOut = trumpsInDiscards.size() + trumpsInHand.size();
 
@@ -304,55 +337,106 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		BySuitComparator compareTrump = new BySuitComparator(pTrumpSuit);
 		Card highestTrumpInHand = trumpsInHand.sort(compareTrump).reverse().getFirst();
 		trumpsInDiscards = trumpsInDiscards.sort(compareTrump).reverse();
+		
+		// Plays the joker
+		if (highestTrumpInHand.isJoker())
+		{
+			
+			return highestTrumpInHand;
+			
+		}
+		
+		// If there are no trumps in discards
+		if (trumpsInDiscards.size() == 0)
+		{
+			
+			return highestTrumpInHand;
+			
+		}
+		
+		// Checking for jokers
+		if (trumpsInDiscards.getFirst().isJoker())
+		{
+			
+			// If the discards contains the high joker
+			if (trumpsInDiscards.getFirst().getJokerValue().equals(Joker.HIGH))
+			{
+				
+				// return the lowest trump
+				return trumpsInHand.getLast();
+				
+			}
+			
+			// Otherwise it is the low joker
+			else
+			{
+				
+				// If we have the high joker
+				if (highestTrumpInHand.isJoker())
+				{
+					
+					return highestTrumpInHand;
+				}
+				
+				else
+				{
+					
+					// return the lowest trump
+					return trumpsInHand.getLast();
+					
+				}
+				
+			}
+			
+		}
+		
+		// Checking for converse jacks
+		if (trumpsInDiscards.getFirst().getRank().equals(Rank.JACK))
+		{
+			
+			// If the discards contains the high jack
+			if (trumpsInDiscards.getFirst().getSuit().equals(aTrumpSuit))
+			{
+				
+				// return the lowest trump
+				return trumpsInHand.getLast();
+				
+			}
+			
+			// Otherwise it is the converse jack
+			else
+			{
+				
+				// If we have the high jack
+				if (highestTrumpInHand.getSuit().equals(aTrumpSuit))
+				{
+					
+					return highestTrumpInHand;
+				}
+				
+				else
+				{
+					
+					// return the lowest trump
+					return trumpsInHand.getLast();
+					
+				}
+				
+			}
+			
+		}
+
+		
 		Card toBeat = null;
-
-		boolean highJokerFound = false;
-		boolean jackSuitFound = false;
-		int i = 0;
 		int j = 0;
-
+		
+		// Jokers and jacks are taken care of by this point
 		for (Card card : trumpsInDiscards)
 		{
 
-			// If the first/second cards are jokers
-			if (card.isJoker() && (i==0 || i==1))
-			{
-
-				if (card.getJokerValue().equals(Joker.HIGH))
-				{
-					i++;
-					highJokerFound = true;
-					continue;
-
-				}
-
-				if (card.getJokerValue().equals(Joker.LOW) && highJokerFound)
-				{
-					i++;
-					continue;
-
-				}
-
-				else
-				{
-
-					toBeat = card;
-					break;
-				}
-			}
-
 			// Jacks problem
-			if (card.getRank().equals(aTrumpRanks[j]) && card.getSuit().equals(pTrumpSuit))
+			if (card.getRank().equals(aTrumpRanks[j]))
 			{
-				jackSuitFound = true;
-				j++;
-				continue;
-
-			}
-
-			else if (card.getRank().equals(aTrumpRanks[j]) && card.getSuit().equals(pTrumpSuit.getConverse()) && jackSuitFound)
-			{
-
 				j++;
 				continue;
 
@@ -366,8 +450,6 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 			}
 		}
-
-
 		// Plays highest trump card to eat up trumps
 		if (highestTrumpInHand.compareTo(toBeat) >= 0)
 		{
@@ -387,7 +469,19 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		// If we can eat up trumps eat them
 		CardList trumpsInHand = pHand.getTrumpCards(pTrumpSuit);
 		CardList trumpsInDiscards = aAllCardsSeen.getTrumpCards(pTrumpSuit);
-
+		
+		if (trumpsInHand.size() == 0 || trumpsInHand.size() == 1)
+		{
+			
+			return noTrumpLead(pHand);
+			
+		}
+		
+		BySuitComparator compareTrump = new BySuitComparator(pTrumpSuit);
+		Card highestTrumpInHand = trumpsInHand.sort(compareTrump).reverse().getFirst();
+		return highestTrumpInHand;
+		
+/*
 		BySuitComparator compareTrump = new BySuitComparator(pTrumpSuit);
 		Card highestTrumpInHand = trumpsInHand.sort(compareTrump).reverse().getFirst();
 		trumpsInDiscards = trumpsInDiscards.sort(compareTrump).reverse();
@@ -453,6 +547,8 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 			}
 		}
+		
+		System.out.println("trumpLeadNotContractor: " + toBeat);
 
 		// Plays highest trump card to eat up trumps
 		if (highestTrumpInHand.compareTo(toBeat) >= 0)
@@ -467,6 +563,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		// Otherwise play a low card
 
 		return noTrumpLead(pHand);
+		*/
 
 	}
 	
@@ -505,7 +602,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 	{
 		
 		BySuitComparator compareTrump = new BySuitComparator(aTrumpSuit);
-		Hand trumps = (Hand) pHand.getTrumpCards(aTrumpSuit).sort(compareTrump).reverse();
+		Hand trumps = new Hand(pHand.getTrumpCards(aTrumpSuit).sort(compareTrump).reverse());
 		
 		// If I have trumps
 		if (trumps.size() > 0)
@@ -535,7 +632,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 				else
 				{
 					
-					trumps = (Hand) trumps.reverse();
+					trumps = new Hand(trumps.reverse());
 					// If I am second or fourth player, I will play the next card above
 					for (Card card : trumps)
 					{
@@ -572,13 +669,12 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 	private static Card followingNonTrumpCard(Card pLeadingCard, Card pWinningCard, Hand pHand, Trick pTrick)
 	{
 		
-		Hand playableCards = (Hand) pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(aTrumpSuit)).sort(compareByRank).reverse();
-		Card highestCard = playableCards.getFirst();
+		Hand playableCards = new Hand(pHand.getCardsOfNonTrumpSuit(pLeadingCard.getEffectiveSuit(aTrumpSuit)).sort(compareByRank).reverse());
 
 		// Must follow suit
 		if (playableCards.size() > 0)
 		{
-
+			Card highestCard = playableCards.getFirst();
 			// If i can beat the winning card
 			if (highestCard.compareTo(pWinningCard) > 0)
 			{
@@ -593,7 +689,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 				else
 				{
 
-					playableCards = (Hand) playableCards.reverse();
+					playableCards = new Hand(playableCards.reverse());
 					// If I am second or fourth player, I will play the next card above
 					for (Card card : playableCards)
 					{
@@ -639,7 +735,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 	{
 		
 		BySuitComparator compareTrump = new BySuitComparator(aTrumpSuit);
-		Hand trumpsInHand = (Hand) pHand.getTrumpCards(aTrumpSuit).sort(compareTrump).reverse();
+		Hand trumpsInHand = new Hand(pHand.getTrumpCards(aTrumpSuit).sort(compareTrump).reverse());
 		
 		if (trumpsInHand.size() > 0)
 		{
@@ -659,7 +755,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 				else
 				{
 
-					trumpsInHand = (Hand) trumpsInHand.reverse();
+					trumpsInHand = new Hand(trumpsInHand.reverse());
 					// If I am second or fourth player, I will play the next card above
 					for (Card card : trumpsInHand)
 					{
@@ -731,7 +827,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		{
 			
 			// Check to see if we can follow suit
-			Hand canBePlayed = (Hand) pHand.getCardsOfNonTrumpSuit(aTrumpSuit);
+			Hand canBePlayed = new Hand(pHand.getCardsOfNonTrumpSuit(aTrumpSuit));
 			
 			// We can follow suit
 			if (canBePlayed.size() > 0)
@@ -791,7 +887,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		
 		// Check what my highest card is
 		Suit currentSuit = pLeadingCard.getSuit();
-		Hand cardsOfSuit = (Hand) pHand.getCardsOfNonTrumpSuit(currentSuit);
+		Hand cardsOfSuit = new Hand(pHand.getCardsOfNonTrumpSuit(currentSuit));
 		
 		// If I can follow suit
 		if (cardsOfSuit.size() > 0)
@@ -856,7 +952,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		else
 		{
 			
-			Hand followSuit = (Hand) pHand.getCardsOfNonTrumpSuit(pLeadingCard.getSuit());
+			Hand followSuit = new Hand(pHand.getCardsOfNonTrumpSuit(pLeadingCard.getSuit()));
 			
 			// If we can follow suit
 			if (followSuit.size() > 0)
@@ -875,7 +971,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 	private static Card followingNoTrumpGameCanFollowSuit(Suit currentSuit, Hand cardsOfSuit, Card pWinningCard, Trick pTrick, Hand pHand)
 	{
 		
-		cardsOfSuit = (Hand) cardsOfSuit.sort(compareByRank).reverse();
+		cardsOfSuit = new Hand(cardsOfSuit.sort(compareByRank).reverse());
 		Card highestCard = cardsOfSuit.getFirst();
 		
 		// If I cannot beat the current game
@@ -907,7 +1003,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		else
 		{
 			
-			cardsOfSuit = (Hand) cardsOfSuit.reverse();
+			cardsOfSuit = new Hand(cardsOfSuit.reverse());
 			// If I am second or fourth player, I will play the next card above
 			for (Card card : cardsOfSuit)
 			{
