@@ -103,6 +103,38 @@ public class GameStatistics implements Observer
 		
 	}
 	
+	public String statString(){
+		Set<APlayer> lPlayers = aNumbers.keySet();
+		String toReturn = "==================== STATISTICS =====================\n";
+		toReturn += String.format("%-10s Trick\t Cont\t Made\t Game\t Score", "");
+		toReturn += "\n";
+		for(APlayer p: lPlayers)
+		{
+			if(!aRatios.containsKey(p))
+			{
+				aRatios.put(p, new EnumMap<Stats, Double>(Stats.class));
+			}
+			
+			// update fields
+			updateRatio(p, Stats.tricksWon);
+			updateRatio(p, Stats.contractsWon);
+			updateRatio(p, Stats.contractsMade);
+			updateRatio(p, Stats.gamesWon);	
+			double lAccScore = (double) aNumbers.get(p).get(Stats.accumulatedScore)/(getSum(Stats.gamesWon) * 500);
+			aRatios.get(p).put(Stats.accumulatedScore, lAccScore);
+			
+			toReturn += (String.format("%-10s %2.1f%%\t %2.1f%%\t %2.1f%%\t %2.1f%%\t %1.2f" , p.getName()
+					, aRatios.get(p).get(Stats.tricksWon)
+					, aRatios.get(p).get(Stats.contractsWon)
+					, aRatios.get(p).get(Stats.contractsMade)
+					, aRatios.get(p).get(Stats.gamesWon) 
+					, aRatios.get(p).get(Stats.accumulatedScore)));
+			toReturn += "\n";
+		}
+		System.out.println(toReturn);
+		return toReturn;
+	}
+	
 	// ---------------------- Helper Methods ----------------------------------
 	
 	private void incrementNumber(APlayer pPlayer, Stats pStatField, int pValue)
