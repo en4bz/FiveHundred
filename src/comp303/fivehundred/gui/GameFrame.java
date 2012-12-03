@@ -65,7 +65,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	private Bid[] aPreviousBids = null;
 	private CardList aDiscardedCards = null;
 	private boolean aDiscardDone = false;
-	
+
 	// AutoPlay mode
 	private boolean aAutoPlay = false;
 	private IBiddingStrategy aBiddingStrategy = new BasicBiddingStrategy();
@@ -187,7 +187,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 			switch (lState)
 			{
 			case newGameSet:
-				
+
 				Thread t = new Thread(new Runnable()
 				{
 					@Override
@@ -233,7 +233,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 			case allPasses:
 				log("All passes!");
 				newDeal();
-				sleep();
 				break;
 			case newContract:
 				log("New contract.");
@@ -246,7 +245,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				break;
 			case cardsDiscarded:
 				aBoard.updateWidow(lEngine.getWidow(), lEngine.getContractor());
-				aBoard.updateCardPanels();	
+				aBoard.updateCardPanels();
 				aBoard.setPlayingCentral();
 				sleep();
 				break;
@@ -282,8 +281,10 @@ public class GameFrame extends JFrame implements Observer, IObservable
 			switch (GameFrame.Human.valueOf(pNotification.getMessage()))
 			{
 			case playPrompt:
-				if(aAutoPlay)
+				log("Human player is prompted to play.");
+				if (aAutoPlay)
 				{
+					log("Autoplaying card.");
 					aPlayedCard = aPlayingStrategy.play(aHuman.getTrick(), aHuman.getHand());
 					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 							GameFrame.Human.playValidated.toString()));
@@ -294,15 +295,14 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				}
 				else
 				{
-				aPlayableCards = aHuman.getPlayableCards();
+					aPlayableCards = aHuman.getPlayableCards();
+					log("Human can play: " + aPlayableCards.toString());
 
-				log("Human player is prompted to play.");
-				log("Human can play: "+ aPlayableCards.toString());
-
-				aCurrentPrompt = PromptState.play;
-				notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
-						GameFrame.Human.playPrompt.toString()));
+					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+							GameFrame.Human.playPrompt.toString()));
 				}
+				aCurrentPrompt = PromptState.play;
+
 				break;
 			case playDone:
 				log("Human has played the card");
@@ -316,20 +316,53 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				aSelectedBid = null;
 				break;
 			case bidPrompt:
-				
 				if (aCurrentPrompt != PromptState.bid)
 					log("Human player is prompted to bid.");
 				aCurrentPrompt = PromptState.bid;
 				aPreviousBids = aHuman.getPreviousBids();
-				notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
-						GameFrame.Human.bidPrompt.toString()));
+				if (aAutoPlay)
+				{
+					log("Autoplaying bid.");
+					aSelectedBid = aBiddingStrategy.selectBid(aPreviousBids, aHuman.getHand());
+					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+							GameFrame.Human.bidValidated.toString()));
+					synchronized (aHuman)
+					{
+						aHuman.notify();
+					}
+					aCurrentPrompt = PromptState.none;
+				}
+				else
+				{
+					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+							GameFrame.Human.bidPrompt.toString()));
+				}
 				break;
 			case discardPrompt:
 				if (aCurrentPrompt != PromptState.discard)
 					log("Human player is prompted to discard.");
 				aCurrentPrompt = PromptState.discard;
-				notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
-						GameFrame.Human.discardPrompt.toString()));
+				if (aAutoPlay)
+				{
+					log("Autoplaying discard.");
+					aDiscardedCards = aCardExchangeStrategy.selectCardsToDiscard(aHuman.getPreviousBids(),
+							aHuman.getIndex(), aHuman.getHand());
+					aDiscardDone = true;
+
+					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+							GameFrame.Human.discardValidated.toString()));
+					synchronized (aHuman)
+					{
+						aHuman.notify();
+					}
+					aCurrentPrompt = PromptState.none;
+
+				}
+				else
+				{
+					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+							GameFrame.Human.discardPrompt.toString()));
+				}
 				break;
 			case discardDone:
 				log("Human has discarded cards.");
@@ -377,11 +410,10 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				log("Human has clicked on \"Discard\"");
 				if (aCurrentPrompt == PromptState.discard)
 				{
-					CardList discardable = aHuman.getDiscardable();
-					
+
 					if (getDiscardedCards() != null && getDiscardedCards().size() == 6)
 					{
-						
+
 						log("Discard valid.");
 						aDiscardDone = true;
 						notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
@@ -395,9 +427,10 @@ public class GameFrame extends JFrame implements Observer, IObservable
 					else
 					{
 						log("Discard invalid.");
-						JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.InvalidDiscardError"));
+						JOptionPane.showMessageDialog(this,
+								MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.InvalidDiscardError"));
 						aCurrentPrompt = PromptState.discard;
-						}
+					}
 				}
 				break;
 
@@ -429,26 +462,30 @@ public class GameFrame extends JFrame implements Observer, IObservable
 					else
 					{
 						log("Invalid card played.");
-						
-						JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.InvalidPlayError"));
+
+						JOptionPane.showMessageDialog(this,
+								MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.InvalidPlayError"));
 						aPlayedCard = null;
 					}
 				}
-				if (aCurrentPrompt == PromptState.discard )
+				if (aCurrentPrompt == PromptState.discard)
 				{
 					if (aDiscardedCards == null)
 					{
 						aDiscardedCards = new CardList();
 					}
-					if(lCardLabel.getVisibility())
+					if (lCardLabel.getVisibility())
 						aDiscardedCards.remove(lCardLabel.getCard());
-					else{
+					else
+					{
 						aDiscardedCards.add(lCardLabel.getCard());
 					}
-					if(aDiscardedCards.size() == 6 ){
+					if (aDiscardedCards.size() == 6)
+					{
 						this.aActionToolbar.setDiscardEnabled(true);
 					}
-					else{
+					else
+					{
 						this.aActionToolbar.setDiscardEnabled(false);
 					}
 				}
@@ -458,11 +495,12 @@ public class GameFrame extends JFrame implements Observer, IObservable
 			}
 		}
 	}
+
 	public boolean isDiscardDone()
 	{
 		return aDiscardDone;
 	}
-	
+
 	public CardList getDiscardedCards()
 	{
 		return aDiscardedCards;
@@ -499,19 +537,17 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	{
 		displayMenu, play, newGameSet, newGame, newDeal, newBid, newContract, cardsDiscarded, cardPlayed, newTrick, trickWon, roundEnd, gameOver
 	}
-	
+
 	public enum PromptState
 	{
-		bid,
-		discard,
-		play,
-		none
+		bid, discard, play, none
 	}
 
 	public PromptState getCurrentPrompt()
 	{
 		return aCurrentPrompt;
 	}
+
 	public enum Human
 	{
 		playDone, playPrompt, playValidated, discardDone, discardPrompt, discardValidated, bidDone, bidPrompt, bidValidated, cardClicked
@@ -532,12 +568,18 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		if (lBit)
 		{
 			aAutoPlay = true;
+			if (aHuman != null)
+			{
+				synchronized (aHuman)
+				{
+					aHuman.notify();
+				}
+			}
 		}
 		else
 		{
 			aAutoPlay = false;
 		}
-
 	}
 
 	@Override

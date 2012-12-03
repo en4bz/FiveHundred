@@ -48,19 +48,11 @@ public class ActionToolbar extends JPanel
 	private ActionPanel aBidPanel;
 	private ActionPanel aDiscardPanel;
 	
-
-	public void setDiscardEnabled(boolean pVal){
-		for(Component c : this.aDiscardPanel.getComponents()){
-			c.setEnabled(pVal);
-		}
-	}
-	
 	public void setAutoPlayEnabled(boolean pVal){
 		for(Component c : this.aAutoPlayBox.getComponents()){
 			c.setEnabled(pVal);
 		}
 	}
-
 
 	public ActionToolbar(GameFrame pFrame)
 	{
@@ -339,7 +331,12 @@ public class ActionToolbar extends JPanel
 			}
 		};
 	}
-
+	
+	public void setDiscardEnabled(boolean pVal){
+		for(Component c : this.aDiscardPanel.getComponents()){
+			c.setEnabled(pVal);
+		}
+	}
 
 	private void buildSpeedBox()
 	{
@@ -402,6 +399,7 @@ public class ActionToolbar extends JPanel
 				if (lButton.isSelected())
 				{
 					aFrame.setAutoPlay(true);
+					System.out.println("Set autoplay true.");
 				}
 				else
 				{
