@@ -2,6 +2,7 @@ package comp303.fivehundred.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -47,6 +48,13 @@ public class ActionToolbar extends JPanel
 	private ActionPanel aBidPanel;
 	private ActionPanel aDiscardPanel;
 	
+
+	public void setDiscardEnabled(boolean pVal){
+		for(Component c : this.aDiscardPanel.getComponents()){
+			c.setEnabled(pVal);
+		}
+	}
+
 
 	public ActionToolbar(GameFrame pFrame)
 	{
@@ -274,6 +282,7 @@ public class ActionToolbar extends JPanel
 				
 				setLayout(new GridLayout(1, 1));
 				int buttonWidth = 200;
+				discardButton.setEnabled(false);
 				setMinimumSize(new Dimension(buttonWidth, aHEIGHT ));
 				setPreferredSize(new Dimension(buttonWidth, aHEIGHT ));
 				setMaximumSize(new Dimension(buttonWidth, aHEIGHT ));
