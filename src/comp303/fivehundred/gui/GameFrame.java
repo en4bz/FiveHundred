@@ -35,6 +35,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
     private GameStatistics aGameStats;
     private GameLogger aGameLogger;
     private PlayerMenu aPlayerMenu;
+    private ActionToolbar aActionToolbar;
     private GameBoard aBoard;
     public static int WIDTH = 900;
     public static int HEIGHT = 600;
@@ -68,16 +69,14 @@ public class GameFrame extends JFrame implements Observer, IObservable
         setTitle("Five Hundred");
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setLocation(5, 5); // Top-left corner of the screen
-        setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
 
         // Add Menu
         this.setJMenuBar(new Menu()); // add menu to the new window (new game)
 
         // Start the party
         aPlayerMenu = new PlayerMenu(this);
-        add(aPlayerMenu);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         this.pack();
         this.setVisible(true);
     }
@@ -103,7 +102,8 @@ public class GameFrame extends JFrame implements Observer, IObservable
         this.remove(aPlayerMenu);
         aBoard = new GameBoard(lTeams);
         this.add(aBoard);
-        this.add(new ActionToolbar(this));
+        aActionToolbar = new ActionToolbar(this);
+        this.add(aActionToolbar);
         this.invalidate();
         this.validate();
         log("Game Board drawn.");
@@ -130,6 +130,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
             log("Game Over.");
             aGameStats.printStatistics();
             remove(aBoard);
+            remove(aActionToolbar);
             JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.GameFrame.GameSetOver"));
             aPlayerMenu = new PlayerMenu(this);
             setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen

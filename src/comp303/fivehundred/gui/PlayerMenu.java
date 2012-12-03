@@ -104,8 +104,8 @@ public class PlayerMenu extends JPanel
 		buildNumberOfGamesBox(lWrapper);
 		buildPracticeCheckBox(lWrapper);
 		buildPlayButton(lWrapper);
-				
-
+		
+		aFrame.add(this);
 	}
 
 	private void buildSelectTeamBox(JPanel lWrapper)
