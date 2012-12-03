@@ -4,6 +4,13 @@ import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.util.Card.Suit;
 
+
+/**
+ * @author Rayyan Khoury
+ * Supports a point-based bidding strategy
+ */
+
+
 public class AdvancedBiddingStrategy extends BasicBiddingStrategy implements IBiddingStrategy
 {
 	

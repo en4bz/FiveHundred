@@ -12,6 +12,12 @@ import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
 import comp303.fivehundred.util.Card.BySuitComparator;
 
+
+/**
+ * @author Rayyan Khoury
+ * Discards the worst cards for play
+ */
+
 public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy implements ICardExchangeStrategy 
 {
 	
@@ -61,9 +67,13 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		
 	}
 	
-	// removes cards from discards
-	// adds them to retain
-	// checks if the size of discards has reached six and if so returns this
+	/**
+	 * removes cards from discards
+	 * adds them to retain
+	 * checks if the size of discards has reached six and if so returns this
+	 * @param pTemp
+	 * @return
+	 */
 	private static boolean switchCards(CardList pTemp)
 	{
 		
@@ -88,7 +98,10 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		
 	}
 	
-	// Keep jokers in hand
+	/**
+	 * Keeps the jokers in hand
+	 * @return
+	 */
 	public static boolean keepJokers()
 	{
 		
@@ -97,32 +110,13 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		return switchCards(aTemp);
 		
 	}
-	
-	/*
-	// Keeps all aces in the hand
-	public static boolean keepAces()
-	{
-		
-		aTemp.removeAll();
-		for (Card card : aDiscards)
-		{
-			
-			if (card.getRank() == Card.Rank.ACE)
-			{
-				
-				aTemp.add(card);
-				
-			}
-			
-		}
-		System.out.println(aTemp);
-		return switchCards(aTemp);
-		
-	}
-	*/
-	
-	// Keeps all runs of ace to queen in the hand
-	// Always keeps the ace
+
+	/**
+	 * Keeps all runs of ace to queen in the hand
+	 * Always keeps the ace
+	 * @param pCompare
+	 * @return
+	 */
 	public static boolean keepRuns(BySuitNoTrumpComparator pCompare)
 	{
 		
@@ -191,7 +185,11 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		
 	}
 	
-	// Sorts the cards according to the trump
+	/**
+	 * Sorts the cards according to the trump
+	 * @param pBids
+	 * @param pIndex
+	 */
 	public static void trumpExchange(Bid[] pBids, int pIndex)
 	{
 		
@@ -247,7 +245,12 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		
 	}
 	
-	// Keeps all trumps
+	/**
+	 * Keeps all the trumps
+	 * @param pSuit
+	 * @param pCompare
+	 * @return
+	 */
 	public static boolean keepTrumps(Suit pSuit, BySuitComparator pCompare)
 	{
 		
@@ -259,8 +262,13 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		
 	}
 	
-	// Keeps one card of partner bid
-	// CORRECT
+	/**
+	 * Keeps one card of the partner's bid
+	 * @param pBids
+	 * @param pIndex
+	 * @param pCompare
+	 * @return
+	 */
 	public static boolean keepPartner (Bid[] pBids, int pIndex, ByRankComparator pCompare)
 	{
 		
@@ -291,8 +299,12 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		
 	}
 	
-	// Keeps king plus one card
-	// Takes in to account if the ace of this suit is already in the hand
+	/**
+	 * Keeps king plus one card
+	 * Takes in to account if the ace of this suit is already in the hand
+	 * @param pCompare
+	 * @return
+	 */
 	public static boolean keepKingsPlusOne(BySuitNoTrumpComparator pCompare)
 	{
 		
@@ -343,8 +355,14 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		
 	}
 	
-	// Discards suits that are singleton or doubleton
-	// Takes in to account partner suit and opponent suit in terms of suit precendence
+	/**
+	 * Discards suits that are singleton or doubleton
+	 * Takes in to account partner suit and opponent suit in terms of suit precendence
+	 * @param pBids
+	 * @param pIndex
+	 * @param pMySuit
+	 * @return
+	 */
 	public static boolean keepNonSingletonsAndNonDoubletons(Bid[] pBids, int pIndex, Suit pMySuit)
 	{
 

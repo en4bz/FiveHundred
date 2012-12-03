@@ -14,7 +14,8 @@ import comp303.fivehundred.util.Card.Suit;
 
 /**
  * @author Rayyan Khoury
- * Has a much more fine tuned strategy than Basic but seems to play worse
+ * Has a much more fine tuned strategy than BasicPlayingStrategy
+ * Checks the discards and widow to make sure of discards, but it seems that this doesn't improve the robot's performance
  */
 
 public class AdvancedPlayingStrategy implements IPlayingStrategy
