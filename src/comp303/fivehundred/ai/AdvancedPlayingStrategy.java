@@ -13,6 +13,7 @@ import comp303.fivehundred.util.Card.Suit;
 
 public class AdvancedPlayingStrategy implements IPlayingStrategy
 {
+	
 	// Compare by rank comparator
 	private static ByRankComparator compareByRank = new ByRankComparator();
 
