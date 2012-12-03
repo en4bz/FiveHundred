@@ -23,4 +23,5 @@ implements both Observer and Observable and is in charge of the following:
     uses AdvancedRobot Strategy classes to obtain the "result" of the action. It
     then uses sync() extensively because it must unlock the HumanPlayer object.
 5.) All action panels are actually anonymous classes implementing Observer.
+6.) Used Locale for internationalization
 
