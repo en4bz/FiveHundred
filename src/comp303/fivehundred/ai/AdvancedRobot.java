@@ -9,7 +9,7 @@ import comp303.fivehundred.util.CardList;
 
 public class AdvancedRobot extends AIObserver
 {
-	private IBiddingStrategy aBiddingStrategy = new BasicBiddingStrategy();
+	private IBiddingStrategy aBiddingStrategy = new AdvancedBiddingStrategy();
 	private ICardExchangeStrategy aCardExchangeStrategy = new AdvancedCardExchangeStrategy();
 	private IPlayingStrategy aPlayingStrategy = new AdvancedPlayingStrategy(this);
 	
