@@ -286,10 +286,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				{
 					log("Autoplaying card.");
 					aPlayedCard = aPlayingStrategy.play(aHuman.getTrick(), aHuman.getHand());
-					synchronized (aHuman)
-					{
-						aHuman.notify();
-					}
+					sync();
 					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 							GameFrame.Human.playValidated.toString()));
 				}
@@ -323,17 +320,10 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				if (aAutoPlay)
 				{
 					log("Autoplaying bid.");
-					synchronized (aHuman)
-					{
-						aHuman.notify();
-					}
 					aSelectedBid = aBiddingStrategy.selectBid(aPreviousBids, aHuman.getHand());
 					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 							GameFrame.Human.bidValidated.toString()));
-					synchronized (aHuman)
-					{
-						aHuman.notify();
-					}
+					sync();
 					aCurrentPrompt = PromptState.none;
 				}
 				else
@@ -355,10 +345,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 
 					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 							GameFrame.Human.discardValidated.toString()));
-					synchronized (aHuman)
-					{
-						aHuman.notify();
-					}
+					sync();
 					aCurrentPrompt = PromptState.none;
 
 				}
@@ -422,10 +409,8 @@ public class GameFrame extends JFrame implements Observer, IObservable
 						aDiscardDone = true;
 						notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 								GameFrame.Human.discardValidated.toString()));
-						synchronized (aHuman)
-						{
-							aHuman.notify();
-						}
+						sync();
+
 						aCurrentPrompt = PromptState.none;
 					}
 					else
@@ -572,18 +557,32 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		if (lBit)
 		{
 			aAutoPlay = true;
-			if (aHuman != null)
-			{
-				synchronized (aHuman)
-				{
-					aHuman.notify();
-				}
-			}
+			sync();
 		}
 		else
 		{
 			aAutoPlay = false;
 		}
+	}
+	
+	private void sync()
+	{
+		log("Synchronizing with HumanPlayer...");
+		Thread t = new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (aHuman != null)
+				{
+					synchronized (aHuman)
+					{
+						aHuman.notify();
+					}
+				}			}
+		});
+		t.start();
+
 	}
 
 	@Override

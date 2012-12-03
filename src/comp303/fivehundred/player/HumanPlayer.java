@@ -87,7 +87,6 @@ public class HumanPlayer extends APlayer
 		{
 			try
 			{
-				System.out.println("PlayedCard == null");
 				aFrame.update(new Notification("gui.humanplayer", this, aFrame.getNotificationSequenceNumber(),
 						GameFrame.Human.playPrompt.toString()));
 				synchronized (this)
