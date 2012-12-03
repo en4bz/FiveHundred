@@ -3,13 +3,10 @@ package comp303.fivehundred.ai;
 import javax.management.Notification;
 
 import comp303.fivehundred.engine.GameEngine;
-import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
-import comp303.fivehundred.model.Trick;
 import comp303.fivehundred.mvc.Observer;
 import comp303.fivehundred.player.APlayer;
 import comp303.fivehundred.player.ARobotPlayer;
-import comp303.fivehundred.player.Team;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.CardList;
 

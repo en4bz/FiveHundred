@@ -14,6 +14,8 @@ public abstract class ActionPanel extends JPanel implements Observer
 	}
 	
 	public abstract void build();
+	@Override
 	public abstract void show();
+	@Override
 	public abstract void hide();
 }

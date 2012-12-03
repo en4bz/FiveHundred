@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 /**
  * GUI application to demonstrate the card utilities at work.
@@ -29,13 +30,14 @@ public class CardDemoApplet extends Applet implements ActionListener
 	/**
 	 * @see java.applet.Applet#init()
 	 */
+	@Override
 	public void init()
 	{
 		aDeck.shuffle();
 		aImage.setIcon(CardImages.getBack());
 		aText.setText("Click the button to start");
-		aImage.setHorizontalAlignment(JLabel.CENTER);
-		aText.setHorizontalAlignment(JLabel.CENTER);
+		aImage.setHorizontalAlignment(SwingConstants.CENTER);
+		aText.setHorizontalAlignment(SwingConstants.CENTER);
 		setLayout(new BorderLayout(MARGIN, MARGIN));
 		add(aText, BorderLayout.NORTH);
 		add(aImage, BorderLayout.CENTER);

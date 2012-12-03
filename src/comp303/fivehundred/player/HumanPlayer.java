@@ -45,6 +45,7 @@ public class HumanPlayer extends APlayer
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Card play(Trick pTrick)
 	{
 		Card lPlayedCard;
@@ -110,6 +111,7 @@ public class HumanPlayer extends APlayer
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Bid selectBid(Bid[] pPreviousBids)
 	{
 		assert pPreviousBids.length <= 4;
@@ -138,6 +140,7 @@ public class HumanPlayer extends APlayer
 		return lSelectedBid;
 	}
 
+	@Override
 	public CardList exchange(Bid[] pBids, int pIndex, Hand pWidow)
 	{
 		aPreviousBids = pBids;

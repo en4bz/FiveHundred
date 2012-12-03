@@ -61,7 +61,7 @@ public final class CardImages
 	
 	private static ImageIcon getCard( String pCode )
 	{
-		ImageIcon lIcon = (ImageIcon) aCards.get( pCode );
+		ImageIcon lIcon = aCards.get( pCode );
 		if( lIcon == null )
 		{
 			lIcon = new ImageIcon(CardImages.class.getClassLoader().getResource( IMAGE_LOCATION + pCode + IMAGE_SUFFIX ));

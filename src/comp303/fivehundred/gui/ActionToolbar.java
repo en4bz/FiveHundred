@@ -19,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -91,6 +92,7 @@ public class ActionToolbar extends JPanel
 		return new ActionPanel()
 		{
 
+			@Override
 			public void build()
 			{
 				final HashMap<String, Bid> allBids = new HashMap<String, Bid>();
@@ -167,6 +169,7 @@ public class ActionToolbar extends JPanel
 			}
 			
 			
+			@Override
 			public void show()
 			{
 				ActionToolbar.this.add(this, BorderLayout.CENTER);
@@ -174,6 +177,7 @@ public class ActionToolbar extends JPanel
 				ActionToolbar.this.repaint();
 			}
 			
+			@Override
 			public void hide()
 			{
 				ActionToolbar.this.remove(this);
@@ -206,6 +210,7 @@ public class ActionToolbar extends JPanel
 		return new ActionPanel()
 		{
 
+			@Override
 			public void build()
 			{
 				final JButton discardButton = new JButton(
@@ -231,6 +236,7 @@ public class ActionToolbar extends JPanel
 				add(discardButton);
 			}
 			
+			@Override
 			public void show()
 			{
 				ActionToolbar.this.add(this, BorderLayout.CENTER);
@@ -238,6 +244,7 @@ public class ActionToolbar extends JPanel
 				ActionToolbar.this.repaint();
 			}
 			
+			@Override
 			public void hide()
 			{
 				ActionToolbar.this.remove(this);
@@ -287,7 +294,7 @@ public class ActionToolbar extends JPanel
 		lSpeedBox.setMaximumSize(new Dimension(buttonWidth, aHEIGHT));
 
 		// Make Slider
-		JSlider lSlider = new JSlider(JSlider.HORIZONTAL, min, max, def);
+		JSlider lSlider = new JSlider(SwingConstants.HORIZONTAL, min, max, def);
 
 		// Turn on labels at major tick marks.
 		lSlider.setMajorTickSpacing(step);
@@ -303,7 +310,7 @@ public class ActionToolbar extends JPanel
 				JSlider source = (JSlider) e.getSource();
 				if (!source.getValueIsAdjusting())
 				{
-					setSpeed(max-(int) source.getValue());
+					setSpeed(max-source.getValue());
 				}
 			}
 		});

@@ -27,6 +27,7 @@ public abstract class ARobotPlayer extends APlayer implements IRobotPlayer
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public CardList exchange(Bid[] pBids, int pIndex, Hand pWidow)
     {
 		assert pWidow.size() == 6;
@@ -47,7 +48,8 @@ public abstract class ARobotPlayer extends APlayer implements IRobotPlayer
 	/**
 	 * {@inheritDoc}
 	 */ 
-    public Bid selectBid(Bid[] pPreviousBids)
+    @Override
+	public Bid selectBid(Bid[] pPreviousBids)
     {
     	assert pPreviousBids.length <= 4;
         return selectBid(pPreviousBids, getHand());  
@@ -56,7 +58,8 @@ public abstract class ARobotPlayer extends APlayer implements IRobotPlayer
     /**
      * {@inheritDoc} 
      */
-    public Card play(Trick pTrick)
+    @Override
+	public Card play(Trick pTrick)
     {
     	assert pTrick != null;
     	

@@ -20,6 +20,7 @@ public class GameLogger implements Observer
 	 *	Update the GameLogger according to the new game state (amongst the enum values specified in GameEngine.State).
 	 *  @param pNotification the Notification object which holds information about the game state change
 	 */
+	@Override
 	public void update(Notification pNotification)
 	{
 		if(pNotification.getType().equals("game.engine"))

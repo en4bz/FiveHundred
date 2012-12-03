@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import org.slf4j.Logger;
@@ -48,13 +49,7 @@ public class PlayerMenu extends JPanel
 	// Layout constants
 	private int MIN_WIDTH = 600;
 	private int MIN_HEIGHT = 300;
-	private int PRF_WIDTH = 600;
-	private int PRF_HEIGHT = 300;
-	private int MAX_WIDTH = Integer.MAX_VALUE;
-	private int MAX_HEIGHT = Integer.MAX_VALUE;
 	private int TXT_HEIGHT = 40;
-	private int H_GAP = PRF_WIDTH;
-	private int V_GAP = 10;
 	
 	// Default values
 	private PlayerType[] aPlayerTypes = {PlayerType.BasicRobot, PlayerType.BasicRobot, PlayerType.RandomRobot, PlayerType.RandomRobot};
@@ -85,14 +80,10 @@ public class PlayerMenu extends JPanel
 		
 		setMinimumSize(new Dimension(GameFrame.WIDTH, GameFrame.HEIGHT));
 		setPreferredSize(new Dimension(GameFrame.WIDTH, GameFrame.HEIGHT));	
-		// TODO wonder if I shouldn't just go ahead and create a smaller wrapper panel.
 		setMaximumSize(new Dimension(GameFrame.WIDTH, GameFrame.HEIGHT));
 		
 		JPanel lWrapper = new JPanel();
 		lWrapper.setLayout(new BoxLayout(lWrapper, BoxLayout.Y_AXIS));
-//		lWrapper.setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-//		lWrapper.setPreferredSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-//		lWrapper.setMaximumSize(new Dimension(MAX_WIDTH, MAX_HEIGHT));
 		int lTopPadding = (int) (GameFrame.HEIGHT * 0.3); 
 		System.out.println(lTopPadding);
 		lWrapper.setBorder(new EmptyBorder( (int) (GameFrame.HEIGHT * 0.2),
@@ -106,9 +97,7 @@ public class PlayerMenu extends JPanel
 		buildNumberOfGamesBox(lWrapper);
 		buildPracticeCheckBox(lWrapper);
 		buildPlayButton(lWrapper);
-		
 		repaint();
-		
 		aFrame.add(this);
 	}
 
@@ -116,11 +105,7 @@ public class PlayerMenu extends JPanel
 	{
 		log("Build select team box.");
 		JPanel teamBox = new JPanel();
-		double ratio = 1;
 		teamBox.setLayout(new BoxLayout(teamBox, BoxLayout.Y_AXIS));
-//		teamBox.setMinimumSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT*ratio)));
-//		teamBox.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT*ratio)));
-//		teamBox.setMaximumSize(new Dimension(MAX_WIDTH, (int) (MAX_HEIGHT*ratio)));
 		teamBox.setBorder(BorderFactory.createTitledBorder(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.SelectTeam")));
 		for(int i = 0; i < NUM_TEAMS; i++)
 		{
@@ -224,7 +209,7 @@ public class PlayerMenu extends JPanel
 		lCBox.setSelected(practiceModeOn);
 //		lCBox.setMinimumSize(new Dimension(lWrapper.getMinimumSize().width, TXT_HEIGHT));
 //		lCBox.setMaximumSize(new Dimension(lWrapper.getMaximumSize().width, TXT_HEIGHT));	
-		lCBox.setHorizontalAlignment(JCheckBox.CENTER);
+		lCBox.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		lCBox.addActionListener(new ActionListener()
 		{

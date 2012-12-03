@@ -615,6 +615,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		}
 	}
 
+	@Override
 	public long getNotificationSequenceNumber()
 	{
 		return aNotificationSequenceNumber++;

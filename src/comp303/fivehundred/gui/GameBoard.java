@@ -27,8 +27,6 @@ import comp303.fivehundred.util.CardList;
 @SuppressWarnings("serial")
 public class GameBoard extends JPanel
 {
-	private final static int XPAD = 0;
-	private final static int YPAD = 0;
 	private final static Font SCORE_FONT = new Font("Serif", Font.BOLD, 56);
 	private static int bidCounter = 0;
 	Team[] aTeams;
@@ -83,22 +81,17 @@ public class GameBoard extends JPanel
 		
 		aScore_NS = new JPanel(new FlowLayout());
 		aScore_NS.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), "Score North-South Team", TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM));
-		//aScore_NS.setPreferredSize(new Dimension(200,200));
 		aScore_NS.setOpaque(false);
 		
 		aScore_EW = new JPanel(new FlowLayout());
 		aScore_EW.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(0,0,0,0), "Score East-West Team", TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM));
-		//aScore_EW.setPreferredSize(new Dimension(200,200));
 		aScore_EW.setOpaque(false);
 		
 		this.resetScores();
 		
 		aCurrentTrick = new TrickPanel();
-	
-		
 		//Set position of each element in board (using coordinates)
 		
-		GridBagConstraints w = getPlayerTrickConstraints(0, 0);
 		GridBagConstraints p1 = getPlayerTrickConstraints(1, 0);
 		GridBagConstraints p2 = getPlayerTrickConstraints(2, 1);
 		GridBagConstraints p3 = getPlayerTrickConstraints(1, 2);
@@ -107,26 +100,7 @@ public class GameBoard extends JPanel
 		GridBagConstraints s_EW = getPlayerTrickConstraints(0, 2, GridBagConstraints.LINE_START);
 		GridBagConstraints s_NS = getPlayerTrickConstraints(2, 2, GridBagConstraints.LINE_END);
 		GridBagConstraints g = getPlayerTrickConstraints(1, 1);
-		
-		
-//		//add a button to submit a trick
-//		JPanel submission = new JPanel();
-//		submission.setBorder(BorderFactory.createTitledBorder("Submit the trick"));
-//
-//		JButton submit = new JButton("submit");
-//		submit.addActionListener(new ActionListener()
-//		{
-//			@Override
-//			public void actionPerformed(ActionEvent e)
-//			{
-//				//Submit new info
-//			}
-//		});
-//		
-//		submission.add(submit);
-//		///////////////////////////
-		
-		
+
 		//add JPanels to the board
 	// 	this.add(aWidow,w);
 		this.add(aTopPlayer,p1);
@@ -148,10 +122,7 @@ public class GameBoard extends JPanel
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = x;
 		c.gridy = y;
-//		c.ipadx = XPAD;
-//		c.ipady = YPAD;
 		c.fill = GridBagConstraints.HORIZONTAL;
-//		c.fill = GridBagConstraints.CENTER;
 		return c;
 	}
 	
@@ -216,15 +187,6 @@ public class GameBoard extends JPanel
 			aTeams[0] = new Team(lPlayers[1], lPlayers[0]);
 		}
 		
-	}
-	
-	//"BUILD" METHODS FOR EACH COMPONENT THAT WE USE MORE THAN ONCE
-	
-	public JLabel textBubble (String aString) //get aString from an observer?
-	{
-		JLabel bubble = new JLabel(aString, JLabel.CENTER); //the "bubble" is in the middle of the label.
-		//add a background?
-		return bubble;
 	}
 	
 	public void updateTrick(APlayer pPlayer, Card c){

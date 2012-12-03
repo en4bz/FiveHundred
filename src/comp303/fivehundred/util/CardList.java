@@ -151,6 +151,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * {@inheritDoc}
 	 */
 
+	@Override
 	public CardList clone()
 	{
 		try 
@@ -183,6 +184,7 @@ public class CardList implements Iterable<Card>, Cloneable
 	 * @see java.lang.Object#toString()
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString()
 	{
 		// Starts building the string

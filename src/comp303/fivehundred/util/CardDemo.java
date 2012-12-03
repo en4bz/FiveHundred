@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 /**
  * GUI application to demonstrate the card utilities at work.
@@ -35,8 +36,8 @@ public class CardDemo extends JFrame implements ActionListener
 		aDeck.shuffle();
 		aImage.setIcon(CardImages.getBack());
 		aText.setText("Click the button to start");
-		aImage.setHorizontalAlignment(JLabel.CENTER);
-		aText.setHorizontalAlignment(JLabel.CENTER);
+		aImage.setHorizontalAlignment(SwingConstants.CENTER);
+		aText.setHorizontalAlignment(SwingConstants.CENTER);
 		setLayout(new BorderLayout(MARGIN, MARGIN));
 		add(aText, BorderLayout.NORTH);
 		add(aImage, BorderLayout.CENTER);
