@@ -90,6 +90,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		this.setVisible(true);
+		this.pack();
 	}
 
 	public static void main(String[] args)
@@ -157,7 +158,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 			@Override
 			public void run()
 			{
-				aPlayerMenu = new PlayerMenu(this);
+				aPlayerMenu = new PlayerMenu(GameFrame.this);
 				setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
 				pack();
 			}
