@@ -11,6 +11,22 @@ import comp303.fivehundred.util.CardList;
  */
 public class Hand extends CardList
 {
+
+	
+	public Hand()
+	{
+		super();
+	}
+	
+	public Hand(CardList pList)
+	{
+		super();
+		for(Card c: pList)
+		{
+			this.add(c);
+		}
+	}
+	
 	/**
 	 * @see java.lang.Object#clone()
 	 * {@inheritDoc}
