@@ -420,16 +420,14 @@ public class GameFrame extends JFrame implements Observer, IObservable
 						{
 							aHuman.notify();
 						}
-						
+						aCurrentPrompt = PromptState.none;
 					}
 					else
 					{
-						// TODO send invalid play notification
 						log("Invalid card played.");
 						JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.InvalidPlayError"));
 						aPlayedCard = null;
 					}
-					aCurrentPrompt = PromptState.none;
 				}
 				if (aCurrentPrompt == PromptState.discard )
 				{
@@ -444,7 +442,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 					}
 					System.out.println(aDiscardedCards.toString());
 				}
-			//	aCurrentPrompt = PromptState.none;
 				break;
 			default:
 				break;
