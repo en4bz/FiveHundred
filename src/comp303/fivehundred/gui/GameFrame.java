@@ -40,6 +40,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	private GameEngine aEngine;
 	private GameStatistics aGameStats;
 	private GameLogger aGameLogger;
+	
 	private PlayerMenu aPlayerMenu;
 	private ActionToolbar aActionToolbar;
 	private GameBoard aBoard;
@@ -76,14 +77,15 @@ public class GameFrame extends JFrame implements Observer, IObservable
 
 	public GameFrame()
 	{
-		// Build basic frame
+		/**
+		 * TO TURN LOGGING ON UNCOMMENT THE THE NEXT LINE
+		 */
+		//Logger.getRootLogger().removeAllAppenders();
+
 		setTitle("Five Hundred");
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		setLocation(5, 5); // Top-left corner of the screen
-
-		// Add Menu
 		this.setJMenuBar(new Menu()); // add menu to the new window (new game)
-
 		// Start the party
 		aPlayerMenu = new PlayerMenu(this);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,8 +103,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	{
 		log.debug("Starting new game set.");
 		Team[] lTeams = aPlayerMenu.getTeams();
-		System.out.println(lTeams[0]);
-		System.out.println(lTeams[1]);
 
 		aPracticeModeOn = aPlayerMenu.isPracticeModeOn();
 		aGamesLeft = aPlayerMenu.getNumberOfGamesToPlay();
