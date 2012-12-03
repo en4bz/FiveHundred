@@ -7,6 +7,7 @@ import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.Card.ByRankComparator;
 import comp303.fivehundred.util.Card.BySuitNoTrumpComparator;
+import comp303.fivehundred.util.Card.GenericBySuitComparator;
 import comp303.fivehundred.util.Card.Suit;
 import comp303.fivehundred.util.CardList;
 import comp303.fivehundred.util.Card.BySuitComparator;
@@ -26,6 +27,9 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	// CardList temporary container
 	private static CardList aTemp;
 	
+	// All suits in this game
+	private static Suit[] aSuits = new Suit[] {Suit.SPADES, Suit.CLUBS, Suit.DIAMONDS, Suit.HEARTS};
+	
 	@Override
 	public CardList selectCardsToDiscard(Bid[] pBids, int pIndex, Hand pHand)
 	{
@@ -36,7 +40,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		aDiscards = pHand.clone();
 		
 		// Trump game
-		if (Bid.max(pBids).getSuit().equals(null))
+		if (!Bid.max(pBids).getSuit().equals(null))
 		{
 			
 			trumpExchange(pBids, pIndex);
@@ -92,6 +96,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		
 	}
 	
+	/*
 	// Keeps all aces in the hand
 	public static boolean keepAces()
 	{
@@ -108,7 +113,78 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 			}
 			
 		}
+		System.out.println(aTemp);
+		return switchCards(aTemp);
 		
+	}
+	*/
+	
+	// Keeps all runs of ace to queen in the hand
+	// Always keeps the ace
+	public static boolean keepRuns(BySuitNoTrumpComparator pCompare)
+	{
+		
+		aTemp.removeAll();
+		aDiscards = (Hand) aDiscards.sort(pCompare);
+		aDiscards = (Hand) aDiscards.reverse();
+		
+		Card tempCard = null;
+		Suit tempSuit = null;
+		
+		for (Card card : aDiscards)
+		{
+			
+			// keeps the ace
+			if (card.getRank() == Card.Rank.ACE && tempCard == null)
+			{
+				tempCard = card;
+				tempSuit = card.getSuit();
+				aTemp.add(card);
+				continue;
+				
+			}
+			
+			// if the temp card has been set
+			if (tempCard != null)
+			{
+
+				// entering with an ace
+				if (tempCard.getRank().equals(Card.Rank.ACE) && card.getSuit().equals(tempSuit))
+				{
+
+					if (card.getRank() == Card.Rank.KING)
+					{
+
+						tempCard = card;
+						aTemp.add(card);
+						continue;
+
+					}
+
+					// not a king
+					tempCard = null;
+					continue;
+
+				}
+
+				// entering with a king
+				if (tempCard.getRank().equals(Card.Rank.KING) && card.getSuit().equals(tempSuit))
+				{
+
+					if (card.getRank() == Card.Rank.QUEEN)
+					{
+
+						tempCard = null;
+						aTemp.add(card);
+						continue;
+
+					}
+
+				}
+				
+			}
+			
+		}
 		return switchCards(aTemp);
 		
 	}
@@ -125,7 +201,8 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		BySuitComparator compareTrump = new BySuitComparator(mySuit);
 		ByRankComparator compareCards = new ByRankComparator();
 		BySuitNoTrumpComparator compareNoTrump = new BySuitNoTrumpComparator();
-		aDiscards.sort(compareTrump);
+		aDiscards = (Hand)aDiscards.sort(compareTrump);
+		aDiscards = (Hand)aDiscards.reverse();
 		
 		while (true)
 		{
@@ -134,20 +211,20 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 			if (keepJokers()) break;
 			// keep all trumps
 			if (keepTrumps(mySuit, compareTrump)) break;
-			// keep aces
-			if (keepAces()) break;
-			// keep one card of partner bid
-			if (keepPartner(pBids, pIndex, compareCards)) break;
+			// keep runs of high cards always including aces
+			if (keepRuns(compareNoTrump)) break;
 			// keep kings + 1
 			if (keepKingsPlusOne(compareNoTrump)) break;
+			// keep one card of partner bid
+			if (keepPartner(pBids, pIndex, compareCards)) break;
 			// keep non singletons and non doubletons
-			if (keepNonSingletonsAndNonDoubletons(compareCards)) break;
+			if (keepNonSingletonsAndNonDoubletons(pBids, pIndex, mySuit)) break;
 			
 		}
 		
 		// Removes random high cards at this point
-		aDiscards.sort(compareCards);
-		aDiscards.reverse();
+		aDiscards = (Hand)aDiscards.sort(compareCards);
+		aDiscards = (Hand)aDiscards.reverse();
 		Card highestCard;
 		while (aDiscards.size() > NUMBER_CARDS_DISCARD)
 		{
@@ -168,8 +245,8 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		
 		aTemp.removeAll();
 		aTemp = aDiscards.getTrumpCards(pSuit);
-		aTemp.sort(pCompare);
-		aTemp.reverse();
+		aTemp = aTemp.sort(pCompare);
+		aTemp = aTemp.reverse();
 		return switchCards(aTemp);
 		
 	}
@@ -185,8 +262,8 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 			return false;
 		}
 		
-		aDiscards.sort(pCompare);
-		aDiscards.reverse();
+		aDiscards = (Hand) aDiscards.sort(pCompare);
+		aDiscards = (Hand) aDiscards.reverse();
 		Suit partnerSuit = partnerBid.getSuit();
 		aTemp.removeAll();
 		
@@ -202,7 +279,6 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 			}
 			
 		}
-		
 		return switchCards(aTemp);
 		
 	}
@@ -213,8 +289,8 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	{
 		
 		aTemp.removeAll();
-		aDiscards.sort(pCompare);
-		aDiscards.reverse();
+		aDiscards = (Hand) aDiscards.sort(pCompare);
+		aDiscards = (Hand) aDiscards.reverse();
 		Card tempKing = null;
 		Card tempAce = null;
 		
@@ -255,16 +331,91 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 			}
 			
 		}
-		
 		return switchCards(aTemp);
 		
 	}
 	
 	// Discards suits that are singleton or doubleton
-	public static boolean keepNonSingletonsAndNonDoubletons(ByRankComparator pCompare)
+	// Takes in to account partner suit and opponent suit in terms of suit precendence
+	public static boolean keepNonSingletonsAndNonDoubletons(Bid[] pBids, int pIndex, Suit pMySuit)
 	{
 
 		aTemp.removeAll();
+		Suit mySuit = pMySuit;
+		Suit partSuit = null;
+		Suit opp1Suit = null;
+		Suit opp2Suit = null;
+		
+		if (!pBids[((pIndex+2)%4)].isPass())
+		{
+			
+			partSuit = pBids[((pIndex+2)%4)].getSuit();
+			
+		}
+		
+		if (!pBids[((pIndex+1)%4)].isPass())
+		{
+			
+			opp1Suit = pBids[((pIndex+1)%4)].getSuit();
+			
+		}
+		
+		if (!pBids[((pIndex+3)%4)].isPass())
+		{
+			
+			opp2Suit = pBids[((pIndex+3)%4)].getSuit();
+			
+		}
+		
+		
+		Suit[] gameSuits = new Suit[] {mySuit, partSuit, opp1Suit, opp2Suit};
+		ArrayList<Suit> leftOverSuits = new ArrayList<Suit>();
+		
+		for (int i = 0; i < aSuits.length; i++)
+		{
+			
+			leftOverSuits.add(aSuits[i]);
+			
+		}
+		
+		for (Suit suit : aSuits)
+		{
+			
+			for (Suit ourSuit : gameSuits)
+			{
+				
+				if (suit.equals(ourSuit))
+				{
+					
+					leftOverSuits.remove(suit);
+					break;
+					
+				}
+				
+			}
+			
+		}
+		
+		for (int i  = 0; i < gameSuits.length ; i++)
+		{
+			
+			if (gameSuits[i] == null)
+			{
+				
+				gameSuits[i] = leftOverSuits.get(0);
+				//System.out.println("change suit:" +ourSuit);
+				leftOverSuits.remove(gameSuits[i]);
+				
+			}
+			
+		}
+		
+		for (Suit ourSuit : gameSuits)
+		{
+			System.out.println(ourSuit);
+		}
+		
+		GenericBySuitComparator compare = new GenericBySuitComparator(gameSuits, true);
 
 		ArrayList<CardList> allCards = new ArrayList<CardList>();
 
@@ -289,9 +440,8 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 			}
 			
 		}
-		
-		aTemp.sort(pCompare);
-		aTemp.reverse();
+		aTemp = aTemp.sort(compare);
+		aTemp = aTemp.reverse();
 		return switchCards(aTemp);
 
 	}
