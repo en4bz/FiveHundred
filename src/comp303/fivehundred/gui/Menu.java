@@ -1,6 +1,8 @@
 package comp303.fivehundred.gui;
 
 
+import PlayerMenu;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -61,7 +63,8 @@ public class Menu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-		//		GameFrame lEngine = (GameFrame) Menu.this.getTopLevelAncestor();
+				GameFrame lFrame = (GameFrame) Menu.this.getTopLevelAncestor();
+				lFrame.resetFrame();
 		//		lEngine.update(new Notification("stats.show",this,lEngine.getNotificationSequenceNumber(), ""));
 			}
 		});
