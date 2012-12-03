@@ -379,6 +379,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 					
 					if (getDiscardedCards() != null && getDiscardedCards().size() == 6)
 					{
+						
 						log("Discard valid.");
 						aDiscardDone = true;
 						notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
@@ -393,9 +394,9 @@ public class GameFrame extends JFrame implements Observer, IObservable
 					{
 						log("Discard invalid.");
 						JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.InvalidDiscardError"));
-					}
+						aCurrentPrompt = PromptState.discard;
+						}
 				}
-				
 				break;
 
 			default:
@@ -441,7 +442,12 @@ public class GameFrame extends JFrame implements Observer, IObservable
 					else{
 						aDiscardedCards.add(lCardLabel.getCard());
 					}
-					System.out.println(aDiscardedCards.toString());
+					if(aDiscardedCards.size() == 6 ){
+						this.aActionToolbar.setDiscardEnabled(true);
+					}
+					else{
+						this.aActionToolbar.setDiscardEnabled(false);
+					}
 				}
 				break;
 			default:
