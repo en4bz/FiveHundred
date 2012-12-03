@@ -326,9 +326,9 @@ public class GameFrame extends JFrame implements Observer, IObservable
 			case discardPrompt:
 				if (aCurrentPrompt != PromptState.discard)
 					log("Human player is prompted to discard.");
+				aCurrentPrompt = PromptState.discard;
 				notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 						GameFrame.Human.discardPrompt.toString()));
-				aCurrentPrompt = PromptState.discard;
 				break;
 			case discardDone:
 				log("Human has discarded cards.");
