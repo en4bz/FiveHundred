@@ -60,6 +60,13 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		return play(pTrick, pHand, aObserver);
 	}
 
+	/**
+	 * The new play call
+	 * @param pTrick
+	 * @param pHand
+	 * @param pObserver
+	 * @return
+	 */
 	public Card play(Trick pTrick, Hand pHand, AIObserver pObserver)
 	{
 
@@ -122,6 +129,10 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 	}
 
+	/**
+	 * Updates the cards that can be seen by this robot
+	 * @param pObserver
+	 */
 	private static void updateCardsSeen(AIObserver pObserver)
 	{
 
@@ -158,7 +169,13 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 	}
 
-	// This robot is leading
+
+	/**
+	 * If the robot is leading
+	 * @param pHand
+	 * @param pTrumpSuit
+	 * @return
+	 */
 	private Card isLeading(Hand pHand, Suit pTrumpSuit) 
 	{
 
@@ -177,9 +194,13 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 	}
 
-	// This robot is leading in a no trump game
-	// If the hand has nothing but jokers, play the joker
-	// Otherwise look at the other cards and remove the jokers
+	/**
+	 * This robot is leading in a no trump game
+	 * If the hand has nothing but jokers, play the joker
+	 *  Otherwise look at the other cards and remove the jokers
+	 * @param pHand
+	 * @return
+	 */
 	private Card noTrumpLead(Hand pHand)
 	{
 
@@ -299,9 +320,12 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 	}
 
-	// This robot is leading in a no trump game
-	// If the hand has nothing but jokers, play the joker
-	// Otherwise look at the other cards and remove the jokers
+	/**
+	 * This robot is leading in a trump game
+	 * @param pHand
+	 * @param pTrumpSuit
+	 * @return
+	 */
 	private Card trumpLeadContractor(Hand pHand, Suit pTrumpSuit)
 	{
 
@@ -463,6 +487,12 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 	}
 
+	/**
+	 * Leading a trump game but not the contractor
+	 * @param pHand
+	 * @param pTrumpSuit
+	 * @return
+	 */
 	private Card trumpLeadNotContractor(Hand pHand, Suit pTrumpSuit)
 	{
 
@@ -566,17 +596,15 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		*/
 
 	}
-	
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//FOLLOWING TRUMP GAME NOT JOKER
+
+	/**
+	 * Following a trump game
+	 * @param pLeadingCard
+	 * @param pWinningCard
+	 * @param pHand
+	 * @param pTrick
+	 * @return
+	 */
 	private static Card followingTrumpGame(Card pLeadingCard, Card pWinningCard, Hand pHand, Trick pTrick)
 	{
 		
@@ -598,6 +626,14 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		
 	}
 	
+	/**
+	 * Following a trump game in which a trump card was led
+	 * @param pLeadingCard
+	 * @param pWinningCard
+	 * @param pHand
+	 * @param pTrick
+	 * @return
+	 */
 	private static Card followingTrumpCard(Card pLeadingCard, Card pWinningCard, Hand pHand, Trick pTrick)
 	{
 		
@@ -666,6 +702,14 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		
 	}
 	
+	/**
+	 * Following a trump game in which a non trump card was led
+	 * @param pLeadingCard
+	 * @param pWinningCard
+	 * @param pHand
+	 * @param pTrick
+	 * @return
+	 */
 	private static Card followingNonTrumpCard(Card pLeadingCard, Card pWinningCard, Hand pHand, Trick pTrick)
 	{
 		
@@ -730,7 +774,14 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		
 	}
 	
-	// Cannot follow suit
+	/**
+	 * The robot is unable to follow suit
+	 * @param pLeadingCard
+	 * @param pWinningCard
+	 * @param pHand
+	 * @param pTrick
+	 * @return
+	 */
 	private static Card couldTrumpFollowingNonTrumpCard(Card pLeadingCard, Card pWinningCard, Hand pHand, Trick pTrick)
 	{
 		
@@ -796,18 +847,13 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		
 	}
 	
-	
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//FOLLOWING TRUMP GAME JOKER
-	
+
+	/**
+	 * The robot is folowing a trump game that was started by a joker
+	 * @param pLeadingCard
+	 * @param pHand
+	 * @return
+	 */
 	private static Card followingTrumpGameJoker(Card pLeadingCard, Hand pHand)
 	{
 		
@@ -853,19 +899,15 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		}
 		
 	}
-	
-	
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//FOLLOWING NO TRUMP GAME
 
+	/**
+	 * The robot is following a no trump game
+	 * @param pLeadingCard
+	 * @param pWinningCard
+	 * @param pTrick
+	 * @param pHand
+	 * @return
+	 */
 	private static Card followingNoTrumpGame(Card pLeadingCard, Card pWinningCard, Trick pTrick, Hand pHand)
 	{
 
@@ -916,6 +958,14 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 	}
 	
+	/**
+	 * The robot is following a no trump game with a leading joker
+	 * @param pLeadingCard
+	 * @param pWinningCard
+	 * @param pTrick
+	 * @param pHand
+	 * @return
+	 */
 	private static Card followingNoTrumpGameLeadingJoker(Card pLeadingCard, Card pWinningCard, Trick pTrick, Hand pHand)
 	{
 		
@@ -936,6 +986,14 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		
 	}
 	
+	/**
+	 * The robot is following a no trump game with a winning joker
+	 * @param pLeadingCard
+	 * @param pWinningCard
+	 * @param pTrick
+	 * @param pHand
+	 * @return
+	 */
 	private static Card followingNoTrumpGameWinningJoker(Card pLeadingCard, Card pWinningCard, Trick pTrick, Hand pHand)
 	{
 		
@@ -968,6 +1026,15 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 		}
 	}
 	
+	/**
+	 * The robot is following a no trump game and can follow suit
+	 * @param currentSuit
+	 * @param cardsOfSuit
+	 * @param pWinningCard
+	 * @param pTrick
+	 * @param pHand
+	 * @return
+	 */
 	private static Card followingNoTrumpGameCanFollowSuit(Suit currentSuit, Hand cardsOfSuit, Card pWinningCard, Trick pTrick, Hand pHand)
 	{
 		
@@ -1024,7 +1091,5 @@ public class AdvancedPlayingStrategy implements IPlayingStrategy
 
 		
 	}
-	
-	
 	
 }
