@@ -1,8 +1,6 @@
 package comp303.fivehundred.gui;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -32,7 +30,7 @@ public class GameBoard extends JPanel
 	private final static int XPAD = 0;
 	private final static int YPAD = 0;
 	private final static Font SCORE_FONT = new Font("Serif", Font.BOLD, 56);
-	
+	private static int bidCounter = 0;
 	Team[] aTeams;
 	
 	final APlayer[] aNSTeam;
@@ -55,6 +53,7 @@ public class GameBoard extends JPanel
 	public GameBoard(final Team[] pPlayer)
 	{
 		super(new GridBagLayout());
+		bidCounter = 0;
 		aTeams = pPlayer;
 		rearrangeTeams();
 
@@ -272,24 +271,6 @@ public class GameBoard extends JPanel
 		aRightPlayer.updatehand();
 		aLeftPlayer.updatehand();
 	}
-	
-	public void updateCardPanel(APlayer pPlayer){
-		if(aBottomPlayer.getPlayer() == pPlayer){
-			aBottomPlayer.updatehand();
-		}
-		else if(aTopPlayer.getPlayer() == pPlayer){
-			aTopPlayer.updatehand();
-		}
-		else if(aLeftPlayer.getPlayer() == pPlayer){
-			aLeftPlayer.updatehand();
-		}
-		else if(aRightPlayer.getPlayer() == pPlayer){
-			aRightPlayer.updatehand();
-		}
-		else{
-			assert pPlayer == null;
-		}
-	}
 
 	public void updateTrickCount(APlayer pPlayer){
 		if(aBottomPlayer.getPlayer() == pPlayer){
@@ -319,7 +300,7 @@ public class GameBoard extends JPanel
 	public void setWidowCentral(){
 		aCenter.removeAll();
 		aCenter.add(aWidow);
-		aCenter.revalidate();
+		aCenter.validate();
 		aCenter.repaint();
 	}
 	public void setBiddingCentral(){
@@ -382,7 +363,7 @@ public class GameBoard extends JPanel
 		}
 	}
 
-	private static int bidCounter = 0;
+	
 	
 	public void updateBids(APlayer pPlayer, Bid[] bids)
 	{

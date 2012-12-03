@@ -117,6 +117,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		this.add(aActionToolbar);
 		this.invalidate();
 		this.validate();
+		this.repaint();
 		log("Game Board drawn.");
 
 		aEngine.addObserver(this);
@@ -188,6 +189,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 			switch (lState)
 			{
 			case newGameSet:
+				
 				Thread t = new Thread(new Runnable()
 				{
 					@Override
@@ -245,12 +247,12 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				break;
 			case cardsDiscarded:
 				aBoard.updateWidow(lEngine.getWidow(), lEngine.getContractor());
-				aBoard.updateCardPanel(lEngine.getCurrentPlayer());
+				aBoard.updateCardPanels();	
 				aBoard.setPlayingCentral();
 				sleep();
 				break;
 			case cardPlayed:
-				aBoard.updateCardPanel(lEngine.getCurrentPlayer());
+				aBoard.updateCardPanels();
 				aBoard.updateTrick(lEngine.getCurrentPlayer(), ((GameEngine) pNotification.getSource()).getCardPlayed());
 				sleep();
 				break;
