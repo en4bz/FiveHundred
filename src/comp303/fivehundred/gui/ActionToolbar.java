@@ -40,18 +40,13 @@ public class ActionToolbar extends JPanel
 	private boolean aPlay;
 	private boolean aWait;
 	private Bid aBid;
-	private CardList aDiscarded;
 	private final int aHEIGHT;
 	private final int aWIDTH;
 
 	private ActionPanel aPlayPanel;
 	private ActionPanel aBidPanel;
 	private ActionPanel aDiscardPanel;
-	private JPanel aActionPanel;
 	
-	private boolean bidPrompted = false;
-	private boolean playPrompted = false;
-	private boolean discardPrompted = false;
 
 	public ActionToolbar(GameFrame pFrame)
 	{
@@ -71,8 +66,8 @@ public class ActionToolbar extends JPanel
 		buildAutoPlayPanel();
 		buildSpeedBox();
 		
-		aPlayPanel = getPlayPanel();
-		aFrame.addObserver(aPlayPanel);
+//		aPlayPanel = getPlayPanel();
+//		aFrame.addObserver(aPlayPanel);
 		
 		aBidPanel = getBidPanel();
 		aFrame.addObserver(aBidPanel);
@@ -254,13 +249,9 @@ public class ActionToolbar extends JPanel
 		           
 		            switch(GameFrame.Human.valueOf(pNotification.getMessage())){
 		            case bidPrompt:
-		            	if(!bidPrompted)
-		            	{
-		            		show();
-		            	}
+		            	show();
 		            	break;
 		            case bidValidated:
-		            	bidPrompted = false;
 		            	hide();
 		            	break;
 		            default:

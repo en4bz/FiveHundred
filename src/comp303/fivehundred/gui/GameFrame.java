@@ -15,6 +15,12 @@ import javax.swing.border.EmptyBorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import comp303.fivehundred.ai.BasicBiddingStrategy;
+import comp303.fivehundred.ai.BasicCardExchangeStrategy;
+import comp303.fivehundred.ai.BasicPlayingStrategy;
+import comp303.fivehundred.ai.IBiddingStrategy;
+import comp303.fivehundred.ai.ICardExchangeStrategy;
+import comp303.fivehundred.ai.IPlayingStrategy;
 import comp303.fivehundred.engine.GameEngine;
 import comp303.fivehundred.engine.GameLogger;
 import comp303.fivehundred.engine.GameStatistics;
@@ -47,7 +53,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	private static boolean aIsLogging = true;
 
 	private int aSpeed = 500;
-	private boolean aAutoPlay = false;
 
 	// MVC-related fields
 	private ArrayList<Observer> aObservers = new ArrayList<Observer>();
@@ -55,7 +60,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 
 	// Human player fields
 	private PromptState aCurrentPrompt = PromptState.none;
-	
 	private HumanPlayer aHuman;
 	private CardList aPlayableCards;
 	private Card aPlayedCard = null;
@@ -63,6 +67,12 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	private Bid[] aPreviousBids = null;
 	private CardList aDiscardedCards = null;
 	private boolean aDiscardDone = false;
+	
+	// AutoPlay mode
+	private boolean aAutoPlay = false;
+	private IBiddingStrategy aBiddingStrategy = new BasicBiddingStrategy();
+	private ICardExchangeStrategy aCardExchangeStrategy = new BasicCardExchangeStrategy();
+	private IPlayingStrategy aPlayingStrategy = new BasicPlayingStrategy();
 
 	public GameFrame()
 	{
@@ -155,7 +165,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	private void play()
 	{
 		log("Play!");
-		this.aCurrentPrompt = PromptState.discard;
 		aEngine.exchange();
 		aEngine.playRound();
 		aEngine.computeScore();
@@ -274,10 +283,24 @@ public class GameFrame extends JFrame implements Observer, IObservable
 			switch (GameFrame.Human.valueOf(pNotification.getMessage()))
 			{
 			case playPrompt:
+				if(aAutoPlay)
+				{
+					aPlayedCard = aPlayingStrategy.play(aHuman.getTrick(), aHuman.getHand());
+					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+							GameFrame.Human.playValidated.toString()));
+					synchronized (aHuman)
+					{
+						aHuman.notify();
+					}
+				}
+				else
+				{
+					
 				if (aCurrentPrompt != PromptState.play)
 					log("Human player is prompted to play.");
 				notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 						GameFrame.Human.playPrompt.toString()));
+				}
 				aCurrentPrompt = PromptState.play;
 				break;
 			case playDone:
@@ -292,6 +315,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				aSelectedBid = null;
 				break;
 			case bidPrompt:
+				
 				if (aCurrentPrompt != PromptState.bid)
 					log("Human player is prompted to bid.");
 				aCurrentPrompt = PromptState.bid;
