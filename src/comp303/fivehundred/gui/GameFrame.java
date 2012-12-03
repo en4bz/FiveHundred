@@ -103,9 +103,9 @@ public class GameFrame extends JFrame implements Observer, IObservable
         this.remove(aPlayerMenu);
         aBoard = new GameBoard(lTeams);
         this.add(aBoard);
-        this.add(new ActionToolbar(this));
+        aBoard.addActionToolBar(new ActionToolbar(this));
+        this.invalidate();
         this.validate();
-        this.revalidate();
         log("Game Board drawn.");
 
         aEngine.addObserver(this);
@@ -129,10 +129,11 @@ public class GameFrame extends JFrame implements Observer, IObservable
         {
             log("Game Over.");
             aGameStats.printStatistics();
-            this.remove(aBoard);
+            remove(aBoard);
             JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.GameFrame.GameSetOver"));
             aPlayerMenu = new PlayerMenu(this);
-           
+            setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
+            pack();
         }
     }
 
@@ -170,7 +171,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
     @Override
     public void update(Notification pNotification)
     {
-        if (pNotification.getType().equals("gui.gameframe"))
+        if (pNotification.getType().equals("gui.playermenu"))
         {
             State lState = State.valueOf(pNotification.getMessage());
             switch (lState)
@@ -266,6 +267,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
             aHuman = (HumanPlayer) (pNotification.getSource());
             aPlayableCards = aHuman.getPlayableCards();
             aPreviousBids = aHuman.getPreviousBids();
+            
             switch (GameFrame.Human.valueOf(pNotification.getMessage()))
             {
             case playPrompt:
@@ -294,6 +296,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 if(!aBidPrompted)
                     log("Human player is prompted to bid.");
                 aBidPrompted = true;
+                aPreviousBids = aHuman.getPreviousBids(); 
                 notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
                         GameFrame.Human.bidPrompt.toString()));
                 break;
@@ -315,8 +318,9 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 break;
             }
         }
-        if (pNotification.getType().equals("game.actiontoolbar"))
+        if (pNotification.getType().equals("gui.actiontoolbar"))
         {
+        	log(pNotification.getMessage());
 
             ActionToolbar lBar = (ActionToolbar) (pNotification.getSource());
             switch (GameFrame.Human.valueOf(pNotification.getMessage()))
@@ -325,13 +329,19 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 log("Human has bid.");
                 if (aBidPrompted)
                 {
+                	log(aPreviousBids.toString());
+                	aSelectedBid = lBar.geBid();
                     if (aPreviousBids.length == 0
-                            || aSelectedBid.compareTo(aPreviousBids[aPreviousBids.length - 1]) > 0)
+                            || aSelectedBid.isPass() || aSelectedBid.compareTo(aPreviousBids[aPreviousBids.length - 1]) > 0)
                     {
                         log("Bid valid.");
                         aSelectedBid = lBar.geBid();
                         notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
                                 GameFrame.Human.bidValidated.toString()));
+                        synchronized (aHuman)
+                        {
+                        	aHuman.notify();
+                        }
                     }
                     else
                     {
@@ -346,7 +356,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 break;
             }
         }
-        if (pNotification.getType().equals("game.cardLabel"))
+        if (pNotification.getType().equals("gui.cardLabel"))
         {
 
             CardLabel lCardLabel = (CardLabel) (pNotification.getSource());

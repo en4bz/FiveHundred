@@ -315,7 +315,7 @@ public class PlayerMenu extends JPanel
 		if(validatePlayers())
 		{
 			log("Starting game.");
-			aFrame.update(new Notification("gui.gameframe", this, aFrame.getNotificationSequenceNumber(), GameFrame.State.newGameSet.toString()));
+			aFrame.update(new Notification("gui.playermenu", this, aFrame.getNotificationSequenceNumber(), GameFrame.State.newGameSet.toString()));
 			//aFrame.setEnabled(true);
 			//this.setVisible(false);
 		}

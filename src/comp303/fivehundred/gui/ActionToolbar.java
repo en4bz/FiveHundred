@@ -65,7 +65,7 @@ public class ActionToolbar extends JPanel
 		// set default values
 		aSpeed = aFrame.getSpeed();
 		aBid = new Bid();
-		aHEIGHT = 60;
+		aHEIGHT = 50;
 		aWIDTH = aFrame.getWidth();
 
 		buildAutoPlayPanel();
@@ -102,10 +102,7 @@ public class ActionToolbar extends JPanel
 					@Override
 					public void actionPerformed(ActionEvent arg0)
 					{
-						if (playButton.isSelected())
-						{
-							aFrame.update(new Notification("gui.gameframe", this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.playDone.toString()));
-						}
+							aFrame.update(new Notification("gui.actiontoolbar", ActionToolbar.this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.playDone.toString()));
 					}
 				});
 				add(playButton);
@@ -169,11 +166,10 @@ public class ActionToolbar extends JPanel
 				
 				
 				setLayout(new GridLayout(1, 2));
-				int height = aHEIGHT;
 				int width = 500;
-				setMinimumSize(new Dimension(width, height));
-				setPreferredSize(new Dimension(width, height));
-				setMaximumSize(new Dimension(width, height));
+				setMinimumSize(new Dimension(width, aHEIGHT));
+				setPreferredSize(new Dimension(width, aHEIGHT));
+				setMaximumSize(new Dimension(width, aHEIGHT));
 				
 				
 		        // No I have not typed all this, I used a python script
@@ -208,7 +204,7 @@ public class ActionToolbar extends JPanel
 		        Arrays.sort(lOptions);
 				bidDropDown = new JComboBox(lOptions);
 				bidDropDown.setEditable(false);
-				bidDropDown.setSize(bidDropDown.getWidth(), height / 4 * 5);
+				bidDropDown.setSize(bidDropDown.getWidth(), aHEIGHT);
 				
 				// update bid value
 				setBid(allBids.get(bidDropDown.getSelectedItem()));
@@ -229,19 +225,13 @@ public class ActionToolbar extends JPanel
 					@Override
 					public void actionPerformed(ActionEvent arg0)
 					{
-						if (bidButton.isSelected())
-						{
-							aFrame.update(new Notification("gui.gameframe", this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.bidDone.toString()));
-						}
+							aFrame.update(new Notification("gui.actiontoolbar", ActionToolbar.this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.bidDone.toString()));
+						
 					}
 				});
 				add(bidButton);
 			}
 			
-			public Bid getBid()
-			{
-				return aBid;
-			}
 			
 			public void show()
 			{
@@ -293,19 +283,18 @@ public class ActionToolbar extends JPanel
 				
 				setLayout(new GridLayout(1, 1));
 				int buttonWidth = 200;
-				setMinimumSize(new Dimension(buttonWidth, aHEIGHT / 4 * 5));
-				setPreferredSize(new Dimension(buttonWidth, aHEIGHT / 4 * 5));
-				setMaximumSize(new Dimension(buttonWidth, aHEIGHT / 4 * 5));
+				setMinimumSize(new Dimension(buttonWidth, aHEIGHT ));
+				setPreferredSize(new Dimension(buttonWidth, aHEIGHT ));
+				setMaximumSize(new Dimension(buttonWidth, aHEIGHT ));
 								
 				discardButton.addActionListener(new ActionListener()
 				{
 					@Override
 					public void actionPerformed(ActionEvent arg0)
 					{
-						if (discardButton.isSelected())
-						{
-							aFrame.update(new Notification("gui.gameframe", this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.discardDone.toString()));
-						}
+
+							aFrame.update(new Notification("gui.actiontoolbar", ActionToolbar.this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.discardDone.toString()));
+						
 					}
 				});
 				add(discardButton);
@@ -391,7 +380,7 @@ public class ActionToolbar extends JPanel
 	{
 		JPanel lAutoPlayBox = new JPanel();
 		lAutoPlayBox.setLayout(new GridLayout(1, 1));
-		int buttonWidth = aWIDTH / 5;
+		int buttonWidth = aWIDTH / 6;
 		lAutoPlayBox.setMinimumSize(new Dimension(buttonWidth, aHEIGHT));
 		lAutoPlayBox.setPreferredSize(new Dimension(buttonWidth, aHEIGHT));
 		lAutoPlayBox.setMaximumSize(new Dimension(buttonWidth, aHEIGHT));
@@ -418,6 +407,11 @@ public class ActionToolbar extends JPanel
 		add(lAutoPlayBox, BorderLayout.WEST);
 	}
 
+	public Bid getBid()
+	{
+		return aBid;
+	}
+	
 	private void setSpeed(int pSpeed)
 	{
 		aSpeed = pSpeed;

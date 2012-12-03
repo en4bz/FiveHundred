@@ -83,7 +83,7 @@ public class HumanPlayer extends APlayer
 			try
 			{
 				aFrame.update(new Notification("gui.humanplayer", this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.playPrompt.toString()));
-				Thread.sleep(100);
+				Thread.sleep(1000);
 			}
 			catch (InterruptedException e)
 			{
@@ -116,7 +116,11 @@ public class HumanPlayer extends APlayer
 			try
 			{
 				aFrame.update(new Notification("gui.humanplayer", this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.bidPrompt.toString()));
-				Thread.sleep(100);
+				synchronized(this)
+				{
+					this.wait();
+				}
+				System.out.println("Unlocked!");
 			}
 			catch (InterruptedException e)
 			{
