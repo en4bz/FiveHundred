@@ -103,7 +103,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
         this.remove(aPlayerMenu);
         aBoard = new GameBoard(lTeams);
         this.add(aBoard);
-        aBoard.addActionToolBar(new ActionToolbar(this));
+        this.add(new ActionToolbar(this));
         this.invalidate();
         this.validate();
         log("Game Board drawn.");
