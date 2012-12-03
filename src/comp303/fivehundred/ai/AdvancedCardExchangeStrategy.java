@@ -40,7 +40,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		aDiscards = pHand.clone();
 		
 		// Trump game
-		if (!Bid.max(pBids).getSuit().equals(null))
+		if (Bid.max(pBids).getSuit() != null)
 		{
 			
 			trumpExchange(pBids, pIndex);
