@@ -3,6 +3,7 @@ package comp303.fivehundred.gui;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.management.Notification;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -93,11 +94,17 @@ public class CardLabel extends JLabel implements MouseListener
 	public void mouseClicked(MouseEvent e)
 	{
 		if(this.getParent().getParent() instanceof PlayerArea && ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT){
-			GameFrame.nextCard = aCard;
+			GameFrame aFrame = (GameFrame) this.getTopLevelAncestor();
+			aFrame.update(new Notification("gui.cardlabel", this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.cardClicked.toString()));
 		}
 		if(this.getParent() instanceof WidowPanel){
 			
 		}
+	}
+	
+	public Card getCard()
+	{
+		return aCard;
 	}
 
 	@Override

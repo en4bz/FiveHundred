@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -46,6 +48,10 @@ public class ActionToolbar extends JPanel
 	private ActionPanel aBidPanel;
 	private ActionPanel aDiscardPanel;
 	private JPanel aActionPanel;
+	
+	private boolean bidPrompted = false;
+	private boolean playPrompted = false;
+	private boolean discardPrompted = false;
 
 	public ActionToolbar(GameFrame pFrame)
 	{
@@ -120,7 +126,7 @@ public class ActionToolbar extends JPanel
 			@Override
 			public void update(Notification pNotification)
 			{
-				if(pNotification.getType().equals("game.gameframe")){
+				if(pNotification.getType().equals("gui.gameframe")){
 		           
 		            switch(GameFrame.Human.valueOf(pNotification.getMessage())){
 		            case playPrompt:
@@ -196,8 +202,11 @@ public class ActionToolbar extends JPanel
 		        allBids.put(MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Bid.10Hearts"), new Bid(10, Suit.HEARTS));
 		        allBids.put(MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Bid.10NoTrump"), new Bid(10, null));
 
-				bidDropDown = new JComboBox(allBids.keySet().toArray());
+		        Object[] lOptions = allBids.keySet().toArray();
+		        Arrays.sort(lOptions);
+				bidDropDown = new JComboBox(lOptions);
 				bidDropDown.setEditable(false);
+				bidDropDown.setSize(bidDropDown.getWidth(), height / 4 * 5);
 				
 				// update bid value
 				setBid(allBids.get(bidDropDown.getSelectedItem()));
@@ -209,6 +218,7 @@ public class ActionToolbar extends JPanel
 						setBid(allBids.get(bidDropDown.getSelectedItem()));
 					}
 				});
+				add(bidDropDown);
 				
 				
 				// trigger bid event
@@ -246,13 +256,17 @@ public class ActionToolbar extends JPanel
 			@Override
 			public void update(Notification pNotification)
 			{
-				if(pNotification.getType().equals("game.gameframe")){
+				if(pNotification.getType().equals("gui.gameframe")){
 		           
 		            switch(GameFrame.Human.valueOf(pNotification.getMessage())){
 		            case bidPrompt:
-		            	show();
+		            	if(!bidPrompted)
+		            	{
+		            		show();
+		            	}
 		            	break;
 		            case bidValidated:
+		            	bidPrompted = false;
 		            	hide();
 		            	break;
 		            default:
@@ -308,7 +322,7 @@ public class ActionToolbar extends JPanel
 			@Override
 			public void update(Notification pNotification)
 			{
-				if(pNotification.getType().equals("game.gameframe")){
+				if(pNotification.getType().equals("gui.gameframe")){
 		           
 		            switch(GameFrame.Human.valueOf(pNotification.getMessage())){
 		            case discardPrompt:

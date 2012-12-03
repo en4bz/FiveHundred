@@ -12,7 +12,7 @@ import comp303.fivehundred.util.CardList;
 
 /**
  * Game Logger.
- * @author Gabrielle Germain
+ * @author Eleyine Zarour
  *
  */
 public class GameLogger implements Observer
@@ -70,7 +70,7 @@ public class GameLogger implements Observer
 				   aLogger.info("{} has the contract of {}", lGame.getContractor().getName(), lGame.getContract());
 				   Team[] lTeams = lGame.getTeams();
 				   aLogger.info(String.format("%-10s and %-10s won %d tricks", lTeams[0].getPlayers()[0].getName(), lTeams[0].getPlayers()[1].getName(), lTeams[0].getTricksWon()));
-				   aLogger.info(String.format("%-10s and %-10s won %d tricks", lTeams[0].getPlayers()[1].getName(), lTeams[1].getPlayers()[1].getName(), lTeams[1].getTricksWon()));
+				   aLogger.info(String.format("%-10s and %-10s won %d tricks", lTeams[1].getPlayers()[0].getName(), lTeams[1].getPlayers()[1].getName(), lTeams[1].getTricksWon()));
 				   break;
 			   case roundEnd:
 				   aLogger.info("Contractor round score: {} \t Total score: {}", lGame.getContractorRoundScore(), lGame.getContractorTotalScore());

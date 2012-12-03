@@ -30,7 +30,7 @@ final class Driver
 		GameStatistics lGameStats = new GameStatistics();
 		lEngine.addObserver(lGameStats);
 		// TO TURN LOGGING ON UNCOMMENT THIS LINE
-		// lEngine.addObserver(new GameLogger());
+		//lEngine.addObserver(new GameLogger());
 		
 		for(int i = 0; i < MAX_GAMES; i++)
 		{

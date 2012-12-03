@@ -102,6 +102,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
         this.remove(aPlayerMenu);
         aBoard = new GameBoard(lTeams);
         this.add(aBoard);
+        aBoard.addActionToolBar(new ActionToolbar(this));
 
         log("Game Board drawn.");
 
@@ -397,7 +398,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
         {
         }
     }
-
+    
     public static void log(String message)
     {
         if (aIsLogging)

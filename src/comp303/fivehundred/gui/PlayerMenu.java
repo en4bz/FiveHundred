@@ -58,7 +58,7 @@ public class PlayerMenu extends JPanel
 	private int V_GAP = 10;
 	
 	// Default values
-	private PlayerType[] aPlayerTypes = {PlayerType.BasicRobot, PlayerType.BasicRobot, PlayerType.RandomRobot, PlayerType.RandomRobot};
+	private PlayerType[] aPlayerTypes = {PlayerType.Human, PlayerType.BasicRobot, PlayerType.RandomRobot, PlayerType.RandomRobot};
 	private String[] aPlayerNames = {"Alice", "Alex", "John", "Jannice"};
 	private boolean practiceModeOn = true;
 	private int numGamesToPlay = 1;
@@ -106,7 +106,6 @@ public class PlayerMenu extends JPanel
 		buildPlayButton(lWrapper);
 		
 		aFrame.add(this);
-		aFrame.pack();
 		
 
 	}
@@ -339,7 +338,7 @@ public class PlayerMenu extends JPanel
 					lPlayers[i] = new RandomRobot(aPlayerNames[i]);
 					break;
 				case Human:
-					lPlayers[i] = new HumanPlayer(aPlayerNames[i]);
+					lPlayers[i] = new HumanPlayer(aPlayerNames[i], aFrame);
 					break;
 				case Advanced:
 					// TODO change robot to advanced once the functionality is implemented
