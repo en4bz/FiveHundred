@@ -145,10 +145,15 @@ public class GameFrame extends JFrame implements Observer, IObservable
 			remove(aBoard);
 			remove(aActionToolbar);
 			JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.GameFrame.GameSetOver"));
-			aPlayerMenu = new PlayerMenu(this);
-			setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
-			pack();
+			resetFrame();
 		}
+	}
+	
+	protected void resetFrame()
+	{
+		aPlayerMenu = new PlayerMenu(this);
+		setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
+		pack();
 	}
 
 	private void newDeal()
