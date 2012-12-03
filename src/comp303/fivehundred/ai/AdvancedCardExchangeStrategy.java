@@ -34,6 +34,8 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	public CardList selectCardsToDiscard(Bid[] pBids, int pIndex, Hand pHand)
 	{
 		
+		Hand handClone = pHand.clone();
+		
 		//aDiscards = new CardList();
 		aRetain = new CardList();
 		aTemp = new CardList();
@@ -51,7 +53,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		else
 		{
 			
-			super.selectCardsToDiscard(pBids, pIndex, pHand);
+			aDiscards = new Hand(super.selectCardsToDiscard(pBids, pIndex, handClone));
 			
 		}
 		
@@ -226,12 +228,18 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		aDiscards = (Hand)aDiscards.sort(compareCards);
 		aDiscards = (Hand)aDiscards.reverse();
 		Card highestCard;
-		while (aDiscards.size() > NUMBER_CARDS_DISCARD)
+		
+		if (aDiscards.size() > NUMBER_CARDS_DISCARD)
 		{
+			
+			while (aDiscards.size() != NUMBER_CARDS_DISCARD)
+			{
 
-			highestCard = aDiscards.getFirst();
-			aDiscards.remove(highestCard);
-			aRetain.add(highestCard);
+				highestCard = aDiscards.getFirst();
+				aDiscards.remove(highestCard);
+				aRetain.add(highestCard);
+				
+			}
 			
 		}
 		
@@ -412,7 +420,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		
 		for (Suit ourSuit : gameSuits)
 		{
-			System.out.println(ourSuit);
+			//System.out.println(ourSuit);
 		}
 		
 		GenericBySuitComparator compare = new GenericBySuitComparator(gameSuits, true);
