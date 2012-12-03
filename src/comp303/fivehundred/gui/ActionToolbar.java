@@ -236,7 +236,7 @@ public class ActionToolbar extends JPanel
 			public void show()
 			{
 				ActionToolbar.this.add(this, BorderLayout.CENTER);
-				ActionToolbar.this.revalidate();
+		
 				ActionToolbar.this.repaint();
 			}
 			
