@@ -78,6 +78,18 @@ public class Menu extends JMenuBar
 
 		});
 		
+		reset.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				GameFrame lEngine = (GameFrame) Menu.this.getTopLevelAncestor();
+				lEngine.update(new Notification("stats.reset",this,lEngine.getNotificationSequenceNumber(), ""));
+			}
+
+		});
+		
+		
 		//Help -> ask for help...OK
 		ask.addActionListener(new ActionListener()
 		{

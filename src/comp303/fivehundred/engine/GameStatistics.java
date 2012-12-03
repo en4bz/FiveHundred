@@ -136,7 +136,6 @@ public class GameStatistics implements Observer
 					, aRatios.get(p).get(Stats.accumulatedScore)));
 			toReturn += "\n";
 		}
-		System.out.println(toReturn);
 		return toReturn;
 	}
 	

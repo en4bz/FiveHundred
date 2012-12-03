@@ -190,7 +190,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 			switch (lState)
 			{
 			case newGameSet:
-
+			
 				Thread t = new Thread(new Runnable()
 				{
 					@Override
@@ -215,8 +215,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		}
 		if (pNotification.getType().equals("game.engine"))
 		{
-			setTitle(pNotification.getMessage());
-
 			GameEngine lEngine = (GameEngine) (pNotification.getSource());
 			switch (GameEngine.State.valueOf(pNotification.getMessage()))
 			{
