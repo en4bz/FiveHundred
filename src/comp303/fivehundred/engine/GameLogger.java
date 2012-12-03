@@ -1,9 +1,7 @@
 package comp303.fivehundred.engine;
 import javax.management.Notification;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.log4j.Logger;
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.mvc.Observer;
 import comp303.fivehundred.player.APlayer;
@@ -17,8 +15,7 @@ import comp303.fivehundred.util.CardList;
  */
 public class GameLogger implements Observer
 {
-	private final Logger aLogger = LoggerFactory.getLogger("GameLogger");
-	
+	private final Logger aLogger = Logger.getLogger(GameLogger.class);
 	/**
 	 *	Update the GameLogger according to the new game state (amongst the enum values specified in GameEngine.State).
 	 *  @param pNotification the Notification object which holds information about the game state change
@@ -32,17 +29,17 @@ public class GameLogger implements Observer
 			switch (lState) 
 			{
 			   case newGame: 
-				   aLogger.info("Game initialized. Initial dealer: {}", lGame.getDealer().getName());
+				   aLogger.info("Game initialized. Initial dealer: " + lGame.getDealer().getName());
 				   aLogger.info("============================== NEW GAME ==============================");
 				   break;
 			   case newDeal: 
 				   aLogger.info("******************** NEW DEAL ********************");
-				   aLogger.info("Players dealt cards by {}", lGame.getDealer().getName());
+				   aLogger.info("Players dealt cards by " + lGame.getDealer().getName());
 				   for(APlayer p: lGame.getPlayersInOrder())
 				   {
 					   aLogger.info(String.format("%-10s cards:  %s", p.getName(), p.getHand()));
 				   }
-				   aLogger.info("The widow contains:  {}", lGame.getWidow());
+				   aLogger.info("The widow contains: " + lGame.getWidow());
 				   break;
 			   case newBid:
 				   APlayer lCurrentPlayer = lGame.getCurrentPlayer();
@@ -50,14 +47,14 @@ public class GameLogger implements Observer
 				   aLogger.info(String.format("%-10s cards: %s bids %s", lCurrentPlayer.getName(), lCurrentPlayer.getHand(), lCurrentBid));
 				   break;
 			   case newContract:
-				   aLogger.info("{} has the contract of {}", lGame.getContractor().getName(), lGame.getContract());
+				   aLogger.info(lGame.getContractor().getName() + " has the contract of " + lGame.getContract());
 				   break;
 			   case cardsDiscarded:
-				   aLogger.info("{} discards {}", lGame.getContractor().getName(), lGame.getWidow());
+				   aLogger.info(lGame.getContractor().getName() + " discards " + lGame.getWidow());
 				   aLogger.info(String.format("%-10s cards:  %s", lGame.getContractor().getName(), lGame.getContractor().getHand()));
 				   break;
 			   case newTrick:
-				   aLogger.info("---- TRICK {} ----", lGame.getTrickCounter());
+				   aLogger.info("---- TRICK " + lGame.getTrickCounter() + " ----");
 				   break;
 			   case cardPlayed:
 				   APlayer lPlayer = lGame.getCurrentPlayer();
@@ -66,15 +63,15 @@ public class GameLogger implements Observer
 				   aLogger.info(String.format("%-10s cards: %s plays %s", lPlayer.getName(), lCards, lGame.getCardPlayed()));
 				   break;
 			   case trickWon:
-				   aLogger.info("{} wins the trick", lGame.getTrickWinner().getName());
-				   aLogger.info("{} has the contract of {}", lGame.getContractor().getName(), lGame.getContract());
+				   aLogger.info( lGame.getTrickWinner().getName() + " wins the trick");
+				   aLogger.info(lGame.getContractor().getName() + " has the contract of " +  lGame.getContract());
 				   Team[] lTeams = lGame.getTeams();
 				   aLogger.info(String.format("%-10s and %-10s won %d tricks", lTeams[0].getPlayers()[0].getName(), lTeams[0].getPlayers()[1].getName(), lTeams[0].getTricksWon()));
 				   aLogger.info(String.format("%-10s and %-10s won %d tricks", lTeams[1].getPlayers()[0].getName(), lTeams[1].getPlayers()[1].getName(), lTeams[1].getTricksWon()));
 				   break;
 			   case roundEnd:
-				   aLogger.info("Contractor round score: {} \t Total score: {}", lGame.getContractorRoundScore(), lGame.getContractorTotalScore());
-				   aLogger.info("Defenders round score: {} \t Total score: {}", lGame.getNonContractorRoundScore(), lGame.getNonContractorTotalScore());
+				   aLogger.info(String.format("Contractor round score: %s \t Total score: %s", lGame.getContractorRoundScore(), lGame.getContractorTotalScore()));
+				   aLogger.info(String.format("Defenders round score: %s \t Total score: $s", lGame.getNonContractorRoundScore(), lGame.getNonContractorTotalScore()));
 				   break;
 			   case gameOver:
 				   aLogger.info("------------------------- GAME OVER --------------------------");
