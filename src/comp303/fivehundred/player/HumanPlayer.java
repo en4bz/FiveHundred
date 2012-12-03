@@ -24,6 +24,7 @@ public class HumanPlayer extends APlayer
 	GameFrame aFrame;
 	CardList aPlayable = null;
 	CardList aDiscardable = null;
+	Trick aTrick = null;
 	
 	Bid[] aPreviousBids = null;
 	
@@ -38,13 +39,19 @@ public class HumanPlayer extends APlayer
 		aFrame = pFrame;
 		aPlayable = getHand();
 	}	
-
+	
+	public Trick getTrick()
+	{
+		return aTrick;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	public Card play(Trick pTrick)
 	{
 		Card lPlayedCard;
+		aTrick = pTrick;
 						
 		// Player is leading
 		if(pTrick.size() == 0)
@@ -151,6 +158,7 @@ public class HumanPlayer extends APlayer
 	public CardList exchange(Bid[] pBids, int pIndex, Hand pWidow)
 	{
 		CardList toDiscard = null;
+		aDiscardable = new CardList();
 		
 		for(Card c: pWidow)
 		{
