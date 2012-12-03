@@ -390,10 +390,17 @@ public class GameFrame extends JFrame implements Observer, IObservable
 						aPlayedCard = lCardLabel.getCard();
 						notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 								GameFrame.Human.playValidated.toString()));
+						synchronized (aHuman)
+						{
+							aHuman.notify();
+						}
+						
 					}
 					else
 					{
 						// TODO send invalid play notification
+						log("Invalid card played.");
+						JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.InvalidPlayError"));
 						aPlayedCard = null;
 					}
 					aCurrentPrompt = PromptState.none;
