@@ -141,6 +141,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		{
 			log.debug("Game Over.");
 			aGameStats.printStatistics();
+			aGameStats.statString();
 			remove(aBoard);
 			remove(aActionToolbar);
 			JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.GameFrame.GameSetOver"));
@@ -204,6 +205,9 @@ public class GameFrame extends JFrame implements Observer, IObservable
 			default:
 				break;
 			}
+		}
+		if (pNotification.getType().equals("stats.show")){
+			JOptionPane.showMessageDialog(this, this.aGameStats.statString());
 		}
 		if (pNotification.getType().equals("game.engine"))
 		{
