@@ -88,7 +88,7 @@ public class Menu extends JMenuBar
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				new GameFrameMartin();
+				new GameFrame();
 			}
 		});
 		
