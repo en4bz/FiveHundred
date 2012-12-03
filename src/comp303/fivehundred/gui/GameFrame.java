@@ -83,12 +83,12 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		setTitle("Five Hundred");
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		setLocation(5, 5); // Top-left corner of the screen
+		this.setPreferredSize(this.getToolkit().getScreenSize());
 		this.setJMenuBar(new Menu()); // add menu to the new window (new game)
 		// Start the party
 		aPlayerMenu = new PlayerMenu(this);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-		this.pack();
 		this.setVisible(true);
 	}
 
