@@ -10,9 +10,7 @@ import comp303.fivehundred.util.CardList;
  * the cards in a player's hand.
  */
 public class Hand extends CardList
-{
-
-	
+{	
 	public Hand()
 	{
 		super();
