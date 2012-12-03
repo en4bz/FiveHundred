@@ -9,28 +9,22 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import javax.management.Notification;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import comp303.fivehundred.model.Bid;
-import comp303.fivehundred.mvc.Observer;
 import comp303.fivehundred.util.Card.Suit;
-import comp303.fivehundred.util.CardList;
 
 @SuppressWarnings("serial")
 public class ActionToolbar extends JPanel
@@ -38,8 +32,6 @@ public class ActionToolbar extends JPanel
 	private final GameFrame aFrame;
 	private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("comp303.fivehundred.gui.MessageBundle");
 	private int aSpeed;
-	private boolean aPlay;
-	private boolean aWait;
 	private Bid aBid;
 	private final int aHEIGHT;
 	private final int aWIDTH;
@@ -82,66 +74,6 @@ public class ActionToolbar extends JPanel
 		aDiscardPanel = getDiscardPanel();
 		aFrame.addObserver(aDiscardPanel);
 
-	}
-
-
-	private ActionPanel getPlayPanel()
-	{
-		return new ActionPanel()
-		{
-
-			public void build()
-			{
-				final JButton playButton = new JButton(MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Play"));
-				setLayout(new GridLayout(1, 1));
-				int buttonWidth = 200;
-				setMinimumSize(new Dimension(buttonWidth, aHEIGHT));
-				setPreferredSize(new Dimension(buttonWidth, aHEIGHT));
-				setMaximumSize(new Dimension(buttonWidth, aHEIGHT));
-				
-				playButton.addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent arg0)
-					{
-							aFrame.update(new Notification("gui.actiontoolbar", ActionToolbar.this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.playDone.toString()));
-					}
-				});
-				add(playButton);
-			}
-			
-			public void show()
-			{
-				ActionToolbar.this.add(this, BorderLayout.CENTER);
-				ActionToolbar.this.validate();
-				ActionToolbar.this.repaint();
-			}
-			
-			public void hide()
-			{
-				ActionToolbar.this.remove(this);
-				ActionToolbar.this.validate();
-				ActionToolbar.this.repaint();
-			}
-
-			@Override
-			public void update(Notification pNotification)
-			{
-				if(pNotification.getType().equals("gui.gameframe")){
-		           
-		            switch(GameFrame.Human.valueOf(pNotification.getMessage())){
-		            case playPrompt:
-		            	show();
-		            	break;
-		            case playValidated:
-		            	hide();
-		            	break;
-		            default:
-		            	break;
-		            }
-				}
-			}
-		};
 	}
 	
 	public Bid geBid()
