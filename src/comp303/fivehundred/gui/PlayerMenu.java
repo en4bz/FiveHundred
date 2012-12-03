@@ -24,6 +24,7 @@ import javax.swing.border.EmptyBorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import comp303.fivehundred.ai.AdvancedRobot;
 import comp303.fivehundred.ai.BasicRobot;
 import comp303.fivehundred.ai.RandomRobot;
 import comp303.fivehundred.player.APlayer;
@@ -342,8 +343,7 @@ public class PlayerMenu extends JPanel
 					lPlayers[i] = new HumanPlayer(aPlayerNames[i], aFrame);
 					break;
 				case Advanced:
-					// TODO change robot to advanced once the functionality is implemented
-					lPlayers[i] = new BasicRobot(aPlayerNames[i]);
+					lPlayers[i] = new AdvancedRobot(aPlayerNames[i]);
 					break;
 				default:
 					// should never happen
