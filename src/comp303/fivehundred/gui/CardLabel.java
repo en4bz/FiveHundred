@@ -94,15 +94,15 @@ public class CardLabel extends JLabel implements MouseListener
 	public void mouseClicked(MouseEvent e)
 	{
 		GameFrame lFrame = (GameFrame) this.getTopLevelAncestor();
-		
 		if(lFrame.getCurrentPrompt() == GameFrame.PromptState.discard
 			&& ( this.getParent() instanceof CardListPanel &&  ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT )
 			|| this.getParent() instanceof WidowPanel){
 			this.setVisibility(!aIsVisible);
 			lFrame.update(new Notification("gui.cardLabel", this, lFrame.getNotificationSequenceNumber(), GameFrame.Human.cardClicked.toString()));
 		}
-		if(this.getParent() instanceof WidowPanel){
-			
+		if(lFrame.getCurrentPrompt() == GameFrame.PromptState.play
+			&& (this.getParent() instanceof CardListPanel &&  ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT )){
+			lFrame.update(new Notification("gui.cardLabel", this, lFrame.getNotificationSequenceNumber(), GameFrame.Human.cardClicked.toString()));
 		}
 	}
 	
@@ -120,12 +120,20 @@ public class CardLabel extends JLabel implements MouseListener
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
-		
+		GameFrame lFrame = (GameFrame) this.getTopLevelAncestor();
+		if(lFrame.getCurrentPrompt() == GameFrame.PromptState.play
+				&& (this.getParent() instanceof CardListPanel &&  ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT )){
+			this.setLocation(this.getX(), this.getY() - 5);
+		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
-		
+		GameFrame lFrame = (GameFrame) this.getTopLevelAncestor();
+		if(lFrame.getCurrentPrompt() == GameFrame.PromptState.play
+				&& (this.getParent() instanceof CardListPanel &&  ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT )){
+			this.setLocation(this.getX(), this.getY() + 5);
+		}
 	}
 }
