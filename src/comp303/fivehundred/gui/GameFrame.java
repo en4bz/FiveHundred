@@ -296,8 +296,10 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				else
 				{
 					
-				if (aCurrentPrompt != PromptState.play)
+				if (aCurrentPrompt != PromptState.play){
 					log("Human player is prompted to play.");
+				}
+					
 				notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 						GameFrame.Human.playPrompt.toString()));
 				}
@@ -362,6 +364,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 						{
 							aHuman.notify();
 						}
+						aCurrentPrompt = PromptState.none;
 					}
 					else
 					{
@@ -369,7 +372,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 						aSelectedBid = null;
 					}
 				}
-				aCurrentPrompt = PromptState.none;
+				
 				break;
 			case discardDone:
 				log("Human has clicked on \"Discard\"");
