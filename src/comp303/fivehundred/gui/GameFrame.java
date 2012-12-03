@@ -10,6 +10,7 @@ import javax.management.Notification;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.border.EmptyBorder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -154,6 +155,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	private void play()
 	{
 		log("Play!");
+		this.aCurrentPrompt = PromptState.discard;
 		aEngine.exchange();
 		aEngine.playRound();
 		aEngine.computeScore();
@@ -405,15 +407,20 @@ public class GameFrame extends JFrame implements Observer, IObservable
 					}
 					aCurrentPrompt = PromptState.none;
 				}
-				if (aCurrentPrompt == PromptState.discard)
+				if (aCurrentPrompt == PromptState.discard )
 				{
-					// how to check if card clicked came from widow TODO
 					if (aDiscardedCards == null)
 					{
 						aDiscardedCards = new CardList();
 					}
+					if(lCardLabel.getVisibility())
+						aDiscardedCards.remove(lCardLabel.getCard());
+					else{
+						aDiscardedCards.add(lCardLabel.getCard());
+					}
+					System.out.println(aDiscardedCards.toString());
 				}
-				aCurrentPrompt = PromptState.none;
+			//	aCurrentPrompt = PromptState.none;
 				break;
 			default:
 				break;
