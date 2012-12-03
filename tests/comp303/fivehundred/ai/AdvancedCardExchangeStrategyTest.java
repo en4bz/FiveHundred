@@ -13,7 +13,7 @@ import comp303.fivehundred.util.Card.Suit;
 
 /**
  * @author Rayyan Khoury
- * Test class for BasicCardExchangeStrategy
+ * Test class for AdvancedCardExchangeStrategy
  */
 public class AdvancedCardExchangeStrategyTest
 {
