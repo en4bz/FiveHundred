@@ -1,7 +1,6 @@
 package comp303.fivehundred.gui;
 
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -10,7 +9,6 @@ import javax.management.Notification;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.border.EmptyBorder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -279,7 +277,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		{
 
 			aHuman = (HumanPlayer) (pNotification.getSource());
-
+			this.aActionToolbar.setAutoPlayEnabled(true);
 			switch (GameFrame.Human.valueOf(pNotification.getMessage()))
 			{
 			case playPrompt:

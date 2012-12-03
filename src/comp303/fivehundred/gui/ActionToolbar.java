@@ -44,13 +44,19 @@ public class ActionToolbar extends JPanel
 	private final int aHEIGHT;
 	private final int aWIDTH;
 
-	private ActionPanel aPlayPanel;
+	private JPanel aAutoPlayBox;
 	private ActionPanel aBidPanel;
 	private ActionPanel aDiscardPanel;
 	
 
 	public void setDiscardEnabled(boolean pVal){
 		for(Component c : this.aDiscardPanel.getComponents()){
+			c.setEnabled(pVal);
+		}
+	}
+	
+	public void setAutoPlayEnabled(boolean pVal){
+		for(Component c : this.aAutoPlayBox.getComponents()){
 			c.setEnabled(pVal);
 		}
 	}
@@ -378,15 +384,16 @@ public class ActionToolbar extends JPanel
 
 	private void buildAutoPlayPanel()
 	{
-		JPanel lAutoPlayBox = new JPanel();
-		lAutoPlayBox.setLayout(new GridLayout(1, 1));
+		aAutoPlayBox = new JPanel();
+		aAutoPlayBox.setLayout(new GridLayout(1, 1));
 		int buttonWidth = aWIDTH / 6;
-		lAutoPlayBox.setMinimumSize(new Dimension(buttonWidth, aHEIGHT));
-		lAutoPlayBox.setPreferredSize(new Dimension(buttonWidth, aHEIGHT));
-		lAutoPlayBox.setMaximumSize(new Dimension(buttonWidth, aHEIGHT));
+		aAutoPlayBox.setMinimumSize(new Dimension(buttonWidth, aHEIGHT));
+		aAutoPlayBox.setPreferredSize(new Dimension(buttonWidth, aHEIGHT));
+		aAutoPlayBox.setMaximumSize(new Dimension(buttonWidth, aHEIGHT));
 
 		final JToggleButton lButton = new JToggleButton(
 				MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.AutoPlay"), false);
+		lButton.setEnabled(false);
 		lButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -402,9 +409,9 @@ public class ActionToolbar extends JPanel
 				}
 			}
 		});
-		lAutoPlayBox.add(lButton);
+		aAutoPlayBox.add(lButton);
 
-		add(lAutoPlayBox, BorderLayout.WEST);
+		add(aAutoPlayBox, BorderLayout.WEST);
 	}
 
 	public Bid getBid()
