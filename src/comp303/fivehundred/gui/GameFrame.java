@@ -240,6 +240,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				aBoard.updateWidow(lEngine.getWidow(), lEngine.getContractor());
 				aBoard.setWidowCentral();
 				aBoard.setContract(lEngine.getContract());
+				sleep();
 				play();
 				sleep();
 				break;
