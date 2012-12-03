@@ -1,7 +1,6 @@
 package comp303.fivehundred.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -57,10 +56,10 @@ public class PlayerMenu extends JPanel
 	private int V_GAP = 10;
 	
 	// Default values
-	private PlayerType[] aPlayerTypes = {PlayerType.Human, PlayerType.BasicRobot, PlayerType.RandomRobot, PlayerType.RandomRobot};
+	private PlayerType[] aPlayerTypes = {PlayerType.BasicRobot, PlayerType.BasicRobot, PlayerType.RandomRobot, PlayerType.RandomRobot};
 	private String[] aPlayerNames = {"Alice", "Alex", "John", "Jannice"};
 	private boolean practiceModeOn = true;
-	private int numGamesToPlay = 1;
+	private int numGamesToPlay = 10000;
 	
 	// Game constants
 	private int MAX_CHAR_PLAYER = 12;
@@ -134,7 +133,7 @@ public class PlayerMenu extends JPanel
 		JPanel teamGrid = new JPanel();
 		teamGrid.setBorder(BorderFactory.createTitledBorder(MESSAGES.getString("comp303.fivehundred.gui.PlayerMenu.Team" + (pTeamIndex+1))));
 		teamGrid.setLayout(new GridLayout(2,2));
-//		teamGrid.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT*0.2)));
+		teamGrid.setPreferredSize(new Dimension(MIN_WIDTH, (int) (MIN_HEIGHT*0.2)));
 		
 		teamGrid.add(getTypeDropDown(pTeamIndex*2));
 		teamGrid.add(getNameTextField(pTeamIndex*2));
