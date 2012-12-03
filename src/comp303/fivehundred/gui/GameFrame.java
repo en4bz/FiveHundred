@@ -279,8 +279,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		{
 
 			aHuman = (HumanPlayer) (pNotification.getSource());
-			aPlayableCards = aHuman.getPlayableCards();
-			aPreviousBids = aHuman.getPreviousBids();
 
 			switch (GameFrame.Human.valueOf(pNotification.getMessage()))
 			{
@@ -297,15 +295,15 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				}
 				else
 				{
-					
-				if (aCurrentPrompt != PromptState.play){
-					log("Human player is prompted to play.");
-				}
-					
+				aPlayableCards = aHuman.getPlayableCards();
+
+				log("Human player is prompted to play.");
+				log("Human can play: "+ aPlayableCards.toString());
+
+				aCurrentPrompt = PromptState.play;
 				notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 						GameFrame.Human.playPrompt.toString()));
 				}
-				aCurrentPrompt = PromptState.play;
 				break;
 			case playDone:
 				log("Human has played the card");
@@ -367,6 +365,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 							aHuman.notify();
 						}
 						aCurrentPrompt = PromptState.none;
+
 					}
 					else
 					{
@@ -374,7 +373,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 						aSelectedBid = null;
 					}
 				}
-				
 				break;
 			case discardDone:
 				log("Human has clicked on \"Discard\"");
@@ -432,6 +430,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 					else
 					{
 						log("Invalid card played.");
+						
 						JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.InvalidPlayError"));
 						aPlayedCard = null;
 					}
