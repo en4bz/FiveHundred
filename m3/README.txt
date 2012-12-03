@@ -43,7 +43,7 @@ high enough to beat the winning card. If the robot cannot beat the card at all, 
 will play the lowest possible card that it is allowed to.
 5.) For CardExchange in a trump game, the robot first keeps all jokers, then keeps all trumps. 
 If the retained cards are not yet ten, it then attempts to keep all runs (From Ace to Queen) in
-non trump suits. If this still does not satistfy the conditions, then if there is a possibility
+non trump suits. If this still does not satisfy the conditions, then if there is a possibility
 of a King with a smaller card, it keeps those. It then keeps a card based on whether the partner
 bid or not to at some point return a card to the partner should the partner have the ace of that suit.
 Finally it gets rid of all Singletons and Doubletons. If all these conditions do not meet the requirements
