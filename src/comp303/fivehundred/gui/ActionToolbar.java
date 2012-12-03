@@ -62,6 +62,7 @@ public class ActionToolbar extends JPanel
 		TitledBorder titledBorder = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(borderColor), "Actions");
 		titledBorder.setTitleJustification(TitledBorder.RIGHT);
 		setBorder(titledBorder);
+		setOpaque(false);
 		
 		// set default values
 		aSpeed = aFrame.getSpeed();
@@ -399,7 +400,6 @@ public class ActionToolbar extends JPanel
 				if (lButton.isSelected())
 				{
 					aFrame.setAutoPlay(true);
-					System.out.println("Set autoplay true.");
 				}
 				else
 				{

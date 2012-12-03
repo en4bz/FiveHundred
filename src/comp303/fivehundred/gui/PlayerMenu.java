@@ -46,7 +46,6 @@ public class PlayerMenu extends JPanel
 	private GameFrame aFrame;
 	
 	// Layout constants
-	public static Color BACKGROUND_COLOR = new Color(40, 160, 20);
 	private int MIN_WIDTH = 600;
 	private int MIN_HEIGHT = 300;
 	private int PRF_WIDTH = 600;
@@ -81,6 +80,9 @@ public class PlayerMenu extends JPanel
 	{
 		aFrame = pFrame;
 		setLayout(new BorderLayout());
+		
+		setOpaque(false);
+		
 		setMinimumSize(new Dimension(GameFrame.WIDTH, GameFrame.HEIGHT));
 		setPreferredSize(new Dimension(GameFrame.WIDTH, GameFrame.HEIGHT));	
 		// TODO wonder if I shouldn't just go ahead and create a smaller wrapper panel.
@@ -104,6 +106,8 @@ public class PlayerMenu extends JPanel
 		buildNumberOfGamesBox(lWrapper);
 		buildPracticeCheckBox(lWrapper);
 		buildPlayButton(lWrapper);
+		
+		repaint();
 		
 		aFrame.add(this);
 	}
