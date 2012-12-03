@@ -209,6 +209,10 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		if (pNotification.getType().equals("stats.show")){
 			JOptionPane.showMessageDialog(this, this.aGameStats.statString());
 		}
+		if (pNotification.getType().equals("stats.reset")){
+			JOptionPane.showMessageDialog(this, "Game statistics have been reset.");
+			this.aGameStats.resetStats();
+		}
 		if (pNotification.getType().equals("game.engine"))
 		{
 			setTitle(pNotification.getMessage());

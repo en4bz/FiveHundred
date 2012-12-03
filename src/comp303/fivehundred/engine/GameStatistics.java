@@ -103,6 +103,11 @@ public class GameStatistics implements Observer
 		
 	}
 	
+	public void resetStats(){
+		aNumbers = new HashMap<APlayer, EnumMap<Stats, Integer>>();
+		aRatios = new HashMap<APlayer, EnumMap<Stats, Double>>();
+	}
+	
 	public String statString(){
 		Set<APlayer> lPlayers = aNumbers.keySet();
 		String toReturn = "==================== STATISTICS =====================\n";
