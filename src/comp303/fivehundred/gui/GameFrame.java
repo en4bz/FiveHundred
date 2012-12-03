@@ -470,4 +470,9 @@ public class GameFrame extends JFrame implements Observer, IObservable
         return aSelectedBid;
     }
 
+	public boolean inPracticeMode()
+	{
+		return aPracticeModeOn;
+	}
+
 }
