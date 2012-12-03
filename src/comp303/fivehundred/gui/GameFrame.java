@@ -286,12 +286,12 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				{
 					log("Autoplaying card.");
 					aPlayedCard = aPlayingStrategy.play(aHuman.getTrick(), aHuman.getHand());
-					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
-							GameFrame.Human.playValidated.toString()));
 					synchronized (aHuman)
 					{
 						aHuman.notify();
 					}
+					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
+							GameFrame.Human.playValidated.toString()));
 				}
 				else
 				{
@@ -323,6 +323,10 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				if (aAutoPlay)
 				{
 					log("Autoplaying bid.");
+					synchronized (aHuman)
+					{
+						aHuman.notify();
+					}
 					aSelectedBid = aBiddingStrategy.selectBid(aPreviousBids, aHuman.getHand());
 					notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 							GameFrame.Human.bidValidated.toString()));
