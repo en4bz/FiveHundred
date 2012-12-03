@@ -196,7 +196,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
         {
             setTitle(pNotification.getMessage());
 
-            sleep();
+          
             GameEngine lEngine = (GameEngine) (pNotification.getSource());
             switch (GameEngine.State.valueOf(pNotification.getMessage()))
             {
@@ -207,22 +207,27 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 {
                     aBoard.setPracticeMode();
                 }
+             
                 break;
             case newDeal:
                 log("Updating card panels.");
                 aBoard.updateCardPanels();
                 log("Resetting tricks count.");
                 aBoard.resetTricksCount();
+                aBoard.setBiddingCentral();
                 invalidate();
                 validate();
                 repaint();
+                sleep();
                 break;
             case newBid:
                 aBoard.updateBids(lEngine.getCurrentPlayer(), aEngine.getBids());
+                sleep();
                 break;
             case allPasses:
                 log("All passes!");
                 newDeal();
+                sleep();
                 break;
             case newContract:
                 log("New contract.");
@@ -231,29 +236,36 @@ public class GameFrame extends JFrame implements Observer, IObservable
             	aBoard.setContract(lEngine.getContract());
             	invalidate();
                 validate();
-            	repaint();                play();
+            	repaint();                
+            	play();
+            	sleep();
                 break;
             case cardsDiscarded:
                 aBoard.updateWidow(lEngine.getWidow(), lEngine.getContractor());
-            	aBoard.setPlayingCentral();
                 aBoard.updateCardPanel(lEngine.getCurrentPlayer());
+                aBoard.setPlayingCentral();
                 invalidate();
                 validate();
             	repaint();
+            	sleep();
                 break;
             case cardPlayed:
                 aBoard.updateCardPanel(lEngine.getCurrentPlayer());
                 aBoard.updateTrick(lEngine.getCurrentPlayer(), ((GameEngine) pNotification.getSource()).getCardPlayed());
+                sleep();
                 break;
             case newTrick:
                 aBoard.resetCurrentTrick();
+                sleep();
                 break;
             case trickWon:
                 aBoard.updateTrickCount(lEngine.getTrickWinner());
                 aBoard.resetCurrentTrick();
+                sleep();
                 break;
             case roundEnd:
                 aBoard.updateScores();
+                sleep();
                 break;
             case gameOver:
                 break;
