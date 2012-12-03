@@ -427,7 +427,7 @@ public class PlayerMenu extends JPanel
 		BasicRobot,
 		RandomRobot,
 		Advanced,
-		Human // Human must always be the last type!
+		Human
 	}
 
 }
