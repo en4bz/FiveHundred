@@ -1,14 +1,7 @@
 package comp303.fivehundred.ai;
 
-import java.util.ArrayList;
-
-import javax.management.Notification;
-
-import comp303.fivehundred.engine.GameEngine;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.model.Trick;
-import comp303.fivehundred.mvc.AObservable;
-import comp303.fivehundred.mvc.Observer;
 import comp303.fivehundred.util.Card;
 import comp303.fivehundred.util.Card.ByRankComparator;
 import comp303.fivehundred.util.Card.BySuitComparator;
@@ -18,10 +11,8 @@ import comp303.fivehundred.util.Card.Rank;
 import comp303.fivehundred.util.CardList;
 import comp303.fivehundred.util.Card.Suit;
 
-public class AdvancedPlayingStrategy implements IPlayingStrategyAdvanced
+public class AdvancedPlayingStrategy implements IPlayingStrategy
 {
-
-
 	// Compare by rank comparator
 	private static ByRankComparator compareByRank = new ByRankComparator();
 
@@ -53,9 +44,22 @@ public class AdvancedPlayingStrategy implements IPlayingStrategyAdvanced
 
 	// Rank of the cards in order
 	//private static ArrayList<Rank>aRankCards = new ArrayList<Rank> () {Rank.FOUR};
-
+	
+	// Observer
+    private AIObserver aObserver;
+    
+	public AdvancedPlayingStrategy(AIObserver pObserver)
+	{
+		aObserver = pObserver;
+	}
+	
 	@Override
-	public Card play(Trick pTrick, Hand pHand, AObservable pObserver)
+	public Card play(Trick pTrick, Hand pHand)
+	{
+		return play(pTrick, pHand, aObserver);
+	}
+
+	public Card play(Trick pTrick, Hand pHand, AIObserver pObserver)
 	{
 
 		// Sets variables
@@ -115,7 +119,7 @@ public class AdvancedPlayingStrategy implements IPlayingStrategyAdvanced
 
 	}
 
-	private static void updateCardsSeen(AObservable pObserver)
+	private static void updateCardsSeen(AIObserver pObserver)
 	{
 
 		// if i am the contractor
