@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.management.Notification;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -64,17 +65,17 @@ public class GameFrame extends JFrame implements Observer, IObservable
     public GameFrame()
     {
         // Build basic frame
-        this.setTitle("Five Hundred");
-        this.setLayout(new GridLayout(2,1));
-        this.setLocation(5, 5); // Top-left corner of the screen
-    //    this.setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
+        setTitle("Five Hundred");
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        setLocation(5, 5); // Top-left corner of the screen
+        setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
 
         // Add Menu
         this.setJMenuBar(new Menu()); // add menu to the new window (new game)
 
         // Start the party
         aPlayerMenu = new PlayerMenu(this);
-        this.add(aPlayerMenu);
+        add(aPlayerMenu);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         this.pack();
