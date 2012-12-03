@@ -11,6 +11,12 @@ import comp303.fivehundred.util.Card.Rank;
 import comp303.fivehundred.util.CardList;
 import comp303.fivehundred.util.Card.Suit;
 
+
+/**
+ * @author Rayyan Khoury
+ * Has a much more fine tuned strategy than Basic but seems to play worse
+ */
+
 public class AdvancedPlayingStrategy implements IPlayingStrategy
 {
 	
