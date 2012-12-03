@@ -24,6 +24,7 @@ public abstract class AIObserver extends ARobotPlayer implements Observer
 	CardList aDiscardedWidow;
 	CardList aDiscardedCards = new CardList();
 	CardList aTrickCards = new CardList();
+	APlayer aContractor;
 	
 	public CardList getDiscardedCards()
 	{
@@ -34,6 +35,11 @@ public abstract class AIObserver extends ARobotPlayer implements Observer
 	{
 		return aDiscardedWidow;
 		
+	}
+	
+	public boolean isContractor()
+	{
+		return aContractor == this; // should be same reference
 	}
 	
 	@Override
@@ -56,6 +62,9 @@ public abstract class AIObserver extends ARobotPlayer implements Observer
 				   }
 				   // reset trickCards
 				   aTrickCards = new CardList();
+				   break;
+			   case newContract:
+				   aContractor = lGame.getContractor();
 				   break;
 			   case cardsDiscarded:
 				   aDiscardedWidow = lGame.getWidow().clone();
