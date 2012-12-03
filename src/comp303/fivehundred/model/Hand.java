@@ -180,10 +180,20 @@ public class Hand extends CardList
 	 */
 	public CardList playableCards( Suit pLed, Suit pTrump )
 	{
+		// if card is a joker or card is the same suit as the suit led
 		CardList lReturn = new CardList();
 		for(Card c: this)
 		{
-			if(c.isJoker() || c.getEffectiveSuit(pTrump).equals(pLed) || c.getEffectiveSuit(pTrump).equals(pTrump))
+			if(c.isJoker() || c.getEffectiveSuit(pTrump).equals(pLed))
+			{
+				lReturn.add(c);
+			}
+		}
+		
+		// if no cards can be played following those rules, then play any card
+		if(lReturn.size() == 0)
+		{
+			for(Card c: this)
 			{
 				lReturn.add(c);
 			}

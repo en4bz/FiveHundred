@@ -77,7 +77,7 @@ public class HumanPlayer extends APlayer
 				}
 			}
 		}
-		else if(pTrick.size() == 1 && pTrick.getFirst().isJoker())
+		else if(pTrick.getFirst().isJoker())
 		{
 			aPlayable = getHand();
 		}
@@ -110,7 +110,7 @@ public class HumanPlayer extends APlayer
 	
 	public CardList getPlayableCards()
 	{
-		return aPlayable;
+		return aPlayable.clone();
 	}
 
 	/**
