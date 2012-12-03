@@ -1,15 +1,16 @@
 package comp303.fivehundred.ai;
 
 import static comp303.fivehundred.util.AllCards.*;
-import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.util.Card;
-import comp303.fivehundred.util.CardList;
 import comp303.fivehundred.util.Card.Suit;
+import comp303.fivehundred.util.CardList;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Rayyan Khoury
@@ -18,7 +19,7 @@ import comp303.fivehundred.util.Card.Suit;
 public class AdvancedCardExchangeStrategyTest
 {
 
-	AdvancedCardExchangeStrategy aStrategy = new AdvancedCardExchangeStrategy();
+	BasicCardExchangeStrategy aStrategy = new BasicCardExchangeStrategy();
 
 	@Test
 	/**
