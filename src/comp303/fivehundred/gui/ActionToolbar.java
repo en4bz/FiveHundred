@@ -114,14 +114,14 @@ public class ActionToolbar extends JPanel
 			public void show()
 			{
 				ActionToolbar.this.add(this, BorderLayout.CENTER);
-				ActionToolbar.this.revalidate();
+				ActionToolbar.this.validate();
 				ActionToolbar.this.repaint();
 			}
 			
 			public void hide()
 			{
 				ActionToolbar.this.remove(this);
-				ActionToolbar.this.revalidate();
+				ActionToolbar.this.validate();
 				ActionToolbar.this.repaint();
 			}
 
@@ -239,14 +239,14 @@ public class ActionToolbar extends JPanel
 			public void show()
 			{
 				ActionToolbar.this.add(this, BorderLayout.CENTER);
-				ActionToolbar.this.revalidate();
+				ActionToolbar.this.validate();
 				ActionToolbar.this.repaint();
 			}
 			
 			public void hide()
 			{
 				ActionToolbar.this.remove(this);
-				ActionToolbar.this.revalidate();
+				ActionToolbar.this.validate();
 				ActionToolbar.this.repaint();
 			}
 
@@ -303,14 +303,14 @@ public class ActionToolbar extends JPanel
 			public void show()
 			{
 				ActionToolbar.this.add(this, BorderLayout.CENTER);
-				ActionToolbar.this.revalidate();
+				ActionToolbar.this.validate();
 				ActionToolbar.this.repaint();
 			}
 			
 			public void hide()
 			{
 				ActionToolbar.this.remove(this);
-				ActionToolbar.this.revalidate();
+				ActionToolbar.this.validate();
 				ActionToolbar.this.repaint();
 			}
 
