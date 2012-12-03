@@ -127,5 +127,11 @@ public class Team
 	{
 		aTricksWon = pNumTricksWon;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "Team: [" + aPlayer1.getName() + ", " + aPlayer2.getName()+"]" ;
+	}
 
 }
