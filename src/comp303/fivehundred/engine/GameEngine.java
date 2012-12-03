@@ -7,6 +7,7 @@ import java.util.Random;
 
 import javax.management.Notification;
 
+import comp303.fivehundred.ai.AIObserver;
 import comp303.fivehundred.model.Bid;
 import comp303.fivehundred.model.Hand;
 import comp303.fivehundred.model.Trick;
@@ -74,6 +75,18 @@ public class GameEngine extends AObservable
         aPlayers[1] = lTeam2Players[0];
         aPlayers[2] = lTeam1Players[1];
         aPlayers[3] = lTeam2Players[1];
+        
+        // if there are any advanced robots, let them listen to authorized updates in AIObserver
+        for(Team t: getTeams())
+        {
+        	for(APlayer p: t.getPlayers())
+        	{
+        		if(p instanceof AIObserver)
+        		{
+        			this.addObserver((AIObserver) p);
+        		}
+        	}
+        }
     }
     
 
