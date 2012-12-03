@@ -20,7 +20,7 @@ public class CardListPanel extends JPanel
 {
 	private static final int BORDER_SIZE = 10;
 	private static final int HORIZONTAL_OVERLAP = 30;
-	private static final int VERTICAL_OVERLAP = 20;
+	private static final int VERTICAL_OVERLAP = 13;
 	
 	private final CardList aCards;
 	private final Rotation aRotation;
