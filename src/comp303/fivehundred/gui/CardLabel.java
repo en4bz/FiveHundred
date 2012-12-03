@@ -95,8 +95,7 @@ public class CardLabel extends JLabel implements MouseListener
 	{
 		GameFrame lFrame = (GameFrame) this.getTopLevelAncestor();
 		if(lFrame.getCurrentPrompt() == GameFrame.PromptState.discard
-			&& ( this.getParent() instanceof CardListPanel &&  ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT )
-			|| this.getParent() instanceof WidowPanel){
+			&& ((this.getParent() instanceof CardListPanel &&  ((CardListPanel)this.getParent()).getRotation() == Rotation.DEFAULT ) || this.getParent() instanceof WidowPanel)){
 			this.setVisibility(!aIsVisible);
 			lFrame.update(new Notification("gui.cardLabel", this, lFrame.getNotificationSequenceNumber(), GameFrame.Human.cardClicked.toString()));
 		}
