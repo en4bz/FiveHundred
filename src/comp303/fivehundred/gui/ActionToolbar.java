@@ -56,7 +56,7 @@ public class ActionToolbar extends JPanel
 	public ActionToolbar(GameFrame pFrame)
 	{
 		aFrame = pFrame;
-		setLayout(new BorderLayout());
+		setLayout(new FlowLayout());
 		Color borderColor = Color.black;
 		TitledBorder titledBorder = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(borderColor), "Actions");
 		titledBorder.setTitleJustification(TitledBorder.RIGHT);
@@ -114,12 +114,14 @@ public class ActionToolbar extends JPanel
 			public void show()
 			{
 				ActionToolbar.this.add(this, BorderLayout.CENTER);
+				ActionToolbar.this.revalidate();
 				ActionToolbar.this.repaint();
 			}
 			
 			public void hide()
 			{
 				ActionToolbar.this.remove(this);
+				ActionToolbar.this.revalidate();
 				ActionToolbar.this.repaint();
 			}
 
@@ -202,7 +204,7 @@ public class ActionToolbar extends JPanel
 		        allBids.put(MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Bid.10Hearts"), new Bid(10, Suit.HEARTS));
 		        allBids.put(MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Bid.10NoTrump"), new Bid(10, null));
 
-		        String[] lOptions = (String[]) allBids.keySet().toArray();
+		        Object[] lOptions = allBids.keySet().toArray();
 		        Arrays.sort(lOptions);
 				bidDropDown = new JComboBox(lOptions);
 				bidDropDown.setEditable(false);
@@ -244,12 +246,14 @@ public class ActionToolbar extends JPanel
 			public void show()
 			{
 				ActionToolbar.this.add(this, BorderLayout.CENTER);
+				ActionToolbar.this.revalidate();
 				ActionToolbar.this.repaint();
 			}
 			
 			public void hide()
 			{
 				ActionToolbar.this.remove(this);
+				ActionToolbar.this.revalidate();
 				ActionToolbar.this.repaint();
 			}
 
@@ -310,12 +314,14 @@ public class ActionToolbar extends JPanel
 			public void show()
 			{
 				ActionToolbar.this.add(this, BorderLayout.CENTER);
+				ActionToolbar.this.revalidate();
 				ActionToolbar.this.repaint();
 			}
 			
 			public void hide()
 			{
 				ActionToolbar.this.remove(this);
+				ActionToolbar.this.revalidate();
 				ActionToolbar.this.repaint();
 			}
 
