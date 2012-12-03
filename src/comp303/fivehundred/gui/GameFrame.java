@@ -49,7 +49,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	private int aGamesLeft = 10;
 	private boolean aPracticeModeOn = true;
 
-	//public static Logger log = Logger.getRootLogger();
 	private final static Logger log = Logger.getLogger(GameFrame.class);
 
 	private int aSpeed = 500;

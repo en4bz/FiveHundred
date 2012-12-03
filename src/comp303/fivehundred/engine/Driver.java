@@ -2,7 +2,6 @@ package comp303.fivehundred.engine;
 
 import comp303.fivehundred.ai.AdvancedRobot;
 import comp303.fivehundred.ai.BasicRobot;
-import comp303.fivehundred.ai.RandomRobot;
 import comp303.fivehundred.player.Team;
 
 /**
