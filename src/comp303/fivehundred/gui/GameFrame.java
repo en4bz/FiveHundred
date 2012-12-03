@@ -2,6 +2,7 @@ package comp303.fivehundred.gui;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -65,9 +66,9 @@ public class GameFrame extends JFrame implements Observer, IObservable
     {
         // Build basic frame
         this.setTitle("Five Hundred");
-        this.setLayout(new FlowLayout());
+        this.setLayout(new GridLayout(2,1));
         this.setLocation(5, 5); // Top-left corner of the screen
-        this.setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
+    //    this.setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
 
         // Add Menu
         this.setJMenuBar(new Menu()); // add menu to the new window (new game)
@@ -77,7 +78,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
         this.add(aPlayerMenu);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-
+        this.pack();
         this.setVisible(true);
     }
 
@@ -102,8 +103,9 @@ public class GameFrame extends JFrame implements Observer, IObservable
         this.remove(aPlayerMenu);
         aBoard = new GameBoard(lTeams);
         this.add(aBoard);
-        aBoard.addActionToolBar(new ActionToolbar(this));
-
+        this.add(new ActionToolbar(this));
+        this.validate();
+        this.revalidate();
         log("Game Board drawn.");
 
         aEngine.addObserver(this);
@@ -127,11 +129,10 @@ public class GameFrame extends JFrame implements Observer, IObservable
         {
             log("Game Over.");
             aGameStats.printStatistics();
-            remove(aBoard);
+            this.remove(aBoard);
             JOptionPane.showMessageDialog(this, MESSAGES.getString("comp303.fivehundred.gui.GameFrame.GameSetOver"));
             aPlayerMenu = new PlayerMenu(this);
-            setSize(Toolkit.getDefaultToolkit().getScreenSize()); // Force Full Screen
-            pack();
+           
         }
     }
 
