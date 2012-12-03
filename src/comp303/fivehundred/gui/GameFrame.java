@@ -1,7 +1,6 @@
 package comp303.fivehundred.gui;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -141,8 +140,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
     {
         log("Starting new deal.");
         aEngine.deal();
-        log("Starting new bid.");
-        aEngine.bid();
+        newBid();
     }
 
     private void newBid()
@@ -207,7 +205,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 {
                     aBoard.setPracticeMode();
                 }
-             
                 break;
             case newDeal:
                 log("Updating card panels.");
@@ -215,9 +212,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 log("Resetting tricks count.");
                 aBoard.resetTricksCount();
                 aBoard.setBiddingCentral();
-                invalidate();
-                validate();
-                repaint();
                 sleep();
                 break;
             case newBid:
@@ -234,9 +228,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 aBoard.updateWidow(lEngine.getWidow(), lEngine.getContractor());
                 aBoard.setWidowCentral();
             	aBoard.setContract(lEngine.getContract());
-            	invalidate();
-                validate();
-            	repaint();                
             	play();
             	sleep();
                 break;
@@ -244,9 +235,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
                 aBoard.updateWidow(lEngine.getWidow(), lEngine.getContractor());
                 aBoard.updateCardPanel(lEngine.getCurrentPlayer());
                 aBoard.setPlayingCentral();
-                invalidate();
-                validate();
-            	repaint();
             	sleep();
                 break;
             case cardPlayed:
