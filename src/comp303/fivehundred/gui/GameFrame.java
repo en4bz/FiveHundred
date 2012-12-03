@@ -61,6 +61,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	private Bid aSelectedBid = null;
 	private Bid[] aPreviousBids = null;
 	private CardList aDiscardedCards = null;
+	private boolean aDiscardDone = false;
 
 	public GameFrame()
 	{
@@ -353,6 +354,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 					if (getDiscardedCards() != null && getDiscardedCards().size() == 6)
 					{
 						log("Discard valid.");
+						aDiscardDone = true;
 						notifyObservers(new Notification("gui.gameframe", this, getNotificationSequenceNumber(),
 								GameFrame.Human.discardValidated.toString()));
 						synchronized (aHuman)
@@ -410,6 +412,10 @@ public class GameFrame extends JFrame implements Observer, IObservable
 				break;
 			}
 		}
+	}
+	public boolean isDiscardDone()
+	{
+		return aDiscardDone;
 	}
 	
 	public CardList getDiscardedCards()

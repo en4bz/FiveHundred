@@ -23,6 +23,7 @@ public class HumanPlayer extends APlayer
 {
 	GameFrame aFrame;
 	CardList aPlayable = null;
+	CardList aDiscardable = null;
 	
 	Bid[] aPreviousBids = null;
 	
@@ -83,7 +84,10 @@ public class HumanPlayer extends APlayer
 			try
 			{
 				aFrame.update(new Notification("gui.humanplayer", this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.playPrompt.toString()));
-				Thread.sleep(1000);
+				synchronized(this)
+				{
+					this.wait();
+				}
 			}
 			catch (InterruptedException e)
 			{
@@ -120,7 +124,6 @@ public class HumanPlayer extends APlayer
 				{
 					this.wait();
 				}
-				System.out.println("Unlocked!");
 			}
 			catch (InterruptedException e)
 			{
@@ -136,38 +139,52 @@ public class HumanPlayer extends APlayer
 	{
 		return Arrays.copyOf(aPreviousBids, aPreviousBids.length);
 	}
+	
+	public CardList getDiscardable()
+	{
+		return aDiscardable;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	public CardList exchange(Bid[] pBids, int pIndex, Hand pWidow)
 	{
-		CardList toDiscard = new CardList();
-		GameFrame.nextCard = null;
-		for(int i = 0; i < 6; i++)
+		CardList toDiscard = null;
+		
+		for(Card c: pWidow)
 		{
-			while(GameFrame.nextCard == null)
-			{
-				try
-				{
-					Thread.sleep(10);
-				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-			}
-			toDiscard.add(GameFrame.nextCard);
-			GameFrame.nextCard = null;
+			aDiscardable.add(c);
 		}
 		for(Card c: pWidow)
 		{
-			this.addCardToHand(c);
+			addCardToHand(c);
 		}
+		aDiscardable = getHand().clone();
+		
+		while(!aFrame.isDiscardDone())
+		{
+			try
+			{
+				aFrame.update(new Notification("gui.humanplayer", this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.discardPrompt.toString()));
+				synchronized(this)
+				{
+					this.wait();
+				}
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		toDiscard = aFrame.getDiscardedCards();
 		
 		for(Card c: toDiscard)
 		{
 			this.removeCardFromHand(c);
 		}
+		aFrame.update(new Notification("gui.humanplayer", this, aFrame.getNotificationSequenceNumber(), GameFrame.Human.discardDone.toString()));
+
 		return toDiscard;
 	}
 }
