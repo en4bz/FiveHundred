@@ -34,7 +34,7 @@ import comp303.fivehundred.util.CardList;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements Observer, IObservable
 {
-	public static Color BACKGROUND_COLOR = new Color(40, 160, 20);
+	public static Color BG_COLOR = Color.GREEN;
 	public static Card nextCard;
 	private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("comp303.fivehundred.gui.MessageBundle");
 	private GameEngine aEngine;
@@ -51,7 +51,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 
 	//public static Logger log = Logger.getRootLogger();
 	private final static Logger log = Logger.getLogger(GameFrame.class);
-	private static boolean aIsLogging = true;
 
 	private int aSpeed = 500;
 
@@ -78,9 +77,9 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	public GameFrame()
 	{
 		/**
-		 * TO TURN LOGGING ON UNCOMMENT THE THE NEXT LINE
+		 * TO TURN LOGGING ON COMMENT THE THE NEXT LINE
 		 */
-		//Logger.getRootLogger().removeAllAppenders();
+		Logger.getRootLogger().removeAllAppenders();
 
 		setTitle("Five Hundred");
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -112,6 +111,7 @@ public class GameFrame extends JFrame implements Observer, IObservable
 
 		this.remove(aPlayerMenu);
 		aBoard = new GameBoard(lTeams);
+		aBoard.setBackground(BG_COLOR);
 		this.add(aBoard);
 		aActionToolbar = new ActionToolbar(this);
 		this.add(aActionToolbar);
@@ -160,11 +160,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 	{
 		log.debug("Starting new deal.");
 		aEngine.deal();
-		newBid();
-	}
-
-	private void newBid()
-	{
 		log.debug("Starting new bid.");
 		aEngine.bid();
 	}
@@ -522,12 +517,6 @@ public class GameFrame extends JFrame implements Observer, IObservable
 		catch (InterruptedException e)
 		{
 		}
-	}
-
-	public static void log(String message)
-	{
-		if (aIsLogging)
-			log.debug(message);
 	}
 
 	GameEngine getGameEngine()
