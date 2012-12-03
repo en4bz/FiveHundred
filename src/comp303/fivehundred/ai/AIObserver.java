@@ -21,17 +21,17 @@ public abstract class AIObserver extends ARobotPlayer implements Observer
 		super(pName);
 	}
 
-	CardList aDiscardedWidow;
-	CardList aDiscardedCards = new CardList();
+	Hand aDiscardedWidow = new Hand();
+	Hand aDiscardedCards = new Hand();
 	CardList aTrickCards = new CardList();
-	APlayer aContractor;
+	APlayer aContractor = null;
 	
-	public CardList getDiscardedCards()
+	public Hand getDiscardedCards()
 	{
 		return aDiscardedCards;
 	}
 	
-	public CardList getDiscardedWidow()
+	public Hand getDiscardedWidow()
 	{
 		return aDiscardedWidow;
 		
@@ -51,6 +51,12 @@ public abstract class AIObserver extends ARobotPlayer implements Observer
 			GameEngine.State lState = GameEngine.State.valueOf(pNotification.getMessage());
 			switch (lState) 
 			{
+				case newGame:
+					aDiscardedWidow = new Hand();
+					aDiscardedCards = new Hand();
+					aTrickCards = new CardList();
+					aContractor = null;
+					break;
 			   case cardPlayed:
 				   aTrickCards.add(lGame.getCardPlayed());
 				   break;
@@ -67,7 +73,11 @@ public abstract class AIObserver extends ARobotPlayer implements Observer
 				   aContractor = lGame.getContractor();
 				   break;
 			   case cardsDiscarded:
-				   aDiscardedWidow = lGame.getWidow().clone();
+				   aDiscardedWidow = new Hand();
+				   for(Card c: lGame.getWidow())
+				   {
+					   aDiscardedWidow.add(c);
+				   }
 				   break;
 			default:
 				break;
