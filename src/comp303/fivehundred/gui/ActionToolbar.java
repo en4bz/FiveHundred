@@ -202,7 +202,7 @@ public class ActionToolbar extends JPanel
 		        allBids.put(MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Bid.10Hearts"), new Bid(10, Suit.HEARTS));
 		        allBids.put(MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Bid.10NoTrump"), new Bid(10, null));
 
-		        Object[] lOptions = allBids.keySet().toArray();
+		        String[] lOptions = (String[]) allBids.keySet().toArray();
 		        Arrays.sort(lOptions);
 				bidDropDown = new JComboBox(lOptions);
 				bidDropDown.setEditable(false);
