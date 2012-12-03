@@ -86,7 +86,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	public static boolean keepJokers()
 	{
 		
-		aTemp.clear();
+		aTemp.removeAll();
 		aTemp = aDiscards.getJokers();
 		return switchCards(aTemp);
 		
@@ -96,7 +96,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	public static boolean keepAces()
 	{
 		
-		aTemp.clear();
+		aTemp.removeAll();
 		for (Card card : aDiscards)
 		{
 			
@@ -166,7 +166,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	public static boolean keepTrumps(Suit pSuit, BySuitComparator pCompare)
 	{
 		
-		aTemp.clear();
+		aTemp.removeAll();
 		aTemp = aDiscards.getTrumpCards(pSuit);
 		aTemp.sort(pCompare);
 		aTemp.reverse();
@@ -188,7 +188,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		aDiscards.sort(pCompare);
 		aDiscards.reverse();
 		Suit partnerSuit = partnerBid.getSuit();
-		aTemp.clear();
+		aTemp.removeAll();
 		
 		for (Card card : aDiscards)
 		{
@@ -212,7 +212,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	public static boolean keepKingsPlusOne(BySuitNoTrumpComparator pCompare)
 	{
 		
-		aTemp.clear();
+		aTemp.removeAll();
 		aDiscards.sort(pCompare);
 		aDiscards.reverse();
 		Card tempKing = null;
@@ -264,7 +264,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	public static boolean keepNonSingletonsAndNonDoubletons(ByRankComparator pCompare)
 	{
 
-		aTemp.clear();
+		aTemp.removeAll();
 
 		ArrayList<CardList> allCards = new ArrayList<CardList>();
 
