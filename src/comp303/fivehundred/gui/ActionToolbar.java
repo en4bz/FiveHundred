@@ -1,6 +1,7 @@
 package comp303.fivehundred.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -17,7 +18,9 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -36,26 +39,28 @@ public class ActionToolbar extends JPanel
 	private boolean aWait;
 	private Bid aBid;
 	private CardList aDiscarded;
-	private int aHEIGHT;
-	private int aWIDTH;
+	private final int aHEIGHT;
+	private final int aWIDTH;
 
 	private ActionPanel aPlayPanel;
 	private ActionPanel aBidPanel;
 	private ActionPanel aDiscardPanel;
 	private JPanel aActionPanel;
 
-	public ActionToolbar()
+	public ActionToolbar(GameFrame pFrame)
 	{
-		aFrame = (GameFrame) this.getTopLevelAncestor();
+		aFrame = pFrame;
 		setLayout(new BorderLayout());
-
+		Color borderColor = Color.black;
+		TitledBorder titledBorder = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(borderColor), "Actions");
+		titledBorder.setTitleJustification(TitledBorder.RIGHT);
+		setBorder(titledBorder);
+		
 		// set default values
 		aSpeed = aFrame.getSpeed();
 		aBid = new Bid();
-		aHEIGHT = 100;
+		aHEIGHT = 60;
 		aWIDTH = aFrame.getWidth();
-		
-		//
 
 		buildAutoPlayPanel();
 		buildSpeedBox();
@@ -77,16 +82,14 @@ public class ActionToolbar extends JPanel
 		return new ActionPanel()
 		{
 
-			private final JButton playButton = new JButton(
-					MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Play"));
-
 			public void build()
 			{
+				final JButton playButton = new JButton(MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Play"));
 				setLayout(new GridLayout(1, 1));
 				int buttonWidth = 200;
-				setMinimumSize(new Dimension(buttonWidth, aHEIGHT / 4 * 5));
-				setPreferredSize(new Dimension(buttonWidth, aHEIGHT / 4 * 5));
-				setMaximumSize(new Dimension(buttonWidth, aHEIGHT / 4 * 5));
+				setMinimumSize(new Dimension(buttonWidth, aHEIGHT));
+				setPreferredSize(new Dimension(buttonWidth, aHEIGHT));
+				setMaximumSize(new Dimension(buttonWidth, aHEIGHT));
 				
 				playButton.addActionListener(new ActionListener()
 				{
@@ -117,7 +120,7 @@ public class ActionToolbar extends JPanel
 			@Override
 			public void update(Notification pNotification)
 			{
-				if(pNotification.getType().equals("game.actiontoolbar")){
+				if(pNotification.getType().equals("game.gameframe")){
 		           
 		            switch(GameFrame.Human.valueOf(pNotification.getMessage())){
 		            case playPrompt:
@@ -149,17 +152,16 @@ public class ActionToolbar extends JPanel
 		return new ActionPanel()
 		{
 
-
-			private final HashMap<String, Bid> allBids = new HashMap<String, Bid>();
-			
-			private final JButton bidButton = new JButton(
-					MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Bid"));
-			private JComboBox bidDropDown;
-
 			public void build()
 			{
+				final HashMap<String, Bid> allBids = new HashMap<String, Bid>();
+				final JButton bidButton = new JButton(
+						MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Bid"));
+				final JComboBox bidDropDown;
+				
+				
 				setLayout(new GridLayout(1, 2));
-				int height = aHEIGHT / 4 * 5;
+				int height = aHEIGHT;
 				int width = 500;
 				setMinimumSize(new Dimension(width, height));
 				setPreferredSize(new Dimension(width, height));
@@ -244,7 +246,7 @@ public class ActionToolbar extends JPanel
 			@Override
 			public void update(Notification pNotification)
 			{
-				if(pNotification.getType().equals("game.actiontoolbar")){
+				if(pNotification.getType().equals("game.gameframe")){
 		           
 		            switch(GameFrame.Human.valueOf(pNotification.getMessage())){
 		            case bidPrompt:
@@ -266,11 +268,11 @@ public class ActionToolbar extends JPanel
 		return new ActionPanel()
 		{
 
-			private final JButton discardButton = new JButton(
-					MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Discard"));
-
 			public void build()
 			{
+				final JButton discardButton = new JButton(
+						MESSAGES.getString("comp303.fivehundred.gui.ActionToolbar.Discard"));
+				
 				setLayout(new GridLayout(1, 1));
 				int buttonWidth = 200;
 				setMinimumSize(new Dimension(buttonWidth, aHEIGHT / 4 * 5));
@@ -306,7 +308,7 @@ public class ActionToolbar extends JPanel
 			@Override
 			public void update(Notification pNotification)
 			{
-				if(pNotification.getType().equals("game.actiontoolbar")){
+				if(pNotification.getType().equals("game.gameframe")){
 		           
 		            switch(GameFrame.Human.valueOf(pNotification.getMessage())){
 		            case discardPrompt:
@@ -326,8 +328,8 @@ public class ActionToolbar extends JPanel
 
 	private void buildSpeedBox()
 	{
-		int min = 50;
-		int max = 3000;
+		int min = 30;
+		final int max = 2000;
 		int step = 100;
 		int def = 1000;
 		JPanel lSpeedBox = new JPanel();
@@ -345,8 +347,8 @@ public class ActionToolbar extends JPanel
 		// Turn on labels at major tick marks.
 		lSlider.setMajorTickSpacing(step);
 		lSlider.setMinorTickSpacing(10);
-		lSlider.setPaintTicks(true);
-		lSlider.setPaintLabels(true);
+//		lSlider.setPaintTicks(true);
+//		lSlider.setPaintLabels(true);
 
 		lSlider.addChangeListener(new ChangeListener()
 		{
@@ -356,7 +358,7 @@ public class ActionToolbar extends JPanel
 				JSlider source = (JSlider) e.getSource();
 				if (!source.getValueIsAdjusting())
 				{
-					setSpeed((int) source.getValue());
+					setSpeed(max-(int) source.getValue());
 				}
 			}
 		});
