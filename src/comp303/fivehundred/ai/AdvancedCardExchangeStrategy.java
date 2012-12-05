@@ -105,7 +105,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	public static boolean keepJokers()
 	{
 		
-		aTemp.removeAll();
+		aTemp.clear();
 		aTemp = aDiscards.getJokers();
 		return switchCards(aTemp);
 		
@@ -120,7 +120,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	public static boolean keepRuns(BySuitNoTrumpComparator pCompare)
 	{
 		
-		aTemp.removeAll();
+		aTemp.clear();
 		aDiscards = (Hand) aDiscards.sort(pCompare);
 		aDiscards = (Hand) aDiscards.reverse();
 		
@@ -254,7 +254,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	public static boolean keepTrumps(Suit pSuit, BySuitComparator pCompare)
 	{
 		
-		aTemp.removeAll();
+		aTemp.clear();
 		aTemp = aDiscards.getTrumpCards(pSuit);
 		aTemp = aTemp.sort(pCompare);
 		aTemp = aTemp.reverse();
@@ -281,7 +281,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 		aDiscards = (Hand) aDiscards.sort(pCompare);
 		aDiscards = (Hand) aDiscards.reverse();
 		Suit partnerSuit = partnerBid.getSuit();
-		aTemp.removeAll();
+		aTemp.clear();
 		
 		for (Card card : aDiscards)
 		{
@@ -308,7 +308,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	public static boolean keepKingsPlusOne(BySuitNoTrumpComparator pCompare)
 	{
 		
-		aTemp.removeAll();
+		aTemp.clear();
 		aDiscards = (Hand) aDiscards.sort(pCompare);
 		aDiscards = (Hand) aDiscards.reverse();
 		Card tempKing = null;
@@ -366,7 +366,7 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 	public static boolean keepNonSingletonsAndNonDoubletons(Bid[] pBids, int pIndex, Suit pMySuit)
 	{
 
-		aTemp.removeAll();
+		aTemp.clear();
 		Suit mySuit = pMySuit;
 		Suit partSuit = null;
 		Suit opp1Suit = null;
@@ -435,12 +435,6 @@ public class AdvancedCardExchangeStrategy extends BasicCardExchangeStrategy impl
 			}
 			
 		}
-		
-		for (Suit ourSuit : gameSuits)
-		{
-			//System.out.println(ourSuit);
-		}
-		
 		GenericBySuitComparator compare = new GenericBySuitComparator(gameSuits, true);
 
 		ArrayList<CardList> allCards = new ArrayList<CardList>();
