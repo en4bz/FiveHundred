@@ -9,6 +9,7 @@ import comp303.fivehundred.util.CardList;
  * Additional services to manage a card list that corresponds to
  * the cards in a player's hand.
  */
+@SuppressWarnings("serial")
 public class Hand extends CardList
 {	
 	public Hand()

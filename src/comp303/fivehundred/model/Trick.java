@@ -12,6 +12,7 @@ import comp303.fivehundred.util.CardList;
  * A card list specialized for handling cards discarded
  * as part of the play of a trick.
  */
+@SuppressWarnings("serial")
 public class Trick extends CardList
 {	
 	private final Suit aTrump;
