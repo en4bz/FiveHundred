@@ -64,7 +64,7 @@ public abstract class APlayer
      */
     public void resetHand()
     {
-    	aHand.removeAll();
+    	aHand.clear();
     }
     /**
      * Gets the player's name.
